@@ -3,6 +3,19 @@
 All notable changes to the OmniMCP plugin are documented here. This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-06-25
+
+### Fixed
+
+- Subagents no longer fabricate results. Their `tools:` allowlist used
+  `mcp__arcade__*`, but a plugin-bundled MCP server is namespaced
+  (`plugin:arcade:arcade`), so the allowlist matched no tools and the subagents
+  had no way to call them. Removed the `tools:` restriction so subagents inherit
+  the MCP tools, and added an explicit no-fabrication guard.
+- Renamed the slash command stems to `do`/`tools`/`auth` so they read as
+  `/arcade:do`, `/arcade:tools`, `/arcade:auth` instead of the redundant
+  `/arcade:arcade` (plugin commands are scoped as `plugin:command`).
+
 ## [0.2.0] - 2026-06-25
 
 ### Added
@@ -18,17 +31,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     authorization-link surfacing.
 - **Claude Desktop** connector config (`clients/claude-desktop/`).
 - Shared `.mcp.json` for Claude Code alongside the existing Cursor `mcp.json`.
-
-### Fixed
-
-- Subagents no longer fabricate results. Their `tools:` allowlist used
-  `mcp__arcade__*`, but a plugin-bundled MCP server is namespaced
-  (`plugin:arcade:arcade`), so the allowlist matched no tools and the subagents
-  had no way to call them. Removed the `tools:` restriction so subagents inherit
-  the MCP tools, and added an explicit no-fabrication guard.
-- Renamed the slash command stems to `do`/`tools`/`auth` so they read as
-  `/arcade:do`, `/arcade:tools`, `/arcade:auth` instead of the redundant
-  `/arcade:arcade` (plugin commands are scoped as `plugin:command`).
 
 ### Changed
 
