@@ -1,7 +1,28 @@
 # Changelog
 
-All notable changes to the Omni Cursor plugin are documented here. This project
+All notable changes to the OmniMCP plugin are documented here. This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.2.0] - 2026-06-25
+
+### Added
+
+- **Claude Code plugin** (`.claude-plugin/`): installable via
+  `/plugin marketplace add arcadeai-labs/omnimcp`.
+  - Subagents (`agents/`): `omni-operator` (general), `inbox-agent` (email),
+    and `schedule-agent` (calendar) run the discovery loop in an isolated
+    context so it never clutters the main conversation.
+  - Skills (`skills/`): `omni-tool-use` and `omni-authorization`.
+  - Slash commands (`commands/`): `/omni`, `/omni-tools`, `/omni-auth`.
+  - Hooks (`hooks/`): session-start availability priming and post-tool
+    authorization-link surfacing.
+- **Claude Desktop** connector config (`clients/claude-desktop/`).
+- Shared `.mcp.json` for Claude Code alongside the existing Cursor `mcp.json`.
+
+### Changed
+
+- README now covers all three client targets (Cursor, Claude Code, Claude
+  Desktop) and documents the repo layout.
 
 ## [0.1.0] - 2026-06-04
 

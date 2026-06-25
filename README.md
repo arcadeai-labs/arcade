@@ -7,30 +7,45 @@ sign-in, and gets it done.
 
 Endpoint: `https://omni.arcade.dev/mcp`
 
-## Add it to your assistant
+This repo is one package that works as a **Cursor plugin**, a **Claude Code
+plugin**, and a **Claude Desktop** connector. The quickest one-click installers
+also live on the splash page — **[omni.arcade.dev](https://omni.arcade.dev)**.
 
-The quickest way is the one-click buttons on the splash page —
-**[omni.arcade.dev](https://omni.arcade.dev)** (Cursor, VS Code, and more).
-
-### Cursor
+## Cursor
 
 [![Add omni MCP server to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=omni&config=eyJ1cmwiOiJodHRwczovL29tbmkuYXJjYWRlLmRldi9tY3AifQ==)
 
-Or: **Cursor Settings → MCP → Add server**, then use the endpoint above.
+Or install the plugin from the Cursor Marketplace, or add the server manually:
+**Cursor Settings → MCP → Add server**, then use the endpoint above.
 
-### Claude Code
+## Claude Code
+
+Install the plugin to get the operator subagent, skills, and slash commands:
 
 ```bash
-claude mcp add --transport http omni https://omni.arcade.dev/mcp
+/plugin marketplace add arcadeai-labs/omnimcp
+/plugin install omnimcp
+/mcp        # authenticate "omnimcp" with Arcade
 ```
 
-### Claude Desktop
+Or just add the bare connection (no subagents/commands):
+
+```bash
+claude mcp add --transport http omnimcp https://omni.arcade.dev/mcp
+```
+
+Once installed, try `/omni summarize my unread email`, or just ask in plain
+language — the `omni-operator` subagent kicks in automatically.
+
+## Claude Desktop
 
 **Settings → Connectors → Add custom connector**, then paste the endpoint above.
 (Requires a paid Claude plan.)
 
-More clients and one-click installers are listed on
-[omni.arcade.dev](https://omni.arcade.dev).
+No connector support on your version? Use the config in
+[`clients/claude-desktop/claude_desktop_config.json`](clients/claude-desktop/claude_desktop_config.json)
+— merge its `mcpServers` entry into your `claude_desktop_config.json` and
+restart Claude Desktop.
 
 ## Signing in
 
@@ -45,6 +60,22 @@ paste.
 - "What's on my calendar tomorrow?"
 - "Open a GitHub issue in arcadeai-labs/omnimcp titled 'flaky CI'."
 - "Summarize my unread email from today."
+
+## What's in this repo
+
+One plugin, three client targets, sharing the same MCP connection:
+
+| Path | Used by | What it is |
+|------|---------|------------|
+| `.cursor-plugin/` | Cursor | Plugin + marketplace manifest |
+| `.claude-plugin/` | Claude Code | Plugin + marketplace manifest |
+| `mcp.json` / `.mcp.json` | Cursor / Claude Code | The Omni MCP server connection |
+| `agents/` | Claude Code | Subagents that run the discovery loop in isolation |
+| `skills/` | Cursor + Claude Code | Auto-activating guidance for tool use & auth |
+| `commands/` | Claude Code | `/omni`, `/omni-tools`, `/omni-auth` slash commands |
+| `hooks/` | Claude Code | Session-start priming + auth-link surfacing |
+| `rules/` | Cursor | Tool-discovery rule |
+| `clients/claude-desktop/` | Claude Desktop | Ready-to-merge connector config |
 
 ## Links
 

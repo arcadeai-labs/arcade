@@ -1,0 +1,38 @@
+{
+  "name": "omnimcp",
+  "description": "Dynamic tool discovery and execution across 500+ Arcade tools (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, Dropbox, and more) over a single MCP connection. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Arcade.dev",
+    "url": "https://omni.arcade.dev"
+  },
+  "homepage": "https://omni.arcade.dev",
+  "repository": "https://github.com/arcadeai-labs/omnimcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "arcade",
+    "omni",
+    "mcp",
+    "tools",
+    "tool-discovery",
+    "agent",
+    "slack",
+    "github",
+    "gmail",
+    "google-calendar",
+    "notion",
+    "linear",
+    "integrations",
+    "automation"
+  ],
+  "commands": [
+    "./commands/omni.md",
+    "./commands/omni-tools.md",
+    "./commands/omni-auth.md"
+  ],
+  "agents": [
+    "./agents/omni-operator.md",
+    "./agents/inbox-agent.md",
+    "./agents/schedule-agent.md"
+  ]
+}

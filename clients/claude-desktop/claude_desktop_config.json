@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "omnimcp": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://omni.arcade.dev/mcp"]
+    }
+  }
+}

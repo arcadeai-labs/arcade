@@ -1,0 +1,30 @@
+{
+  "name": "omnimcp",
+  "owner": {
+    "name": "Arcade.dev",
+    "email": "support@arcade.dev"
+  },
+  "metadata": {
+    "description": "Arcade's Omni MCP — dynamic tool discovery and execution across the full Arcade tool catalog."
+  },
+  "plugins": [
+    {
+      "name": "omnimcp",
+      "source": "./",
+      "description": "Dynamic tool discovery and execution across 500+ Arcade tools over a single MCP connection, with an operator subagent, skills, slash commands, and hooks.",
+      "author": {
+        "name": "Arcade.dev"
+      },
+      "homepage": "https://omni.arcade.dev",
+      "repository": "https://github.com/arcadeai-labs/omnimcp",
+      "license": "Apache-2.0",
+      "keywords": [
+        "arcade",
+        "omni",
+        "mcp",
+        "tool-discovery",
+        "integrations"
+      ]
+    }
+  ]
+}

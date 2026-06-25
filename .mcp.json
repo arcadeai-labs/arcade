@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "omnimcp": {
+      "type": "http",
+      "url": "https://omni.arcade.dev/mcp"
+    }
+  }
+}
