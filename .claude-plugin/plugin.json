@@ -26,9 +26,9 @@
     "automation"
   ],
   "commands": [
-    "./commands/arcade.md",
-    "./commands/arcade-tools.md",
-    "./commands/arcade-auth.md"
+    "./commands/do.md",
+    "./commands/tools.md",
+    "./commands/auth.md"
   ],
   "agents": [
     "./agents/arcade-operator.md",
