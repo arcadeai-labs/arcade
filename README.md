@@ -7,53 +7,61 @@ sign-in, and gets it done.
 
 Endpoint: `https://omni.arcade.dev/mcp`
 
-This repo is one package that works as a **Cursor plugin**, a **Claude Code
-plugin**, and a **Claude Desktop** connector. The quickest one-click installers
-also live on the splash page — **[omni.arcade.dev](https://omni.arcade.dev)**.
+This repo is one package: a **Cursor plugin**, a **Claude Code / Cowork
+plugin**, and a **Claude Desktop** connector. One-click installers also live on
+the splash page — **[omni.arcade.dev](https://omni.arcade.dev)**.
+
+The first time you connect you sign in with Arcade. After that, each app
+(Google, GitHub, Slack, …) prompts a one-time sign-in the first time it's used.
+No API keys to paste.
 
 ## Cursor
 
 [![Add arcade MCP server to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL29tbmkuYXJjYWRlLmRldi9tY3AifQ==)
 
-Or install the plugin from the Cursor Marketplace, or add the server manually:
-**Cursor Settings → MCP → Add server**, then use the endpoint above.
+New user — pick one:
 
-## Claude Code
+- Click **Add to Cursor** above and approve the install, or
+- **Cursor Settings → MCP → Add server** and paste `https://omni.arcade.dev/mcp`.
 
-Install the plugin to get the operator subagent, skills, and slash commands:
+Then open **Settings → MCP**, find **arcade**, and sign in with Arcade.
+
+## Claude Code (CLI)
 
 ```bash
-/plugin marketplace add arcadeai-labs/omnimcp
-/plugin install arcade
-/mcp        # authenticate "arcade" with Arcade
+/plugin marketplace add arcadeai-labs/omnimcp   # register this repo as a marketplace
+/plugin install arcade@arcade                   # install the plugin
+/mcp                                            # sign in to the "arcade" server
 ```
 
-Or just add the bare connection (no subagents/commands):
+Then just ask in plain language, or use the commands:
+
+- `/arcade:do <task>` — do something in an app (Slack, Gmail, GitHub, …)
+- `/arcade:apps` — see or disconnect your connected apps
+- `/arcade:tools <query>` — preview which tools would run (debugging)
+
+Want only the tools (no commands/skills/subagents)? Add the bare server instead:
 
 ```bash
 claude mcp add --transport http arcade https://omni.arcade.dev/mcp
 ```
 
-Once installed, try `/arcade:do summarize my unread email`, or just ask in plain
-language — the `arcade-operator` subagent kicks in automatically. Use
-`/arcade:apps` to see or disconnect your connected apps.
+## Claude in the desktop app (Cowork & Code)
 
-## Claude Desktop
+Plugins work in **Cowork** and **Code** (not plain Chat).
 
-**Settings → Connectors → Add custom connector**, then paste the endpoint above.
-(Requires a paid Claude plan.)
+1. Open the **Plugins** page → **Add marketplace**.
+2. Enter `arcadeai-labs/omnimcp` (or `https://github.com/arcadeai-labs/omnimcp`).
+3. **Install** the **arcade** plugin and sign in with Arcade when prompted.
 
-No connector support on your version? Use the config in
+You get the same commands, skills, and subagents as Claude Code.
+
+For plain **Chat** (which doesn't use plugins), connect the server directly:
+**Settings → Connectors → Add custom connector** → paste
+`https://omni.arcade.dev/mcp` (requires a paid Claude plan). That gives the tools
+only — no slash commands. If your version lacks custom connectors, merge
 [`clients/claude-desktop/claude_desktop_config.json`](clients/claude-desktop/claude_desktop_config.json)
-— merge its `mcpServers` entry into your `claude_desktop_config.json` and
-restart Claude Desktop.
-
-## Signing in
-
-The first time you connect, you'll sign in with Arcade. After that, whenever a
-tool needs one of your accounts (Google, GitHub, Slack, …), you'll get a
-one-time link to connect it — approve it once and you're set. No API keys to
-paste.
+into your `claude_desktop_config.json` and restart.
 
 ## Try it
 
@@ -71,10 +79,10 @@ One plugin, three client targets, sharing the same MCP connection:
 | `.cursor-plugin/` | Cursor | Plugin + marketplace manifest |
 | `.claude-plugin/` | Claude Code | Plugin + marketplace manifest |
 | `mcp.json` / `.mcp.json` | Cursor / Claude Code | The Omni MCP server connection |
-| `agents/` | Claude Code | Subagents that run the discovery loop in isolation |
-| `skills/` | Cursor + Claude Code | Auto-activating guidance for tool use & apps |
-| `commands/` | Claude Code | `/arcade:do`, `/arcade:apps`, `/arcade:tools` slash commands |
-| `hooks/` | Claude Code | Session-start priming |
+| `agents/` | Claude Code / Cowork | Subagents that run the discovery loop in isolation |
+| `skills/` | Cursor + Claude Code / Cowork | Auto-activating guidance for tool use & apps |
+| `commands/` | Claude Code / Cowork | `/arcade:do`, `/arcade:apps`, `/arcade:tools` slash commands |
+| `hooks/` | Claude Code / Cowork | Session-start priming |
 | `rules/` | Cursor | Tool-discovery rule |
 | `clients/claude-desktop/` | Claude Desktop | Ready-to-merge connector config |
 
