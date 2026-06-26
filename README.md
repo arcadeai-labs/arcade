@@ -66,30 +66,37 @@ into your `claude_desktop_config.json` and restart.
 
 ## OpenCode
 
-OpenCode connects to Arcade as an **MCP server** (OAuth is auto-discovered — no
-keys). Add the server to your OpenCode config — `opencode.json` (project) or
+Two ways — the plugin (one install) or a manual MCP-server entry. OAuth is
+auto-discovered either way (no keys); run `opencode mcp auth arcade` if it
+doesn't prompt automatically.
+
+**Plugin** (`opencode-arcade`) — registers the Arcade MCP server for you and
+shows app sign-in links as toasts. Add it to your `opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-arcade"]
+}
+```
+
+Source: [`clients/opencode/`](clients/opencode/). Until it's published to npm,
+load it locally with `"plugin": ["file:///ABS/PATH/TO/clients/opencode"]`.
+
+**Or add the MCP server directly** — `opencode.json` (project) or
 `~/.config/opencode/opencode.json` (global):
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "arcade": {
-      "type": "remote",
-      "url": "https://omni.arcade.dev/mcp",
-      "enabled": true
-    }
+    "arcade": { "type": "remote", "url": "https://omni.arcade.dev/mcp", "enabled": true }
   }
 }
 ```
 
 (Ready-made: [`clients/opencode/opencode.json`](clients/opencode/opencode.json).)
-Run `opencode mcp auth arcade` if it doesn't prompt to sign in automatically,
-then just ask in plain language.
-
-Optional: drop [`clients/opencode/plugins/arcade.ts`](clients/opencode/plugins/arcade.ts)
-into `.opencode/plugins/` (or `~/.config/opencode/plugins/`) to surface app
-sign-in links in the logs.
+Then just ask in plain language.
 
 ## Try it
 
@@ -113,7 +120,7 @@ One package, four client targets, sharing the same MCP connection:
 | `hooks/` | Claude Code / Cowork | Session-start priming |
 | `rules/` | Cursor | Tool-discovery rule |
 | `clients/claude-desktop/` | Claude Desktop | Ready-to-merge connector config |
-| `clients/opencode/` | OpenCode | MCP server config + optional plugin |
+| `clients/opencode/` | OpenCode | `opencode-arcade` plugin (npm-style) + MCP server config |
 
 ## Links
 

@@ -7,10 +7,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **OpenCode** client target (`clients/opencode/`): a ready-made `opencode.json`
-  that adds Arcade as a remote MCP server (OAuth auto-discovered, no keys), plus
-  an optional OpenCode plugin (`clients/opencode/plugins/arcade.ts`) that surfaces
-  app sign-in links in the logs. README now documents Cursor, Claude Code/Cowork,
+- **OpenCode** client target (`clients/opencode/`): an `opencode-arcade` plugin
+  package (npm-style: `package.json` + `index.ts`, per the OpenCode ecosystem
+  convention) that registers the Arcade remote MCP server via the `config` hook
+  and surfaces app sign-in links as toasts (`client.tui.showToast`); plus a
+  ready-made `opencode.json` for configuring the MCP server directly. OAuth is
+  auto-discovered (no keys). README now documents Cursor, Claude Code/Cowork,
   Claude Desktop, and OpenCode.
 
 ## [0.3.0] - 2026-06-26
