@@ -8,8 +8,9 @@ sign-in, and gets it done.
 Endpoint: `https://omni.arcade.dev/mcp`
 
 This repo is one package: a **Cursor plugin**, a **Claude Code / Cowork
-plugin**, and a **Claude Desktop** connector. One-click installers also live on
-the splash page — **[omni.arcade.dev](https://omni.arcade.dev)**.
+plugin**, a **Claude Desktop** connector, and an **OpenCode** MCP server.
+One-click installers also live on the splash page —
+**[omni.arcade.dev](https://omni.arcade.dev)**.
 
 The first time you connect you sign in with Arcade. After that, each app
 (Google, GitHub, Slack, …) prompts a one-time sign-in the first time it's used.
@@ -63,6 +64,33 @@ only — no slash commands. If your version lacks custom connectors, merge
 [`clients/claude-desktop/claude_desktop_config.json`](clients/claude-desktop/claude_desktop_config.json)
 into your `claude_desktop_config.json` and restart.
 
+## OpenCode
+
+OpenCode connects to Arcade as an **MCP server** (OAuth is auto-discovered — no
+keys). Add the server to your OpenCode config — `opencode.json` (project) or
+`~/.config/opencode/opencode.json` (global):
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "arcade": {
+      "type": "remote",
+      "url": "https://omni.arcade.dev/mcp",
+      "enabled": true
+    }
+  }
+}
+```
+
+(Ready-made: [`clients/opencode/opencode.json`](clients/opencode/opencode.json).)
+Run `opencode mcp auth arcade` if it doesn't prompt to sign in automatically,
+then just ask in plain language.
+
+Optional: drop [`clients/opencode/plugins/arcade.ts`](clients/opencode/plugins/arcade.ts)
+into `.opencode/plugins/` (or `~/.config/opencode/plugins/`) to surface app
+sign-in links in the logs.
+
 ## Try it
 
 - "Send a Slack message to #eng that the deploy is done."
@@ -72,7 +100,7 @@ into your `claude_desktop_config.json` and restart.
 
 ## What's in this repo
 
-One plugin, three client targets, sharing the same MCP connection:
+One package, four client targets, sharing the same MCP connection:
 
 | Path | Used by | What it is |
 |------|---------|------------|
@@ -85,6 +113,7 @@ One plugin, three client targets, sharing the same MCP connection:
 | `hooks/` | Claude Code / Cowork | Session-start priming |
 | `rules/` | Cursor | Tool-discovery rule |
 | `clients/claude-desktop/` | Claude Desktop | Ready-to-merge connector config |
+| `clients/opencode/` | OpenCode | MCP server config + optional plugin |
 
 ## Links
 

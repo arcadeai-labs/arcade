@@ -3,6 +3,16 @@
 All notable changes to the OmniMCP plugin are documented here. This project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-06-26
+
+### Added
+
+- **OpenCode** client target (`clients/opencode/`): a ready-made `opencode.json`
+  that adds Arcade as a remote MCP server (OAuth auto-discovered, no keys), plus
+  an optional OpenCode plugin (`clients/opencode/plugins/arcade.ts`) that surfaces
+  app sign-in links in the logs. README now documents Cursor, Claude Code/Cowork,
+  Claude Desktop, and OpenCode.
+
 ## [0.3.0] - 2026-06-26
 
 ### Added
