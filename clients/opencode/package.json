@@ -5,8 +5,16 @@
   "type": "module",
   "main": "index.ts",
   "license": "Apache-2.0",
-  "repository": "https://github.com/arcadeai-labs/omnimcp",
+  "author": "Arcade.dev (https://arcade.dev)",
   "homepage": "https://omni.arcade.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcadeai-labs/omnimcp.git",
+    "directory": "clients/opencode"
+  },
+  "bugs": {
+    "url": "https://github.com/arcadeai-labs/omnimcp/issues"
+  },
   "keywords": [
     "opencode",
     "opencode-plugin",
@@ -14,7 +22,15 @@
     "omni",
     "mcp",
     "tools",
-    "tool-discovery"
+    "tool-discovery",
+    "slack",
+    "gmail",
+    "github"
+  ],
+  "files": [
+    "index.ts",
+    "README.md",
+    "LICENSE"
   ],
   "dependencies": {
     "@opencode-ai/plugin": "latest"
