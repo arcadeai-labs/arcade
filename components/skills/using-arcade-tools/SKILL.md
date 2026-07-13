@@ -43,8 +43,8 @@ subagents are unavailable or the task is one quick call.
 ```text
 User: "Tell #eng the deploy is done"
 Arcade_SelectTools(tasks: ["Send a Slack message to a channel"])
-  → [{tool_name: "Slack_SendMessageToChannel", input_schema: {channel_name, message}}, ...]
-Arcade_UseTool(tool_name: "Slack_SendMessageToChannel",
+  → [{tool_name: "Slack_SendMessage", input_schema: {channel_name, message, ...}}, ...]
+Arcade_UseTool(tool_name: "Slack_SendMessage",
                inputs: {channel_name: "eng", message: "Deploy is done."},
                query_id: "<from SelectTools>")
   → {success: true, ...}
