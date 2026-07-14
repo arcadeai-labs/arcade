@@ -30,15 +30,27 @@ All three run in CI (`.github/workflows/check.yml`) on every push/PR.
 `QA.md` documents the manual release checklist (client loads, gateway
 scenarios, auth-flow scenarios).
 
-## Rebuilding the Claude Desktop bundle
+## Rebuilding the Claude Desktop artifacts
 
-The `.mcpb` is committed so the README download link always works. After
-changing `clients/claude-desktop/mcpb/manifest.json`:
+Both artifact sets are committed so README download links always work.
+
+The `.mcpb` extension, after changing
+`clients/claude-desktop/mcpb/manifest.json`:
 
 ```bash
 cd clients/claude-desktop/mcpb
 npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
 ```
+
+The claude.ai skill ZIPs, after editing any `components/skills/*/SKILL.md`
+(also rewrites each description to the 200-character claude.ai limit —
+short copies live in the script):
+
+```bash
+node scripts/build-claude-skills.mjs
+```
+
+`check.mjs` fails if a skill lacks its committed ZIP.
 
 ## Versioning and release
 

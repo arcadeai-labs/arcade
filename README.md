@@ -29,7 +29,7 @@ account.
 
 - **Claude Desktop** — the button downloads
   `arcade-gateway-hub.mcpb`; double-click it, click **Install**, sign in.
-  Tools only — extensions can't carry skills/commands
+  The skills can be added too, as uploadable ZIPs
   ([details & alternatives](docs/install/claude-desktop.md)).
 - **OpenCode** — `opencode plugin opencode-arcade-hub` once published; local
   install today: [docs/install/opencode.md](docs/install/opencode.md).

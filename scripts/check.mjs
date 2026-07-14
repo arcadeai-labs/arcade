@@ -184,6 +184,16 @@ for (const file of userFacing) {
   }
 }
 
+// --- Claude-app skill bundles ------------------------------------------------------
+// Every skill must have an upload-ready ZIP for claude.ai / Claude Desktop
+// (built by scripts/build-claude-skills.mjs and committed).
+for (const skillDir of readdirSync(join(ROOT, "components/skills"))) {
+  const zip = `clients/claude-desktop/skills/${skillDir}.zip`;
+  if (!existsSync(join(ROOT, zip))) {
+    fail(`${zip} missing — run: node scripts/build-claude-skills.mjs`);
+  }
+}
+
 // --- Gateway coverage ------------------------------------------------------------
 // The hub's defining tool must be documented wherever tools are enumerated.
 for (const file of [

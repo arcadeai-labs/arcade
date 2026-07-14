@@ -10,13 +10,31 @@
 Requires Node.js (the bundle bridges Claude Desktop to the hosted server via
 a pinned `mcp-remote` proxy).
 
-> **Tools only.** Claude Desktop extensions can carry an MCP server but not
-> skills, commands, or subagents — those are Claude Code / Cowork plugin
-> features. You get all five Arcade tools (discovery, execution, gateways,
-> apps, connection repair), and the server's own instructions teach Claude
-> the flow — so plain-language requests like "switch to my work gateway"
-> still work. For the full experience (slash commands, skills, the operator
-> subagent), use the [Claude Code plugin](claude-code.md) in Cowork or Code.
+> The extension carries the MCP server (all five Arcade tools), and the
+> server's own instructions teach Claude the flow — so plain-language
+> requests like "switch to my work gateway" work out of the box. Slash
+> commands and subagents are Claude Code / Cowork plugin features
+> ([install guide](claude-code.md)); the plugin's *skills*, however, can be
+> added to Claude Desktop too — see below.
+
+## Add the skills (optional)
+
+The plugin's three skills ship as upload-ready ZIPs for the Claude apps:
+
+- [`using-arcade-tools.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/using-arcade-tools.zip)
+- [`managing-arcade-apps.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/managing-arcade-apps.zip)
+- [`working-with-arcade-gateways.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/working-with-arcade-gateways.zip)
+
+To install them:
+
+1. Enable **Code execution and file creation** under **Settings →
+   Capabilities** (skills require it; Enterprise owners enable Skills in
+   Organization settings first).
+2. Open **Customize → Skills** → **+ Create skill** → **Upload a skill**.
+3. Upload each ZIP and toggle it on.
+
+Skills uploaded this way follow your Claude account, so they also apply on
+claude.ai and mobile.
 
 ## Alternative: custom connector (paid plans)
 
