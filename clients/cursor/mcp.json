@@ -1,7 +1,7 @@
 {
     "mcpServers": {
         "arcade": {
-            "url": "https://omni.arcade.dev/mcp"
+            "url": "https://hub.arcadeagent.dev/mcp"
         }
     }
 }

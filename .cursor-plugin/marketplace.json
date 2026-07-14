@@ -5,18 +5,18 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "OmniMCP provides agents access to services like Slack, Gmail, GitHub, Linear, Notion, Dropbox, and other similar services."
+    "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection."
   },
   "plugins": [
     {
       "name": "arcade",
       "source": "./",
-      "description": "OmniMCP provides agents access to services like Slack, Gmail, GitHub, Linear, Notion, Dropbox, and other similar services.",
-      "logo": "assets/omni.svg",
-      "homepage": "https://omni.arcade.dev",
-      "repository": "https://github.com/arcadeai-labs/omnimcp",
+      "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection.",
+      "logo": "assets/arcade.svg",
+      "homepage": "https://hub.arcadeagent.dev",
+      "repository": "https://github.com/arcadeai-labs/arcade",
       "license": "Apache-2.0",
-      "keywords": ["arcade", "omni", "mcp", "tools", "tool-discovery", "integrations"]
+      "keywords": ["arcade", "gateway", "mcp", "tools", "tool-discovery", "integrations"]
     }
   ]
 }

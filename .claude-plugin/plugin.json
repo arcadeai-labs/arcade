@@ -1,17 +1,17 @@
 {
   "name": "arcade",
-  "description": "Dynamic tool discovery and execution across 500+ Arcade tools (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, Dropbox, and more) over a single MCP connection. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
-  "version": "0.6.0",
+  "description": "Connect your agent to your Arcade gateways — curated sets of apps and tools (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more) over a single MCP connection. Discovery and execution are scoped to the gateway you select, per app or account-wide. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
+  "version": "0.1.0",
   "author": {
     "name": "Arcade.dev",
-    "url": "https://omni.arcade.dev"
+    "url": "https://hub.arcadeagent.dev"
   },
-  "homepage": "https://omni.arcade.dev",
-  "repository": "https://github.com/arcadeai-labs/omnimcp",
+  "homepage": "https://hub.arcadeagent.dev",
+  "repository": "https://github.com/arcadeai-labs/arcade",
   "license": "Apache-2.0",
   "keywords": [
     "arcade",
-    "omni",
+    "gateway",
     "mcp",
     "tools",
     "tool-discovery",
@@ -28,7 +28,8 @@
   "commands": [
     "./components/commands/do.md",
     "./components/commands/apps.md",
-    "./components/commands/tools.md"
+    "./components/commands/tools.md",
+    "./components/commands/gateway.md"
   ],
   "agents": [
     "./components/agents/arcade-operator.md"

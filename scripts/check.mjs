@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Repo-wide structural checks for the OmniMCP plugin package.
+// Repo-wide structural checks for the Arcade Gateway Hub plugin package.
 // No dependencies; run with: node scripts/check.mjs
 
 import { execFileSync } from "node:child_process";
@@ -8,7 +8,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const ENDPOINT = "https://omni.arcade.dev/mcp";
+const ENDPOINT = "https://hub.arcadeagent.dev/mcp";
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 const errors = [];
@@ -172,13 +172,28 @@ const userFacing = [
   "components/commands/do.md",
   "components/commands/apps.md",
   "components/commands/tools.md",
+  "components/commands/gateway.md",
   "components/skills/using-arcade-tools/SKILL.md",
   "components/skills/managing-arcade-apps/SKILL.md",
-  "clients/cursor/rules/omni-tool-discovery.mdc",
+  "components/skills/working-with-arcade-gateways/SKILL.md",
+  "clients/cursor/rules/arcade-gateway-hub.mdc",
 ];
 for (const file of userFacing) {
   if (/authorization link/i.test(read(file))) {
     fail(`${file}: says "authorization link" — user-facing copy uses "sign-in link"`);
+  }
+}
+
+// --- Gateway coverage ------------------------------------------------------------
+// The hub's defining tool must be documented wherever tools are enumerated.
+for (const file of [
+  "components/skills/working-with-arcade-gateways/SKILL.md",
+  "components/commands/gateway.md",
+  "README.md",
+  "clients/opencode/README.md",
+]) {
+  if (!read(file).includes("Arcade_SelectGateway")) {
+    fail(`${file}: does not mention Arcade_SelectGateway`);
   }
 }
 

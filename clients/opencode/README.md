@@ -1,25 +1,26 @@
-# opencode-arcade
+# opencode-arcade-hub
 
-Arcade ([OmniMCP](https://omni.arcade.dev)) for **OpenCode** — instant access to
-500+ external-service tools (Slack, Gmail, GitHub, Google Calendar, Notion,
-Linear, Dropbox, and more) over a single MCP connection. Just ask for what you
-want; Arcade picks the right tool and handles the app sign-in.
+[Arcade Gateway Hub](https://hub.arcadeagent.dev) for **OpenCode** — your
+Arcade **gateways** (curated sets of apps and tools like Slack, Gmail, GitHub,
+Google Calendar, Notion, Linear) over a single MCP connection. Just ask for
+what you want; Arcade picks the right tool from your active gateway and
+handles the app sign-in.
 
 ## Install
 
-One command:
-
-```bash
-opencode plugin opencode-arcade
-```
-
-Or add it to your `opencode.json` (`plugin` array) yourself:
+> Not yet published to npm — install from a local checkout for now.
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-arcade"]
+  "plugin": ["file:///path/to/arcade/clients/opencode"]
 }
+```
+
+Once published:
+
+```bash
+opencode plugin opencode-arcade-hub
 ```
 
 The plugin registers the `arcade` remote MCP server for you (OAuth is
@@ -33,26 +34,28 @@ Prefer configuring the MCP server yourself instead of using the plugin? Add:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "arcade": { "type": "remote", "url": "https://omni.arcade.dev/mcp", "enabled": true }
+    "arcade": { "type": "remote", "url": "https://hub.arcadeagent.dev/mcp", "enabled": true }
   }
 }
 ```
 
 ## What you get
 
-Four meta-tools that resolve to the full Arcade catalog on demand:
+Five meta-tools that resolve to your gateways' tools on demand:
 
-- `Arcade_SelectTools` — find the right tool for a task
+- `Arcade_SelectTools` — find the right tool for a task (scoped to your
+  active gateway)
 - `Arcade_UseTool` — run it
+- `Arcade_SelectGateway` — see your gateways or switch the active one
 - `Arcade_Apps` — see or disconnect your connected apps
 - `Arcade_ManageToolAuthorization` — fix an app connection (switch account,
   expired sign-in, missing permissions)
 
 ## Links
 
-- Home: https://omni.arcade.dev
-- Endpoint: https://omni.arcade.dev/mcp
-- Source: https://github.com/arcadeai-labs/omnimcp
+- Home: https://hub.arcadeagent.dev
+- Endpoint: https://hub.arcadeagent.dev/mcp
+- Source: https://github.com/arcadeai-labs/arcade
 
 ## License
 

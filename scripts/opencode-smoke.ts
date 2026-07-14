@@ -26,7 +26,7 @@ assert(typeof hooks["tool.execute.after"] === "function", "plugin must expose to
 const emptyConfig: { mcp?: Record<string, { url?: string }> } = {}
 await hooks.config!(emptyConfig as never)
 assert(
-  emptyConfig.mcp?.arcade?.url === "https://omni.arcade.dev/mcp",
+  emptyConfig.mcp?.arcade?.url === "https://hub.arcadeagent.dev/mcp",
   "config hook must register the arcade MCP server",
 )
 

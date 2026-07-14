@@ -1,20 +1,21 @@
 import type { Plugin } from "@opencode-ai/plugin"
 
-// Arcade (OmniMCP) for OpenCode.
+// Arcade Gateway Hub for OpenCode.
 //
 // Installing this plugin does two things:
-//   1. Registers the `arcade` remote MCP server (https://omni.arcade.dev/mcp)
-//      via the `config` hook, so the 500+ Arcade tools (Slack, Gmail, GitHub,
-//      Calendar, Notion, Linear, and more) are available — no keys, OAuth is
-//      auto-discovered. (You can also configure this manually in opencode.json;
-//      see clients/opencode/opencode.json.)
+//   1. Registers the `arcade` remote MCP server (https://hub.arcadeagent.dev/mcp)
+//      via the `config` hook, so the Arcade tools (Slack, Gmail, GitHub,
+//      Calendar, Notion, Linear, and more — scoped to the user's active
+//      Arcade gateway) are available — no keys, OAuth is auto-discovered.
+//      (You can also configure this manually in opencode.json; see
+//      clients/opencode/opencode.json.)
 //   2. Surfaces the one-time app sign-in link as a toast when an Arcade tool
 //      returns one, so it isn't buried in a tool result.
 //
-// Install with `opencode plugin opencode-arcade`, add "opencode-arcade" to the
-// `plugin` array in opencode.json, or load locally with a "file://" path.
+// Install with `opencode plugin opencode-arcade-hub`, add "opencode-arcade-hub"
+// to the `plugin` array in opencode.json, or load locally with a "file://" path.
 
-const ARCADE_MCP_URL = "https://omni.arcade.dev/mcp"
+const ARCADE_MCP_URL = "https://hub.arcadeagent.dev/mcp"
 
 // Fallback pattern, used only when an Arcade result isn't parseable JSON.
 const SIGNIN_URL =

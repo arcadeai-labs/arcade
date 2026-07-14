@@ -7,16 +7,39 @@ behavior and is verified by hand before tagging a release.
 ## Local loads
 
 - [ ] **Claude Code:** `claude plugin validate .` passes, then load with
-  `claude --plugin-dir .` — verify 2 skills, 1 agent (`arcade-operator`),
-  3 commands (`/arcade:do`, `/arcade:apps`, `/arcade:tools`), the SessionStart
-  hook context, and the `arcade` MCP server connect.
+  `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
+  4 commands (`/arcade:do`, `/arcade:gateway`, `/arcade:apps`,
+  `/arcade:tools`), the SessionStart hook context, and the `arcade` MCP
+  server connect (sign in with an Arcade staging account).
 - [ ] **Cursor:** copy/symlink the repo to `~/.cursor/plugins/local/arcade`,
-  reload, and in Customize verify exactly: 1 rule, 2 skills, 1 agent,
-  3 commands, 1 hook, 1 MCP server — and nothing else. Start a new chat and
+  reload, and in Customize verify exactly: 1 rule, 3 skills, 1 agent,
+  4 commands, 1 hook, 1 MCP server — and nothing else. Start a new chat and
   confirm the sessionStart context appears (Hooks output channel shows no
   errors).
-- [ ] **OpenCode:** `opencode plugin opencode-arcade` (or `file://` path),
-  restart, confirm the `arcade` server is registered and tools list.
+- [ ] **OpenCode:** load via `file://` path (npm publish pending), restart,
+  confirm the `arcade` server is registered and tools list.
+
+## Gateway scenarios (any client)
+
+- [ ] **List:** "what gateways do I have" → readable list with names, apps,
+  tool counts; active gateway marked; unrestricted gateways say "all tools";
+  no raw JSON dump.
+- [ ] **Switch (this app):** "switch to <gateway>" → confirmation summary
+  (gateway, apps, tool count, "applies to this app"); a follow-up discovery
+  only returns the new gateway's tools.
+- [ ] **Cross-client isolation:** switching with the default scope in one
+  client does not change another client's active gateway.
+- [ ] **Switch (everywhere):** explicit "everywhere"/"all my apps" request
+  uses `scope: "everywhere"` and says so.
+- [ ] **Inspect:** "what's in <gateway>?" answered from the list output
+  (apps + tool count) without switching.
+- [ ] **Missing app:** a task whose app is outside the active gateway →
+  agent explains the gateway doesn't include it and offers the gateway that
+  does; it does not switch on its own or silently fall back.
+- [ ] **Unknown name:** a made-up gateway name → agent lists and asks, never
+  guesses an id.
+- [ ] **No speculative calls:** ordinary tasks don't trigger
+  `Arcade_SelectGateway`.
 
 ## Auth-flow scenarios (any client)
 
@@ -45,8 +68,8 @@ behavior and is verified by hand before tagging a release.
 
 - [ ] All CI checks green on `main`.
 - [ ] `git tag v<version>` + GitHub release with CHANGELOG notes.
-- [ ] `npm publish` from `clients/opencode/` (version matches manifests).
-- [ ] Cursor Marketplace: submit/refresh at cursor.com/marketplace/publish.
+- [ ] `npm publish` from `clients/opencode/` once `opencode-arcade-hub` goes
+  public (version matches manifests).
 - [ ] Claude: verify `/plugin marketplace update arcade` picks up the new
   version from a machine with the old version installed.
 - [ ] README upgrade note accurate for users on older cached versions.

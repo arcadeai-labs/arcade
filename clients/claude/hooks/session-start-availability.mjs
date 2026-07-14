@@ -4,11 +4,12 @@
 
 try {
   const context =
-    'Arcade (OmniMCP by Arcade.dev) is connected as the "arcade" MCP server — ' +
-    "500+ external-service tools (Slack, Gmail, GitHub, Calendar, Notion, and " +
-    "more) over one connection; prefer it for tasks in external apps or live " +
-    "data. The using-arcade-tools and managing-arcade-apps skills describe the " +
-    "flow; the arcade-operator subagent runs these tasks end-to-end.";
+    'Arcade Gateway Hub is connected as the "arcade" MCP server — external-app ' +
+    "tools (Slack, Gmail, GitHub, Calendar, Notion, and more) scoped to the " +
+    "user's active Arcade gateway; prefer it for tasks in external apps or " +
+    "live data. The using-arcade-tools, managing-arcade-apps, and " +
+    "working-with-arcade-gateways skills describe the flow; the " +
+    "arcade-operator subagent runs these tasks end-to-end.";
 
   process.stdout.write(
     JSON.stringify({

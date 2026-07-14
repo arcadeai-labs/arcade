@@ -1,7 +1,7 @@
 {
-  "name": "opencode-arcade",
-  "version": "0.6.0",
-  "description": "Arcade (OmniMCP) for OpenCode — 500+ external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) over one MCP connection.",
+  "name": "opencode-arcade-hub",
+  "version": "0.1.0",
+  "description": "Arcade Gateway Hub for OpenCode — external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) scoped to your Arcade gateways, over one MCP connection.",
   "type": "module",
   "main": "index.ts",
   "exports": {
@@ -9,20 +9,20 @@
   },
   "license": "Apache-2.0",
   "author": "Arcade.dev (https://arcade.dev)",
-  "homepage": "https://omni.arcade.dev",
+  "homepage": "https://hub.arcadeagent.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arcadeai-labs/omnimcp.git",
+    "url": "git+https://github.com/arcadeai-labs/arcade.git",
     "directory": "clients/opencode"
   },
   "bugs": {
-    "url": "https://github.com/arcadeai-labs/omnimcp/issues"
+    "url": "https://github.com/arcadeai-labs/arcade/issues"
   },
   "keywords": [
     "opencode",
     "opencode-plugin",
     "arcade",
-    "omni",
+    "gateway",
     "mcp",
     "tools",
     "tool-discovery",
