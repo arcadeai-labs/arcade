@@ -1,0 +1,31 @@
+{
+  "manifest_version": "0.2",
+  "name": "arcade-gateway-hub",
+  "display_name": "Arcade Gateway Hub",
+  "version": "0.1.0",
+  "description": "Your Arcade gateways — curated sets of apps and tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) over one connection.",
+  "long_description": "Connects Claude Desktop to the Arcade Gateway Hub (https://hub.arcadeagent.dev/mcp). Ask for what you want; the right tool from your active Arcade gateway runs, with one-time app sign-ins handled in the browser. Includes Arcade_SelectGateway to view and switch gateways. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
+  "author": {
+    "name": "Arcade.dev",
+    "email": "support@arcade.dev",
+    "url": "https://arcade.dev"
+  },
+  "homepage": "https://hub.arcadeagent.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcadeai-labs/arcade"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["arcade", "gateway", "mcp", "tools", "slack", "gmail", "github"],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote@0.1.38", "https://hub.arcadeagent.dev/mcp"]
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}

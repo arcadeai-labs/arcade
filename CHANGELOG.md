@@ -4,9 +4,9 @@ All notable changes to the Arcade Gateway Hub plugins are documented here.
 This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Derived from the [OmniMCP plugin](https://github.com/arcadeai-labs/omnimcp)
-at v0.6.0; this repo targets the gateway hub deployment
-(`hub.arcadeagent.dev`) instead of the curated production Omni server.
+Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
+history); this repo targets the gateway hub deployment
+(`hub.arcadeagent.dev`).
 
 ## [0.1.0] - 2026-07-14
 
