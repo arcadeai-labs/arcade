@@ -10,6 +10,14 @@
 Requires Node.js (the bundle bridges Claude Desktop to the hosted server via
 a pinned `mcp-remote` proxy).
 
+> **Tools only.** Claude Desktop extensions can carry an MCP server but not
+> skills, commands, or subagents — those are Claude Code / Cowork plugin
+> features. You get all five Arcade tools (discovery, execution, gateways,
+> apps, connection repair), and the server's own instructions teach Claude
+> the flow — so plain-language requests like "switch to my work gateway"
+> still work. For the full experience (slash commands, skills, the operator
+> subagent), use the [Claude Code plugin](claude-code.md) in Cowork or Code.
+
 ## Alternative: custom connector (paid plans)
 
 **Settings → Connectors → Add custom connector** → paste
