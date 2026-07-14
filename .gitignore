@@ -3,3 +3,10 @@
 node_modules/
 .env
 .env.*
+
+# Built artifacts — attached to GitHub Releases, never committed (Claude's
+# plugin installer rejects repos containing zip archives)
+dist/
+clients/claude-desktop/skills/*.zip
+clients/claude-desktop/arcade-gateway-hub.mcpb
+node_modules/

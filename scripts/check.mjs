@@ -173,6 +173,8 @@ const userFacing = [
   "components/commands/apps.md",
   "components/commands/tools.md",
   "components/commands/gateway.md",
+  "components/commands/status.md",
+  "components/commands/connect.md",
   "components/skills/using-arcade-tools/SKILL.md",
   "components/skills/managing-arcade-apps/SKILL.md",
   "components/skills/working-with-arcade-gateways/SKILL.md",
@@ -184,14 +186,18 @@ for (const file of userFacing) {
   }
 }
 
-// --- Claude-app skill bundles ------------------------------------------------------
-// Every skill must have an upload-ready ZIP for claude.ai / Claude Desktop
-// (built by scripts/build-claude-skills.mjs and committed).
-for (const skillDir of readdirSync(join(ROOT, "components/skills"))) {
-  const zip = `clients/claude-desktop/skills/${skillDir}.zip`;
-  if (!existsSync(join(ROOT, zip))) {
-    fail(`${zip} missing — run: node scripts/build-claude-skills.mjs`);
-  }
+// --- No committed archives ---------------------------------------------------------
+// Claude's plugin installer rejects repos containing zip archives ("Nested
+// zip files are not allowed"), and .mcpb bundles are zips. Built artifacts
+// are attached to GitHub Releases instead (see .github/workflows/release.yml).
+const trackedArchives = execFileSync("git", ["ls-files", "*.zip", "*.mcpb", "*.dxt"], {
+  cwd: ROOT,
+  encoding: "utf8",
+})
+  .split("\n")
+  .filter(Boolean);
+for (const archive of trackedArchives) {
+  fail(`${archive}: archives must not be committed (breaks Claude plugin installs) — attach to a GitHub Release instead`);
 }
 
 // --- Gateway coverage ------------------------------------------------------------

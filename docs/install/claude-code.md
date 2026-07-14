@@ -16,6 +16,8 @@ hook, and the commands:
 - `/arcade:do <task>` — do something in an app (Slack, Gmail, GitHub, …)
 - `/arcade:gateway [name]` — see your gateways or switch the active one
 - `/arcade:apps` — see, disconnect, or fix your connected apps
+- `/arcade:connect <app>` — connect an app with a one-time sign-in
+- `/arcade:status` — check connection, sign-in, gateway, and apps
 - `/arcade:tools <query>` — preview which tools would run (debugging)
 
 Inside a session, the same install works as `/plugin marketplace add
@@ -33,3 +35,11 @@ claude mcp add --transport http arcade https://hub.arcadeagent.dev/mcp
 
 Plugins work there too: **Plugins → Add marketplace** →
 `arcadeai-labs/arcade` → install **arcade** → sign in when prompted.
+
+## Updating
+
+```bash
+claude plugin marketplace update arcade
+```
+
+(or `/plugin marketplace update arcade` inside a session).

@@ -9,47 +9,47 @@ capability ceiling). Items are scoped to this repo unless noted.
 
 ## UX
 
-- [ ] **`/arcade:status` command (+ skill coverage).** Every polished plugin
+- [x] **`/arcade:status` command (+ skill coverage).** Every polished plugin
   has a preflight/status surface (Vercel's `/vercel-plugin:status`, its
   command `_conventions.md` preflight sections). Ours has no way to answer
   "am I connected, signed in, and on which gateway?" without triggering a
   task. One command: MCP server reachable → signed-in account → active
   gateway → connected apps count, with a fix-it hint per failure.
-- [ ] **First-run guidance when the server is missing or unauthenticated.**
+- [x] **First-run guidance when the server is missing or unauthenticated.**
   Skills assume the `arcade` server exists and is signed in. Add a short
   "if the tools are missing/erroring, check /mcp (Claude) or Settings → MCP
   (Cursor)" branch to the skills and rule so agents degrade with
   instructions instead of silence.
-- [ ] **Cursor manifest polish: `primaryColor` + logo treatment.** Linear
+- [x] **Cursor manifest polish: `primaryColor` + logo treatment.** Linear
   ships `primaryColor` for marketplace presentation; we don't. Trivial.
-- [ ] **`.mcpb` install-dialog polish.** The manifest spec (0.3+) lets the
+- [x] **`.mcpb` install-dialog polish.** The manifest spec (0.3+) lets the
   install UI show declared `tools` before install, plus
   `privacy_policies`, localized strings, and richer compatibility. Ours
   declares none of that — the dialog shows a bare server. Declare the five
   meta-tools with one-line descriptions, add the privacy policy URL, bump
   `manifest_version`.
-- [ ] **OpenCode gateway toast.** The plugin already watches
+- [x] **OpenCode gateway toast.** The plugin already watches
   `tool.execute.after` for sign-in links; also watch `Arcade_SelectGateway`
   select results and toast "Now using <gateway> (this app)" — switching
   feedback is otherwise buried in JSON output.
-- [ ] **OpenCode session context parity.** Cursor/Claude get a session-start
+- [x] **OpenCode session context parity.** Cursor/Claude get a session-start
   context line via hooks; OpenCode gets nothing. Investigate injecting the
   equivalent via the plugin API (`experimental` chat/system hooks) so all
   four clients start with the same one-paragraph orientation.
 
 ## Features
 
-- [ ] **`/arcade:connect <app>` command.** "Connect my Google account" as an
+- [x] **`/arcade:connect <app>` command.** "Connect my Google account" as an
   explicit flow (ManageToolAuthorization `authorize` + sign-in link
   etiquette) instead of waiting for a task to trip over the missing app.
-- [ ] **Vendor-neutral `.plugin/plugin.json` + `npx plugins add` support.**
+- [x] **Vendor-neutral `.plugin/plugin.json` + `npx plugins add` support.**
   Vercel's installer CLI (vercel-labs/plugins) translates a neutral manifest
   into every detected client (Claude Code, Cursor; Codex/Copilot/Grok/Kimi
   per their docs). Add the neutral manifest, test
   `npx plugins add arcadeai-labs/arcade`, and document it as the single
   cross-client install command — this is also our cheapest path to Codex
   and Copilot CLI users.
-- [ ] **OpenCode commands.** OpenCode supports markdown commands in the
+- [x] **OpenCode commands.** OpenCode supports markdown commands in the
   config dir; the plugin currently ships tools + toasts only. Evaluate
   installing `/arcade-do`, `/arcade-gateway`, `/arcade-apps` equivalents
   (oh-my-opencode demonstrates command + skill loading from a plugin).
@@ -60,20 +60,20 @@ capability ceiling). Items are scoped to this repo unless noted.
 
 ## Reliability
 
-- [ ] **Artifact freshness in CI.** `check.mjs` verifies skill ZIPs exist but
+- [x] **Artifact freshness in CI.** `check.mjs` verifies skill ZIPs exist but
   not that they're current, and the `.mcpb` isn't checked at all. CI should
   rebuild both and fail on drift (needs deterministic zips — strip
   timestamps).
-- [ ] **`claude plugin validate .` in CI.** Currently a manual QA step;
+- [x] **`claude plugin validate .` in CI.** Currently a manual QA step;
   Vercel runs client-shape validation in CI. Same for a headless Cursor
   hook-shape run (we execute hooks in check.mjs — extend to assert both
   client shapes stay parallel in content).
-- [ ] **Real-client OpenCode load test.** The smoke test exercises the module
+- [x] **Real-client OpenCode load test.** The smoke test exercises the module
   in isolation; add a CI job that installs the plugin into an actual
   `opencode` invocation (their ecosystem's plugins are bitten by
   `@opencode-ai/plugin` API drift regularly — we pin, but a load test
   catches breakage on bump).
-- [ ] **Update-awareness for local installs.** Claude marketplace installs
+- [x] **Update-awareness for local installs.** Claude marketplace installs
   update on `marketplace update`; Cursor local-dir installs never do. At
   minimum, document the update path per client in the install guides;
   optionally have the session hook compare plugin version against the hub's

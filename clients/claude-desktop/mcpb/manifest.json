@@ -1,22 +1,25 @@
 {
-  "manifest_version": "0.2",
+  "manifest_version": "0.3",
   "name": "arcade-gateway-hub",
   "display_name": "Arcade Gateway Hub",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Your Arcade gateways — curated sets of apps and tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) over one connection.",
-  "long_description": "Connects Claude Desktop to the Arcade Gateway Hub (https://hub.arcadeagent.dev/mcp). Ask for what you want; the right tool from your active Arcade gateway runs, with one-time app sign-ins handled in the browser. Includes Arcade_SelectGateway to view and switch gateways. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
+  "long_description": "Connects Claude Desktop to the Arcade Gateway Hub (https://hub.arcadeagent.dev/mcp). Ask for what you want; the right tool from your active Arcade gateway runs, with one-time app sign-ins handled in the browser — no API keys. Includes Arcade_SelectGateway to view and switch gateways per app or account-wide. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
   "author": {
     "name": "Arcade.dev",
     "email": "support@arcade.dev",
     "url": "https://arcade.dev"
   },
   "homepage": "https://hub.arcadeagent.dev",
+  "documentation": "https://github.com/arcadeai-labs/arcade/blob/main/docs/install/claude-desktop.md",
+  "support": "https://github.com/arcadeai-labs/arcade/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/arcadeai-labs/arcade"
   },
   "license": "Apache-2.0",
   "keywords": ["arcade", "gateway", "mcp", "tools", "slack", "gmail", "github"],
+  "privacy_policies": ["https://www.arcade.dev/privacy-policy"],
   "server": {
     "type": "node",
     "entry_point": "server/index.js",
@@ -25,6 +28,29 @@
       "args": ["-y", "mcp-remote@0.1.38", "https://hub.arcadeagent.dev/mcp"]
     }
   },
+  "tools": [
+    {
+      "name": "Arcade_SelectTools",
+      "description": "Find the right tool for a task (scoped to your active gateway)"
+    },
+    {
+      "name": "Arcade_UseTool",
+      "description": "Run a tool found by Arcade_SelectTools"
+    },
+    {
+      "name": "Arcade_SelectGateway",
+      "description": "See your gateways or switch the active one (this app or everywhere)"
+    },
+    {
+      "name": "Arcade_Apps",
+      "description": "See or disconnect your connected apps"
+    },
+    {
+      "name": "Arcade_ManageToolAuthorization",
+      "description": "Fix an app connection — switch account, expired sign-in, permissions"
+    }
+  ],
+  "tools_generated": false,
   "compatibility": {
     "platforms": ["darwin", "win32", "linux"]
   }

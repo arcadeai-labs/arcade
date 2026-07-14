@@ -3,7 +3,7 @@
 ## One click: the `.mcpb` extension (recommended)
 
 1. Download
-   [`arcade-gateway-hub.mcpb`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/arcade-gateway-hub.mcpb).
+   [`arcade-gateway-hub.mcpb`](https://github.com/arcadeai-labs/arcade/releases/latest/download/arcade-gateway-hub.mcpb).
 2. Double-click it (or drag it into the Claude Desktop window).
 3. Click **Install**, then sign in with Arcade when prompted.
 
@@ -21,9 +21,9 @@ a pinned `mcp-remote` proxy).
 
 The plugin's three skills ship as upload-ready ZIPs for the Claude apps:
 
-- [`using-arcade-tools.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/using-arcade-tools.zip)
-- [`managing-arcade-apps.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/managing-arcade-apps.zip)
-- [`working-with-arcade-gateways.zip`](https://github.com/arcadeai-labs/arcade/raw/main/clients/claude-desktop/skills/working-with-arcade-gateways.zip)
+- [`using-arcade-tools.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/using-arcade-tools.zip)
+- [`managing-arcade-apps.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/managing-arcade-apps.zip)
+- [`working-with-arcade-gateways.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/working-with-arcade-gateways.zip)
 
 To install them:
 

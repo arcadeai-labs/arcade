@@ -8,12 +8,11 @@ behavior and is verified by hand before tagging a release.
 
 - [ ] **Claude Code:** `claude plugin validate .` passes, then load with
   `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
-  4 commands (`/arcade:do`, `/arcade:gateway`, `/arcade:apps`,
-  `/arcade:tools`), the SessionStart hook context, and the `arcade` MCP
+  6 commands (`/arcade:do`, `/arcade:gateway`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`,  `/arcade:tools`), the SessionStart hook context, and the `arcade` MCP
   server connect (sign in with an Arcade staging account).
 - [ ] **Cursor:** copy/symlink the repo to `~/.cursor/plugins/local/arcade`,
   reload, and in Customize verify exactly: 1 rule, 3 skills, 1 agent,
-  4 commands, 1 hook, 1 MCP server — and nothing else. Start a new chat and
+  6 commands, 1 hook, 1 MCP server — and nothing else. Start a new chat and
   confirm the sessionStart context appears (Hooks output channel shows no
   errors).
 - [ ] **OpenCode:** load via `file://` path (npm publish pending), restart,
@@ -67,7 +66,9 @@ behavior and is verified by hand before tagging a release.
 ## Release steps
 
 - [ ] All CI checks green on `main`.
-- [ ] `git tag v<version>` + GitHub release with CHANGELOG notes.
+- [ ] `git tag v<version> && git push origin v<version>` — the release
+  workflow builds the `.mcpb` + skill ZIPs and attaches them to the GitHub
+  Release (download links use `releases/latest/download/…`).
 - [ ] `npm publish` from `clients/opencode/` once `opencode-arcade-hub` goes
   public (version matches manifests).
 - [ ] Claude: verify `/plugin marketplace update arcade` picks up the new

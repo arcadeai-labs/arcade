@@ -8,6 +8,46 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcadeagent.dev`).
 
+## [0.2.0] - 2026-07-14
+
+### Fixed
+
+- **Claude plugin installs from this repo work again.** Claude's installer
+  rejects repositories containing zip archives ("Nested zip files are not
+  allowed"), and we had committed the `.mcpb` bundle and three skill ZIPs.
+  Binary artifacts now live on GitHub Releases (built by the tag-driven
+  `release.yml` workflow); README/docs links use
+  `releases/latest/download/…`, and `check.mjs` fails if any archive is
+  ever committed again.
+
+### Added
+
+- **`/arcade:status`** — connection health check (server → sign-in → active
+  gateway → connected apps) with a one-line fix per failure.
+- **`/arcade:connect <app>`** — explicit app sign-in flow.
+- **OpenCode parity:** the plugin now injects the same session orientation
+  the Cursor/Claude hooks provide (via a shipped `instructions.md`),
+  registers `/arcade-do`, `/arcade-gateway`, and `/arcade-apps` commands
+  (never overwriting user-defined ones), and toasts gateway switches
+  ("now using Full Suite (this app)") alongside sign-in links.
+- **Vendor-neutral `.plugin/plugin.json`**, verified against the universal
+  installer: `npx plugins add arcadeai-labs/arcade` installs into every
+  detected client.
+- **First-run degradation guidance** in the tools skill and Cursor rule:
+  what to tell the user when the `arcade` server is missing or
+  unauthenticated, instead of silent fallback.
+- **CI hardening:** artifact builds (skill ZIPs + `.mcpb`), `claude plugin
+  validate`, and an OpenCode typecheck against the real
+  `@opencode-ai/plugin` types (catches plugin-API drift) now run on every
+  push.
+
+### Changed
+
+- **`.mcpb` manifest polish** (spec 0.3): the five meta-tools are declared
+  so the install dialog shows them, plus privacy policy, documentation, and
+  support links.
+- Cursor manifest gains `primaryColor` for marketplace presentation.
+
 ## [0.1.0] - 2026-07-14
 
 ### Added

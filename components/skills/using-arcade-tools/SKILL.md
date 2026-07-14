@@ -82,6 +82,14 @@ against the current date and state times with their timezone.
 - Any other error → report the tool's error message verbatim and stop.
 - Never fabricate a result. If a call returned nothing, say so.
 
+## If the Arcade tools are missing or erroring
+
+- Tools not listed at all → the `arcade` MCP server isn't connected. Tell
+  the user: check **Settings → MCP** (Cursor), run **/mcp** (Claude Code),
+  or run **opencode mcp auth arcade** (OpenCode) and sign in.
+- Every call fails with an authentication error → the Arcade sign-in
+  expired; same fix. Don't retry in a loop — give the instruction once.
+
 ## When not to use
 
 - Local work: repo files, code edits, shell commands.

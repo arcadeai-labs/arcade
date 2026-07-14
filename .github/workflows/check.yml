@@ -18,10 +18,26 @@ jobs:
       - name: Structural checks
         run: node scripts/check.mjs
 
+      - name: Build Claude-app skill bundles
+        run: node scripts/build-claude-skills.mjs
+
+      - name: Build Claude Desktop extension
+        working-directory: clients/claude-desktop/mcpb
+        run: npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
+
+      - name: Claude plugin validation
+        run: npx -y @anthropic-ai/claude-code plugin validate .
+
       - uses: oven-sh/setup-bun@v2
 
       - name: OpenCode plugin smoke test
         run: bun scripts/opencode-smoke.ts
+
+      - name: OpenCode plugin typecheck (real plugin API types)
+        working-directory: clients/opencode
+        run: |
+          bun install --frozen-lockfile
+          bunx tsc --noEmit -p .
 
       - name: OpenCode package contents
         working-directory: clients/opencode

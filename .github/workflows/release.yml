@@ -1,0 +1,45 @@
+name: release
+
+# Tag-driven releases build the binary artifacts (Claude Desktop .mcpb +
+# claude.ai skill ZIPs) and attach them to a GitHub Release. Artifacts are
+# never committed: Claude's plugin installer rejects repos containing zip
+# archives, and the README's stable download links point at
+# releases/latest/download/ instead.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Structural checks
+        run: node scripts/check.mjs
+
+      - name: Build Claude-app skill bundles
+        run: node scripts/build-claude-skills.mjs
+
+      - name: Build Claude Desktop extension
+        working-directory: clients/claude-desktop/mcpb
+        run: npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
+
+      - name: Create release with artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "Arcade Gateway Hub plugins ${GITHUB_REF_NAME}" \
+            --generate-notes \
+            clients/claude-desktop/arcade-gateway-hub.mcpb \
+            clients/claude-desktop/skills/*.zip

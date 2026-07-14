@@ -24,3 +24,14 @@ under Customize: 1 rule, 3 skills, 1 agent, 4 commands, 1 hook, 1 MCP server.
 - "What gateways do I have?"
 - "Switch to <gateway> for this app."
 - "Send a Slack message to #eng that the deploy is done."
+- `/arcade:status` to verify the connection end to end.
+
+## Updating
+
+Local-directory installs don't self-update — pull the repo:
+
+```bash
+git -C ~/.cursor/plugins/local/arcade pull
+```
+
+then reload Cursor.

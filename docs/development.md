@@ -21,36 +21,33 @@ client gets exactly its intended bundle.
 ## Checks
 
 ```bash
-node scripts/check.mjs        # structural checks (JSON, frontmatter, paths, versions, endpoint)
-bun scripts/opencode-smoke.ts # OpenCode plugin behavior
+node scripts/check.mjs             # structural checks (JSON, frontmatter, paths, versions, endpoint)
+bun scripts/opencode-smoke.ts      # OpenCode plugin behavior
+claude plugin validate .           # Claude marketplace/plugin manifest validation
+cd clients/opencode && bunx tsc --noEmit -p .  # typecheck against real plugin API
 cd clients/opencode && npm pack --dry-run
 ```
 
-All three run in CI (`.github/workflows/check.yml`) on every push/PR.
-`QA.md` documents the manual release checklist (client loads, gateway
-scenarios, auth-flow scenarios).
+All of these run in CI (`.github/workflows/check.yml`) on every push/PR,
+along with artifact builds. `QA.md` documents the manual release checklist
+(client loads, gateway scenarios, auth-flow scenarios).
 
-## Rebuilding the Claude Desktop artifacts
+## Binary artifacts (.mcpb + skill ZIPs)
 
-Both artifact sets are committed so README download links always work.
+Artifacts are **never committed** — Claude's plugin installer rejects repos
+containing zip archives ("Nested zip files are not allowed"), and `check.mjs`
+fails if any `.zip`/`.mcpb`/`.dxt` is tracked. They're built by the
+tag-driven `release.yml` workflow and attached to GitHub Releases; download
+links use `releases/latest/download/…`.
 
-The `.mcpb` extension, after changing
-`clients/claude-desktop/mcpb/manifest.json`:
+Build locally the same way CI does:
 
 ```bash
+node scripts/build-claude-skills.mjs   # claude.ai skill ZIPs (also rewrites
+                                       # descriptions to the 200-char limit)
 cd clients/claude-desktop/mcpb
 npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
 ```
-
-The claude.ai skill ZIPs, after editing any `components/skills/*/SKILL.md`
-(also rewrites each description to the 200-character claude.ai limit —
-short copies live in the script):
-
-```bash
-node scripts/build-claude-skills.mjs
-```
-
-`check.mjs` fails if a skill lacks its committed ZIP.
 
 ## Versioning and release
 

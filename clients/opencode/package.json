@@ -1,7 +1,7 @@
 {
   "name": "opencode-arcade-hub",
-  "version": "0.1.0",
-  "description": "Arcade Gateway Hub for OpenCode — external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) scoped to your Arcade gateways, over one MCP connection.",
+  "version": "0.2.0",
+  "description": "Arcade Gateway Hub for OpenCode \u2014 external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) scoped to your Arcade gateways, over one MCP connection.",
   "type": "module",
   "main": "index.ts",
   "exports": {
@@ -32,6 +32,7 @@
   ],
   "files": [
     "index.ts",
+    "instructions.md",
     "README.md",
     "LICENSE"
   ],

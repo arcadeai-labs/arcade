@@ -23,19 +23,53 @@ assert(typeof hooks.config === "function", "plugin must expose a config hook")
 assert(typeof hooks["tool.execute.after"] === "function", "plugin must expose tool.execute.after")
 
 // config: registers the arcade server on an empty config
-const emptyConfig: { mcp?: Record<string, { url?: string }> } = {}
+const emptyConfig: {
+  mcp?: Record<string, { url?: string }>
+  instructions?: string[]
+  command?: Record<string, { description?: string; template?: string }>
+} = {}
 await hooks.config!(emptyConfig as never)
 assert(
   emptyConfig.mcp?.arcade?.url === "https://hub.arcadeagent.dev/mcp",
   "config hook must register the arcade MCP server",
 )
 
-// config: never overwrites an existing user entry
-const userConfig = { mcp: { arcade: { url: "https://example.com/custom" } } }
+// config: injects session instructions pointing at the shipped file
+assert(
+  emptyConfig.instructions?.some((p) => p.endsWith("instructions.md")) === true,
+  "config hook must register the session instructions file",
+)
+
+// config: registers the three slash commands
+for (const name of ["arcade-do", "arcade-gateway", "arcade-apps"]) {
+  assert(
+    typeof emptyConfig.command?.[name]?.template === "string" &&
+      typeof emptyConfig.command?.[name]?.description === "string",
+    `config hook must register the /${name} command`,
+  )
+}
+
+// config: never overwrites existing user entries (server, commands)
+const userConfig = {
+  mcp: { arcade: { url: "https://example.com/custom" } },
+  command: { "arcade-do": { description: "mine", template: "custom" } },
+}
 await hooks.config!(userConfig as never)
 assert(
   userConfig.mcp.arcade.url === "https://example.com/custom",
   "config hook must not overwrite an existing arcade entry",
+)
+assert(
+  userConfig.command["arcade-do"].template === "custom",
+  "config hook must not overwrite an existing user command",
+)
+
+// config: idempotent — instructions are not duplicated on re-run
+const rerunConfig: { instructions?: string[] } = { instructions: [...(emptyConfig.instructions ?? [])] }
+await hooks.config!(rerunConfig as never)
+assert(
+  rerunConfig.instructions?.filter((p) => p.endsWith("instructions.md")).length === 1,
+  "config hook must not duplicate the instructions entry",
 )
 
 const after = hooks["tool.execute.after"]!
@@ -72,6 +106,31 @@ await after(
   { output: "Sign in at https://slack.com/oauth/authorize?state=z to continue" } as never,
 )
 assert(toasts.length === 2, "regex fallback must still catch sign-in links in plain-text Arcade output")
+
+// toast: gateway switch confirmation from Arcade_SelectGateway
+await after(
+  { tool: "arcade_Arcade_SelectGateway" } as never,
+  {
+    output: JSON.stringify({
+      gateway: "gw_123",
+      name: "Full Suite",
+      scope: "this_app",
+      tool_count: 494,
+      message: "Connected to Full Suite …",
+    }),
+  } as never,
+)
+assert(
+  toasts.length === 3 && toasts[2].includes("Full Suite") && toasts[2].includes("this app"),
+  "gateway switch must toast with the gateway name and scope",
+)
+
+// no toast: gateway list output (no scope field) must stay silent
+await after(
+  { tool: "arcade_Arcade_SelectGateway" } as never,
+  { output: JSON.stringify({ gateways: [], count: 0 }) } as never,
+)
+assert(toasts.length === 3, "gateway list output must not toast")
 
 if (failures.length > 0) {
   console.error(`opencode-smoke: ${failures.length} failure(s)`)

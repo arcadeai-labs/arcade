@@ -21,6 +21,10 @@ include it; offer to check the gateway list rather than falling back silently.
 The `using-arcade-tools` skill has the full flow; `managing-arcade-apps` covers
 listing, disconnecting, and fixing the user's app connections.
 
+If the `arcade` tools are missing or every call fails with an authentication
+error, tell the user to open **Settings → MCP**, find **arcade**, and sign
+in — don't silently fall back to built-ins or retry in a loop.
+
 ## Non-negotiables
 
 - A result containing an `authorization_url` (or an authorization-required
