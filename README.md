@@ -55,6 +55,7 @@ Your assistant handles discovery with five meta-tools (`Arcade_SelectTools`,
 ## Learn more
 
 - [Gateways — how selection and scoping work](docs/gateways.md)
+- [Client support matrix — what each install gets](docs/support-matrix.md)
 - [Install guides](docs/install/) · [Development & repo layout](docs/development.md)
 - Privacy: tasks run through Arcade's hosted hub and the apps you connect —
   [privacy policy](https://www.arcade.dev/privacy-policy).
