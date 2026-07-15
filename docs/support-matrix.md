@@ -9,7 +9,7 @@ the MCP connection itself, so **every** row below includes it.
 
 | | Cursor | Claude Code (CLI) | Claude Cowork / Code (desktop) | OpenCode |
 |---|---|---|---|---|
-| **Install** | clone/symlink to `~/.cursor/plugins/local/arcade` (marketplace pending) | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode.json` `plugin: ["file:///…/clients/opencode"]` (npm publish pending) |
+| **Install** | recommended: the Claude Code install (Cursor auto-loads Claude plugins — everything below except the rule, with auto-updates); or clone a **real copy** (not a symlink — Cursor rejects those) to `~/.cursor/plugins/local/arcade` for the rule too | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode.json` `plugin: ["file:///…/clients/opencode"]` (npm publish pending) |
 | **One-command alternative** | `npx plugins add arcadeai-labs/arcade` | `npx plugins add arcadeai-labs/arcade` | — | — |
 | **MCP tools (all 5)** | ✅ | ✅ | ✅ | ✅ |
 | **Skills (3)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
@@ -38,6 +38,12 @@ Notes:
   archives).
 - OpenCode command names use a dash (`/arcade-do`) because they're injected
   config commands; Cursor/Claude use the plugin namespace (`/arcade:do`).
+- **Claude→Cursor bridge:** Cursor loads installed Claude Code plugins via
+  the Claude manifest, which has no rules concept — so that path delivers
+  skills/subagent/commands/hook but not the always-on rule. The session
+  hook is one shared script that detects the invoking client from its stdin
+  payload and answers in that client's native shape, so context injection
+  works on both editors regardless of which manifest loaded it.
 - Plain-language use ("switch to my work gateway") works identically in
   every row — the hub's server instructions carry the flow even with no
   plugin content installed.

@@ -149,22 +149,38 @@ for (const file of ["clients/cursor/mcp.json", "clients/claude/mcp.json", "clien
   if (!json[file]?.mcpServers?.arcade) fail(`${file}: mcpServers must define the "arcade" server key`);
 }
 
-// --- Hook scripts execute with client-native shapes ---------------------------
-const runHook = (script) => {
+// --- Hook script executes with client-native shapes ---------------------------
+// One shared script serves both clients (Cursor also loads Claude Code
+// plugins, so either client may invoke either hooks.json). The platform is
+// detected from the hook's stdin payload; verify both detections.
+const runHook = (script, stdinPayload) => {
   try {
-    return JSON.parse(execFileSync("node", [join(ROOT, script)], { encoding: "utf8", timeout: 10_000 }));
+    return JSON.parse(
+      execFileSync("node", [join(ROOT, script)], {
+        encoding: "utf8",
+        timeout: 10_000,
+        input: stdinPayload,
+      }),
+    );
   } catch (execError) {
     fail(`${script}: failed to execute or emit JSON — ${execError.message}`);
     return null;
   }
 };
-const cursorHook = runHook("clients/cursor/hooks/session-start.mjs");
+const HOOK_SCRIPT = "components/hooks/session-start.mjs";
+const cursorHook = runHook(HOOK_SCRIPT, JSON.stringify({ conversation_id: "c", workspace_roots: ["/tmp"] }));
 if (cursorHook && typeof cursorHook.additional_context !== "string") {
-  fail("clients/cursor/hooks/session-start.mjs: must emit flat { additional_context } (Cursor-native shape)");
+  fail(`${HOOK_SCRIPT}: cursor-shaped stdin must emit flat { additional_context }`);
 }
-const claudeHook = runHook("clients/claude/hooks/session-start-availability.mjs");
+const claudeHook = runHook(HOOK_SCRIPT, JSON.stringify({ hook_event_name: "SessionStart", session_id: "s" }));
 if (claudeHook && claudeHook.hookSpecificOutput?.hookEventName !== "SessionStart") {
-  fail("clients/claude/hooks/session-start-availability.mjs: must emit hookSpecificOutput.hookEventName = SessionStart");
+  fail(`${HOOK_SCRIPT}: claude-shaped stdin must emit hookSpecificOutput.hookEventName = SessionStart`);
+}
+// Both hooks.json files must reference the shared script.
+for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hooks/hooks.json"]) {
+  if (!read(hooksFile).includes("components/hooks/session-start.mjs")) {
+    fail(`${hooksFile}: must reference the shared ${HOOK_SCRIPT}`);
+  }
 }
 
 // --- Language consistency -------------------------------------------------------

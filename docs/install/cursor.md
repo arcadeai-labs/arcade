@@ -8,30 +8,40 @@ This adds the `arcade` MCP server only — no rule, skills, commands, or hooks.
 Approve the install, then open **Settings → MCP**, find **arcade**, and sign
 in with Arcade.
 
-## Full plugin (rule + skills + commands + subagent + hook)
+## Recommended: install once via Claude Code
 
-Copy or symlink this repo and restart Cursor:
+Cursor automatically loads installed Claude Code plugins, so one install
+covers both editors — with auto-updates:
+
+```bash
+claude plugin marketplace add arcadeai-labs/arcade
+claude plugin install arcade@arcade
+```
+
+Reload Cursor. This surfaces the MCP server, all 3 skills, the
+`arcade-operator` subagent, all 6 commands, and the session-start context
+hook (the hook detects which client invoked it and answers in that client's
+native shape). The only piece that can't bridge is the Cursor-specific
+always-on rule — its guidance is substantially covered by the hook + skills.
+
+Update later with `claude plugin marketplace update arcade`.
+
+## Full native install (adds the rule)
+
+Copy the repo — **a real directory, not a symlink** (Cursor rejects symlink
+targets outside its plugins folder):
 
 ```bash
 git clone https://github.com/arcadeai-labs/arcade ~/.cursor/plugins/local/arcade
 ```
 
-After the restart, **Settings → MCP → arcade → sign in** with Arcade. Verify
-under Customize: 1 rule, 3 skills, 1 agent, 4 commands, 1 hook, 1 MCP server.
+Reload Cursor and verify under Customize: 1 rule, 3 skills, 1 agent,
+6 commands, 1 hook, 1 MCP server. If you also have the Claude Code install,
+disable one of the two `arcade` plugins in the Plugins UI to avoid
+duplicates. Update with `git -C ~/.cursor/plugins/local/arcade pull` + reload.
 
 ## First steps
 
-- "What gateways do I have?"
-- "Switch to <gateway> for this app."
-- "Send a Slack message to #eng that the deploy is done."
 - `/arcade:status` to verify the connection end to end.
-
-## Updating
-
-Local-directory installs don't self-update — pull the repo:
-
-```bash
-git -C ~/.cursor/plugins/local/arcade pull
-```
-
-then reload Cursor.
+- "What gateways do I have?" / "Switch to <gateway> for this app."
+- "Send a Slack message to #eng that the deploy is done."
