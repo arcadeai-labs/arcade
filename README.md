@@ -5,8 +5,12 @@ One connection to your Arcade **gateways** — curated sets of apps and tools
 want; the right tool from your active gateway runs, and one-time app sign-ins
 happen in the browser. No API keys.
 
-Endpoint: `https://hub.arcadeagent.dev/mcp` · Sign in with your Arcade
-account.
+Endpoint: `https://hub.arcadeagent.dev/mcp`
+
+> **Staging deployment.** The gateway hub currently runs against Arcade
+> staging, so sign in with your **staging** Arcade account (the sign-in page
+> is served by `cloud.bosslevel.dev`, not `arcade.dev`). Everything below is
+> otherwise production-shaped.
 
 ## Add it to your client
 
@@ -17,9 +21,11 @@ account.
 | **Claude Desktop** | [![Download extension for Claude Desktop](https://img.shields.io/badge/Claude_Desktop-download_extension-d97757?logo=claude&logoColor=white)](https://github.com/arcadeai-labs/arcade/releases/latest/download/arcade-gateway-hub.mcpb) |
 | **OpenCode** | [![Install plugin in OpenCode](https://img.shields.io/badge/OpenCode-install_plugin-333333?logo=iterm2&logoColor=white)](docs/install/opencode.md) |
 
-- **Cursor** — the button adds the `arcade` MCP server (approve, then sign in
-  under **Settings → MCP**). For the full plugin — rule, skills, commands,
-  subagent — see [docs/install/cursor.md](docs/install/cursor.md).
+- **Cursor** — the button adds the `arcade` MCP server only (tools, no
+  skills/commands/rule). For the full plugin, add the marketplace
+  `arcadeai-labs/arcade` in Cursor's plugins panel (or
+  `npx plugins add arcadeai-labs/arcade --target cursor`), then sign in under
+  **Settings → MCP**. Details: [docs/install/cursor.md](docs/install/cursor.md).
 - **Claude Code** — two commands, no session needed:
 
   ```bash
@@ -34,11 +40,9 @@ account.
 - **OpenCode** — `opencode plugin opencode-arcade-hub` once published; local
   install today: [docs/install/opencode.md](docs/install/opencode.md).
 
-Or install into every detected client at once with the universal installer:
-
-```bash
-npx plugins add arcadeai-labs/arcade
-```
+Cursor auto-loads Claude Code plugins, so if you use both editors, install in
+**one** place to avoid a duplicate entry in Cursor — see the note in the
+[Cursor guide](docs/install/cursor.md#avoid-installing-twice).
 
 ## Try it
 

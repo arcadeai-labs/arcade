@@ -10,11 +10,13 @@ behavior and is verified by hand before tagging a release.
   `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
   6 commands (`/arcade:do`, `/arcade:gateway`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`,  `/arcade:tools`), the SessionStart hook context, and the `arcade` MCP
   server connect (sign in with an Arcade staging account).
-- [ ] **Cursor:** copy/symlink the repo to `~/.cursor/plugins/local/arcade`,
+- [ ] **Cursor:** add the marketplace `arcadeai-labs/arcade` in Cursor's
+  plugins panel (or `npx plugins add arcadeai-labs/arcade --target cursor`),
   reload, and in Customize verify exactly: 1 rule, 3 skills, 1 agent,
-  6 commands, 1 hook, 1 MCP server — and nothing else. Start a new chat and
-  confirm the sessionStart context appears (Hooks output channel shows no
-  errors).
+  6 commands, 1 hook, 1 MCP server — and nothing else, with the arcade logo.
+  Confirm no duplicate "Imported" entry (would mean it's also installed in
+  Claude Code). Start a new chat and confirm the sessionStart context appears
+  (Hooks output channel shows no errors).
 - [ ] **OpenCode:** load via `file://` path (npm publish pending), restart,
   confirm the `arcade` server is registered and tools list.
 
