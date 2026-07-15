@@ -12,6 +12,7 @@
       "name": "arcade",
       "source": "./",
       "description": "Your Arcade gateways (curated sets of apps and tools) over a single MCP connection, with an operator subagent, skills, slash commands, and hooks. Discovery and execution follow the gateway you select.",
+      "logo": "assets/arcade.svg",
       "author": {
         "name": "Arcade.dev"
       },
