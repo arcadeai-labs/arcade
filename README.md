@@ -17,7 +17,7 @@ Endpoint: `https://hub.arcade.dev/mcp`
 
 | Client | Install |
 |--------|---------|
-| **Cursor** | [![Install MCP server in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGUuZGV2L21jcCJ9) |
+| **Cursor** | [![Install MCP server in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGUuZGV2L21jcCJ9) |
 | **Claude Code** | [![Install plugin in Claude Code](https://img.shields.io/badge/Claude_Code-install_plugin-d97757?logo=claude&logoColor=white)](docs/install/claude-code.md) |
 | **Claude Desktop** | [![Download extension for Claude Desktop](https://img.shields.io/badge/Claude_Desktop-download_extension-d97757?logo=claude&logoColor=white)](https://github.com/arcadeai-labs/arcade/releases/latest/download/arcade-gateway-hub.mcpb) |
 | **OpenCode** | [![Install plugin in OpenCode](https://img.shields.io/badge/OpenCode-install_plugin-333333?logo=iterm2&logoColor=white)](docs/install/opencode.md) |
