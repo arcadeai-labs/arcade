@@ -1,12 +1,22 @@
 # Changelog
 
-All notable changes to the Arcade Gateway Hub plugins are documented here.
+All notable changes to the Arcade Agent Hub plugins are documented here.
 This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
+
+## [0.3.1] - 2026-07-16
+
+### Changed
+
+- Rebranded to **Arcade Agent Hub** — the hub between you and all your
+  apps, across any agent you connect. "Gateway" remains the technical term
+  for the curated app/tool sets that scope discovery and execution; only
+  the product name changed. Display names, descriptions, and docs updated
+  across all four clients.
 
 ## [0.3.0] - 2026-07-16
 

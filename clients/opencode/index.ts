@@ -1,6 +1,6 @@
 import type { Plugin } from "@opencode-ai/plugin"
 
-// Arcade Gateway Hub for OpenCode.
+// Arcade Agent Hub for OpenCode.
 //
 // Installing this plugin does two things:
 //   1. Registers the `arcade` remote MCP server (https://hub.arcade.dev/mcp)

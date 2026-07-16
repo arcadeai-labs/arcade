@@ -1,13 +1,14 @@
-# Arcade Gateway Hub
+# Arcade Agent Hub
 
-One connection to your Arcade **gateways** — curated sets of apps and tools
-(Slack, Gmail, GitHub, Calendar, Notion, Linear, and more). Ask for what you
-want; the right tool from your active gateway runs, and one-time app sign-ins
-happen in the browser. No API keys.
+The hub between you and all your apps — across any agent you connect. Ask
+for what you want; the right tool runs, scoped to your active Arcade
+**gateway** (a curated set of apps and tools like Slack, Gmail, GitHub,
+Calendar, Notion, Linear), and one-time app sign-ins happen in the browser.
+No API keys.
 
 Endpoint: `https://hub.arcade.dev/mcp`
 
-> **Staging deployment.** The gateway hub currently runs against Arcade
+> **Staging deployment.** The Arcade Agent Hub currently runs against Arcade
 > staging, so sign in with your **staging** Arcade account (the sign-in page
 > is served by `cloud.bosslevel.dev`, not `arcade.dev`). Everything below is
 > otherwise production-shaped.

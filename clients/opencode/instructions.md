@@ -1,4 +1,4 @@
-# Arcade Gateway Hub
+# Arcade Agent Hub
 
 The `arcade` MCP server is connected — external-app tools (Slack, Gmail,
 GitHub, Calendar, Notion, and more) scoped to the user's active Arcade

@@ -1,6 +1,6 @@
 # opencode-arcade-hub
 
-[Arcade Gateway Hub](https://hub.arcade.dev) for **OpenCode** — your
+[Arcade Agent Hub](https://hub.arcade.dev) for **OpenCode** — your
 Arcade **gateways** (curated sets of apps and tools like Slack, Gmail, GitHub,
 Google Calendar, Notion, Linear) over a single MCP connection. Just ask for
 what you want; Arcade picks the right tool from your active gateway and

@@ -5,13 +5,13 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection."
+    "description": "Arcade Agent Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection."
   },
   "plugins": [
     {
       "name": "arcade",
       "source": "./",
-      "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection.",
+      "description": "Arcade Agent Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection.",
       "logo": "assets/arcade.svg",
       "homepage": "https://hub.arcade.dev",
       "repository": "https://github.com/arcadeai-labs/arcade",

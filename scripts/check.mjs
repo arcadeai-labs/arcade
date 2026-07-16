@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Repo-wide structural checks for the Arcade Gateway Hub plugin package.
+// Repo-wide structural checks for the Arcade Agent Hub plugin package.
 // No dependencies; run with: node scripts/check.mjs
 
 import { execFileSync } from "node:child_process";

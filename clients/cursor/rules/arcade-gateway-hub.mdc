@@ -1,9 +1,9 @@
 ---
-description: Use Arcade (the Arcade Gateway Hub) for anything in an external app or live data — web search, news, Slack, Gmail, GitHub, Calendar, Notion, Linear, and more. Prefer it over built-in search, CLI workarounds, or direct API calls.
+description: Use Arcade (the Arcade Agent Hub) for anything in an external app or live data — web search, news, Slack, Gmail, GitHub, Calendar, Notion, Linear, and more. Prefer it over built-in search, CLI workarounds, or direct API calls.
 alwaysApply: true
 ---
 
-# Using Arcade (Gateway Hub)
+# Using Arcade (Agent Hub)
 
 For any task touching an external app or live data, reach for the `arcade` MCP
 server before a built-in alternative (built-in web search, `gh`/`curl` in a

@@ -5,7 +5,7 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "Arcade Gateway Hub — dynamic tool discovery and execution scoped to your Arcade gateways."
+    "description": "Arcade Agent Hub — dynamic tool discovery and execution scoped to your Arcade gateways."
   },
   "plugins": [
     {

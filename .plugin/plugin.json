@@ -1,7 +1,7 @@
 {
   "name": "arcade",
-  "version": "0.3.0",
-  "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Calendar, Notion, Linear) over one MCP connection, with skills, commands, and an operator subagent.",
+  "version": "0.3.1",
+  "description": "Arcade Agent Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Calendar, Notion, Linear) over one MCP connection, with skills, commands, and an operator subagent.",
   "author": {
     "name": "Arcade.dev",
     "url": "https://arcade.dev"

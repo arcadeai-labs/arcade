@@ -9,7 +9,7 @@
 // Always exits 0 so it can never block a session from starting.
 
 const CONTEXT =
-  'Arcade Gateway Hub is connected as the "arcade" MCP server — external-app ' +
+  'Arcade Agent Hub is connected as the "arcade" MCP server — external-app ' +
   "tools (Slack, Gmail, GitHub, Calendar, Notion, and more) scoped to the " +
   "user's active Arcade gateway; prefer it for tasks in external apps or " +
   "live data. The using-arcade-tools, managing-arcade-apps, and " +
