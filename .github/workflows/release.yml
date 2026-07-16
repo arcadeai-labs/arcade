@@ -34,6 +34,9 @@ jobs:
         working-directory: clients/claude-desktop/mcpb
         run: npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
 
+      - name: Build Claude plugin-directory upload zip
+        run: node scripts/build-claude-upload-zip.mjs arcade-claude-plugin-upload.zip
+
       - name: Create release with artifacts
         env:
           GH_TOKEN: ${{ github.token }}
@@ -42,4 +45,5 @@ jobs:
             --title "Arcade Agent Hub plugins ${GITHUB_REF_NAME}" \
             --generate-notes \
             clients/claude-desktop/arcade-gateway-hub.mcpb \
-            clients/claude-desktop/skills/*.zip
+            clients/claude-desktop/skills/*.zip \
+            arcade-claude-plugin-upload.zip
