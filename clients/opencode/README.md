@@ -1,6 +1,6 @@
 # opencode-arcade-hub
 
-[Arcade Gateway Hub](https://hub.arcadeagent.dev) for **OpenCode** — your
+[Arcade Gateway Hub](https://hub.arcade.dev) for **OpenCode** — your
 Arcade **gateways** (curated sets of apps and tools like Slack, Gmail, GitHub,
 Google Calendar, Notion, Linear) over a single MCP connection. Just ask for
 what you want; Arcade picks the right tool from your active gateway and
@@ -34,7 +34,7 @@ Prefer configuring the MCP server yourself instead of using the plugin? Add:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "arcade": { "type": "remote", "url": "https://hub.arcadeagent.dev/mcp", "enabled": true }
+    "arcade": { "type": "remote", "url": "https://hub.arcade.dev/mcp", "enabled": true }
   }
 }
 ```
@@ -53,8 +53,8 @@ Five meta-tools that resolve to your gateways' tools on demand:
 
 ## Links
 
-- Home: https://hub.arcadeagent.dev
-- Endpoint: https://hub.arcadeagent.dev/mcp
+- Home: https://hub.arcade.dev
+- Endpoint: https://hub.arcade.dev/mcp
 - Source: https://github.com/arcadeai-labs/arcade
 
 ## License

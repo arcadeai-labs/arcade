@@ -8,7 +8,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const ENDPOINT = "https://hub.arcadeagent.dev/mcp";
+const ENDPOINT = "https://hub.arcade.dev/mcp";
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 const errors = [];

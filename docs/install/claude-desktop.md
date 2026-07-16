@@ -39,7 +39,7 @@ claude.ai and mobile.
 ## Alternative: custom connector (paid plans)
 
 **Settings → Connectors → Add custom connector** → paste
-`https://hub.arcadeagent.dev/mcp`. Tools only; no extension needed.
+`https://hub.arcade.dev/mcp`. Tools only; no extension needed.
 
 ## Alternative: config file
 

@@ -6,7 +6,20 @@ This project adheres to
 
 Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
-(`hub.arcadeagent.dev`).
+(`hub.arcade.dev`).
+
+## [0.3.0] - 2026-07-16
+
+### Changed
+
+- The hub moved to its permanent home: every client config, deeplink, and
+  doc now points at `https://hub.arcade.dev/mcp` (previously
+  `hub.arcadeagent.dev`). The service behind it is the new standalone
+  gateway hub with Engine-backed tool discovery — same tools, same
+  gateway model, better search coverage of the staging catalog.
+- Existing installs pointed at `hub.arcadeagent.dev` keep working until
+  that deployment is retired; re-add the server (or update the URL) to
+  move to the new endpoint.
 
 ## [0.2.0] - 2026-07-14
 
@@ -63,7 +76,7 @@ history); this repo targets the gateway hub deployment
 ### Changed
 
 - **Retargeted to the gateway hub.** Every client config, manifest, hook, and
-  document now points at `https://hub.arcadeagent.dev/mcp` and
+  document now points at `https://hub.arcade.dev/mcp` and
   `github.com/arcadeai-labs/arcade`. The MCP server key stays `arcade`, so
   muscle memory and existing prompts carry over.
 - **Renamed for the deployment.** Cursor rule is now `arcade-gateway-hub.mdc`;

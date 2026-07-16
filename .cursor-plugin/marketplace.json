@@ -13,7 +13,7 @@
       "source": "./",
       "description": "Arcade Gateway Hub — your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Linear, Notion) over one MCP connection.",
       "logo": "assets/arcade.svg",
-      "homepage": "https://hub.arcadeagent.dev",
+      "homepage": "https://hub.arcade.dev",
       "repository": "https://github.com/arcadeai-labs/arcade",
       "license": "Apache-2.0",
       "keywords": ["arcade", "gateway", "mcp", "tools", "tool-discovery", "integrations"]

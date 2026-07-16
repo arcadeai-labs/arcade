@@ -3,7 +3,7 @@
   "mcp": {
     "arcade": {
       "type": "remote",
-      "url": "https://hub.arcadeagent.dev/mcp",
+      "url": "https://hub.arcade.dev/mcp",
       "enabled": true
     }
   }

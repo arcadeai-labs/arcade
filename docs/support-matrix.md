@@ -24,7 +24,7 @@ the MCP connection itself, so **every** row below includes it.
 
 | | Cursor (button) | Claude Desktop Chat (`.mcpb`) | Claude Desktop Chat (connector) | claude.ai web / mobile | Any MCP client |
 |---|---|---|---|---|---|
-| **Install** | one-click deeplink from the README | download `.mcpb` from the release, double-click, Install | Settings → Connectors → add `https://hub.arcadeagent.dev/mcp` (paid plans) | via account connector (paid plans) | add `https://hub.arcadeagent.dev/mcp` |
+| **Install** | one-click deeplink from the README | download `.mcpb` from the release, double-click, Install | Settings → Connectors → add `https://hub.arcade.dev/mcp` (paid plans) | via account connector (paid plans) | add `https://hub.arcade.dev/mcp` |
 | **MCP tools (all 5)** | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
 | **Skills** | — (install full plugin) | ✅ optional: upload the 3 skill ZIPs (Customize → Skills) | ✅ same ZIP uploads | ✅ uploads follow the account | — |
 | **Commands / subagent / hooks** | — | — (not supported by extensions) | — | — | — |

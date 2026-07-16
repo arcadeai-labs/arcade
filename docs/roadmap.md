@@ -94,7 +94,7 @@ capability ceiling). Items are scoped to this repo unless noted.
 - [ ] **README visual demo.** Popular plugins lead with a 20-second GIF
   (gateway list → switch → task). Text-only READMEs underperform in
   marketplace listings.
-- [ ] **Landing page buttons.** `hub.arcadeagent.dev` links to install docs;
+- [ ] **Landing page buttons.** `hub.arcade.dev` links to install docs;
   the Cursor deeplink and `.mcpb` download could be first-class buttons on
   the page itself (requires a hub page update in the server repo).
 

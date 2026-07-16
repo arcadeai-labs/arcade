@@ -30,7 +30,7 @@ const emptyConfig: {
 } = {}
 await hooks.config!(emptyConfig as never)
 assert(
-  emptyConfig.mcp?.arcade?.url === "https://hub.arcadeagent.dev/mcp",
+  emptyConfig.mcp?.arcade?.url === "https://hub.arcade.dev/mcp",
   "config hook must register the arcade MCP server",
 )
 

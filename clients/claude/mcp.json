@@ -2,7 +2,7 @@
   "mcpServers": {
     "arcade": {
       "type": "http",
-      "url": "https://hub.arcadeagent.dev/mcp"
+      "url": "https://hub.arcade.dev/mcp"
     }
   }
 }

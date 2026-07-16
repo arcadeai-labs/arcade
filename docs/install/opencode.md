@@ -34,7 +34,7 @@ Configure the MCP server yourself instead:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "arcade": { "type": "remote", "url": "https://hub.arcadeagent.dev/mcp", "enabled": true }
+    "arcade": { "type": "remote", "url": "https://hub.arcade.dev/mcp", "enabled": true }
   }
 }
 ```

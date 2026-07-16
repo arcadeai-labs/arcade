@@ -28,7 +28,7 @@ arcadeai-labs/arcade` then `/plugin install arcade@arcade`.
 Skip the plugin and add the bare MCP server:
 
 ```bash
-claude mcp add --transport http arcade https://hub.arcadeagent.dev/mcp
+claude mcp add --transport http arcade https://hub.arcade.dev/mcp
 ```
 
 ## Claude Cowork / Code in the desktop app

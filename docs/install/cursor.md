@@ -26,7 +26,7 @@ Verify under **Settings → Customize**: 1 rule, 3 skills, 1 agent, 6 commands,
 
 If you just want the tools without the skills/commands/rule:
 
-[![Add arcade MCP server to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGVhZ2VudC5kZXYvbWNwIn0=)
+[![Add arcade MCP server to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGUuZGV2L21jcCJ9)
 
 This adds the `arcade` MCP server only. Approve it, then sign in under
 **Settings → MCP**.

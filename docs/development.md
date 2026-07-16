@@ -69,5 +69,5 @@ live at the bottom of `QA.md`.
   rejects "authorization link" in user-facing files and requires
   `Arcade_SelectGateway` coverage where tools are enumerated.
 - **Server identity.** The MCP server key is `arcade` in every client; the
-  hosted endpoint is `https://hub.arcadeagent.dev/mcp` (enforced by
+  hosted endpoint is `https://hub.arcade.dev/mcp` (enforced by
   `check.mjs`).

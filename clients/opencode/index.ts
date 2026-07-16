@@ -3,7 +3,7 @@ import type { Plugin } from "@opencode-ai/plugin"
 // Arcade Gateway Hub for OpenCode.
 //
 // Installing this plugin does two things:
-//   1. Registers the `arcade` remote MCP server (https://hub.arcadeagent.dev/mcp)
+//   1. Registers the `arcade` remote MCP server (https://hub.arcade.dev/mcp)
 //      via the `config` hook, so the Arcade tools (Slack, Gmail, GitHub,
 //      Calendar, Notion, Linear, and more — scoped to the user's active
 //      Arcade gateway) are available — no keys, OAuth is auto-discovered.
@@ -15,7 +15,7 @@ import type { Plugin } from "@opencode-ai/plugin"
 // Install with `opencode plugin opencode-arcade-hub`, add "opencode-arcade-hub"
 // to the `plugin` array in opencode.json, or load locally with a "file://" path.
 
-const ARCADE_MCP_URL = "https://hub.arcadeagent.dev/mcp"
+const ARCADE_MCP_URL = "https://hub.arcade.dev/mcp"
 
 // Fallback pattern, used only when an Arcade result isn't parseable JSON.
 const SIGNIN_URL =

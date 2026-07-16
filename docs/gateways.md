@@ -39,7 +39,7 @@ no API keys, ever.
 
 ## Privacy
 
-Tasks run through Arcade's hosted gateway hub (`hub.arcadeagent.dev`) and the
+Tasks run through Arcade's hosted gateway hub (`hub.arcade.dev`) and the
 apps you connect. See
 [Arcade's privacy policy](https://www.arcade.dev/privacy-policy) for how data
 is handled.
