@@ -124,13 +124,70 @@ const versions = {
   ".cursor-plugin/plugin.json": json[".cursor-plugin/plugin.json"]?.version,
   ".claude-plugin/plugin.json": json[".claude-plugin/plugin.json"]?.version,
   "clients/opencode/package.json": json["clients/opencode/package.json"]?.version,
+  ".plugin/plugin.json": json[".plugin/plugin.json"]?.version,
+  "clients/claude-desktop/mcpb/manifest.json": json["clients/claude-desktop/mcpb/manifest.json"]?.version,
 };
 if (new Set(Object.values(versions)).size !== 1) {
   fail(`version mismatch: ${JSON.stringify(versions)}`);
 }
 const version = Object.values(versions)[0];
+const fileVersion = read("VERSION").trim();
+if (fileVersion !== version) {
+  fail(`VERSION file ${JSON.stringify(fileVersion)} != manifest version ${JSON.stringify(version)}`);
+}
 if (version && !read("CHANGELOG.md").includes(`## [${version}]`)) {
   fail(`CHANGELOG.md has no entry for ${version}`);
+}
+
+// --- Release-train contract (shared semver with arcadeai-labs/hub) ------------
+const SEMVER = /^(\d+)\.(\d+)\.(\d+)$/;
+const parseSemver = (value, label) => {
+  const match = SEMVER.exec(value);
+  if (!match) {
+    fail(`${label}: not semver X.Y.Z: ${JSON.stringify(value)}`);
+    return null;
+  }
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+};
+const contract = json["release-contract.json"];
+if (!contract) {
+  fail("release-contract.json missing or invalid JSON");
+} else {
+  if (contract.release_train !== "arcade-agent-hub") {
+    fail('release-contract.json: release_train must be "arcade-agent-hub"');
+  }
+  if (contract.component !== "plugin") {
+    fail('release-contract.json: component must be "plugin"');
+  }
+  if (contract.version !== version) {
+    fail(`release-contract.json version ${JSON.stringify(contract.version)} != ${JSON.stringify(version)}`);
+  }
+  if (contract.endpoint !== ENDPOINT) {
+    fail(`release-contract.json: endpoint must be ${ENDPOINT}`);
+  }
+  const requiresHub = contract.requires?.hub;
+  if (typeof requiresHub !== "string" || !requiresHub.startsWith(">=")) {
+    fail('release-contract.json: requires.hub must use ">=" form (e.g. ">=0.1.6")');
+  } else {
+    const floor = requiresHub.slice(2).trim();
+    parseSemver(floor, "requires.hub");
+    const changelog = read("CHANGELOG.md");
+    const heading = `## [${version}]`;
+    const start = changelog.indexOf(heading);
+    if (start < 0) {
+      fail(`CHANGELOG.md missing entry ${heading}`);
+    } else {
+      const rest = changelog.slice(start + heading.length);
+      const next = rest.search(/\n## \[/);
+      const section = next < 0 ? rest : rest.slice(0, next);
+      const requiresMatch = section.match(/requires\s+hub\s*[≥>=]+\s*(\d+\.\d+\.\d+)/i);
+      if (!requiresMatch) {
+        fail(`CHANGELOG.md [${version}] must include 'requires hub ≥ ${floor}' (or >=)`);
+      } else if (requiresMatch[1] !== floor) {
+        fail(`CHANGELOG.md requires hub ≥ ${requiresMatch[1]} != contract ${floor}`);
+      }
+    }
+  }
 }
 
 // --- Endpoint consistency ------------------------------------------------------
@@ -140,6 +197,7 @@ for (const file of [
   "clients/claude-desktop/claude_desktop_config.json",
   "clients/opencode/opencode.json",
   "clients/opencode/index.ts",
+  "release-contract.json",
 ]) {
   if (!read(file).includes(ENDPOINT)) fail(`${file}: does not reference ${ENDPOINT}`);
 }

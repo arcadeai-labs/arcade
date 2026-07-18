@@ -16,7 +16,8 @@ client gets exactly its intended bundle.
 | `clients/claude-desktop/` | One-click `.mcpb` bundle + ready-to-merge connector config | Claude Desktop Chat |
 | `clients/opencode/` | The `opencode-arcade-hub` npm plugin + MCP server config | OpenCode |
 | `.cursor-plugin/` / `.claude-plugin/` | Plugin + marketplace manifests | Cursor / Claude |
-| `docs/` | Install guides, gateway explainer, this file | — |
+| `docs/` | Install guides, gateway explainer, release-train, this file | — |
+| `VERSION` + `release-contract.json` | Shared semver train with `arcadeai-labs/hub` | CI (`check.mjs`) |
 
 ## Checks
 
@@ -51,10 +52,14 @@ npx -y @anthropic-ai/mcpb pack . ../arcade-gateway-hub.mcpb
 
 ## Versioning and release
 
-Versions must match across `.cursor-plugin/plugin.json`,
-`.claude-plugin/plugin.json`, and `clients/opencode/package.json`
-(`check.mjs` enforces this, plus a matching CHANGELOG entry). Release steps
-live at the bottom of `QA.md`.
+Versions must match across `VERSION`, `release-contract.json`,
+`.plugin/plugin.json`, `.cursor-plugin/plugin.json`,
+`.claude-plugin/plugin.json`, `clients/opencode/package.json`, and
+`clients/claude-desktop/mcpb/manifest.json` (`check.mjs` enforces this, plus
+a matching CHANGELOG entry that includes `requires hub ≥ X.Y.Z`).
+
+Shared semver with the hub server: [`docs/release-train.md`](release-train.md).
+Release steps live at the bottom of `QA.md`.
 
 ## Design notes
 

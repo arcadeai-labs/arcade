@@ -68,9 +68,15 @@ behavior and is verified by hand before tagging a release.
 ## Release steps
 
 - [ ] All CI checks green on `main`.
+- [ ] `VERSION` / `release-contract.json` / CHANGELOG (`requires hub ≥ …`)
+  aligned — see [`docs/release-train.md`](docs/release-train.md).
+- [ ] If this release depends on new hub behavior: tag `arcadeai-labs/hub`
+  with the **same** `vX.Y.Z` the same day (after hub staging canary).
 - [ ] `git tag v<version> && git push origin v<version>` — the release
   workflow builds the `.mcpb` + skill ZIPs and attaches them to the GitHub
-  Release (download links use `releases/latest/download/…`).
+  Release (download links use `releases/latest/download/…`). Tag must match
+  `VERSION`.
+- [ ] `/arcade:status` shows `plugin … ↔ hub … (staging|prod)`.
 - [ ] `npm publish` from `clients/opencode/` once `opencode-arcade-hub` goes
   public (version matches manifests).
 - [ ] Claude: verify `/plugin marketplace update arcade` picks up the new
