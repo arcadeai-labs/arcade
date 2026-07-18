@@ -17,6 +17,9 @@ history); this repo targets the gateway hub deployment
   for the curated app/tool sets that scope discovery and execution; only
   the product name changed. Display names, descriptions, and docs updated
   across all four clients.
+- Release-train contract with `arcadeai-labs/hub`: `VERSION`,
+  `release-contract.json`, and CI changelog enforcement.
+  `requires hub ≥ 0.1.6`.
 
 ## [0.3.0] - 2026-07-16
 
