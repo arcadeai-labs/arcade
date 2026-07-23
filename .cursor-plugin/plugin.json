@@ -1,45 +1,45 @@
 {
-    "name": "arcade",
-    "displayName": "Arcade Agent Hub",
-    "description": "Connect your agent to your Arcade gateways: curated sets of apps and tools (Slack, Gmail, GitHub, Linear, Notion, and more) that you switch between per app or account-wide.",
-    "version": "0.3.1",
-    "author": {
-        "name": "Arcade.dev",
-        "email": "support@arcade.dev"
-    },
-    "publisher": "Arcade.dev",
-    "homepage": "https://hub.arcade.dev",
-    "repository": "https://github.com/arcadeai-labs/arcade",
-    "license": "Apache-2.0",
-    "logo": "assets/arcade.svg",
-    "primaryColor": "#ff5c37",
-    "category": "Productivity",
-    "keywords": [
-        "arcade",
-        "gateway",
-        "mcp",
-        "tools",
-        "tool-discovery",
-        "agent",
-        "oauth",
-        "slack",
-        "github",
-        "gmail",
-        "google-calendar",
-        "notion",
-        "linear",
-        "integrations",
-        "automation"
-    ],
-    "tags": [
-        "mcp",
-        "integrations",
-        "agent-tools"
-    ],
-    "rules": "clients/cursor/rules",
-    "skills": "components/skills",
-    "agents": "components/agents",
-    "commands": "components/commands",
-    "hooks": "clients/cursor/hooks/hooks.json",
-    "mcpServers": "clients/cursor/mcp.json"
+  "name": "arcade",
+  "displayName": "Arcade Agent Hub",
+  "description": "Connect your agent to your Arcade gateways: curated sets of apps and tools (Slack, Gmail, GitHub, Linear, Notion, and more) that you switch between per app or account-wide.",
+  "version": "0.4.0",
+  "author": {
+    "name": "Arcade.dev",
+    "email": "support@arcade.dev"
+  },
+  "publisher": "Arcade.dev",
+  "homepage": "https://hub.arcade.dev",
+  "repository": "https://github.com/arcadeai-labs/arcade",
+  "license": "Apache-2.0",
+  "logo": "assets/arcade.svg",
+  "primaryColor": "#ff5c37",
+  "category": "Productivity",
+  "keywords": [
+    "arcade",
+    "gateway",
+    "mcp",
+    "tools",
+    "tool-discovery",
+    "agent",
+    "oauth",
+    "slack",
+    "github",
+    "gmail",
+    "google-calendar",
+    "notion",
+    "linear",
+    "integrations",
+    "automation"
+  ],
+  "tags": [
+    "mcp",
+    "integrations",
+    "agent-tools"
+  ],
+  "rules": "clients/cursor/rules",
+  "skills": "components/skills",
+  "agents": "components/agents",
+  "commands": "components/commands",
+  "hooks": "clients/cursor/hooks/hooks.json",
+  "mcpServers": "clients/cursor/mcp.json"
 }

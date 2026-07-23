@@ -1,14 +1,14 @@
 {
   "release_train": "arcade-agent-hub",
   "component": "plugin",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "endpoint": "https://hub.arcade.dev/mcp",
   "requires": {
-    "hub": ">=0.1.6"
+    "hub": ">=0.2.0"
   },
   "peers": {
     "hub": "arcadeai-labs/hub",
     "plugin": "arcadeai-labs/arcade"
   },
-  "notes": "Shared semver with arcadeai-labs/hub: coordinated releases use the same X.Y.Z tag in both repos. Pure hub backend cutovers do not require a plugin bump. When this plugin depends on new hub behavior, bump requires.hub and note 'requires hub ≥ X.Y.Z' in CHANGELOG."
+  "notes": "Shared semver with arcadeai-labs/hub: coordinated releases use the same X.Y.Z tag in both repos. Pure hub backend cutovers do not require a plugin bump. When this plugin depends on new hub behavior, bump requires.hub and note 'requires hub \u2265 X.Y.Z' in CHANGELOG."
 }

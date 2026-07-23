@@ -53,9 +53,13 @@ Cursor auto-loads Claude Code plugins, so if you use both editors, install in
 - `/arcade:status` — check your connection, sign-in, and active gateway
 - `/arcade:connect google` — connect an app ahead of time
 
-Your assistant handles discovery with five meta-tools (`Arcade_SelectTools`,
-`Arcade_UseTool`, `Arcade_SelectGateway`, `Arcade_Apps`,
-`Arcade_ManageToolAuthorization`) — you never call them yourself.
+Your assistant speaks intent to the hub: `Arcade_Run` executes a task end to
+end (pausing for your confirmation, missing details, or a sign-in — handled
+via `Arcade_Confirm` / `Arcade_Resume`, with `Arcade_Plan` for multi-step
+workflows), while `Arcade_SelectTools` / `Arcade_UseTool` remain the manual
+escape hatch and `Arcade_SelectGateway`, `Arcade_Apps`,
+`Arcade_ManageToolAuthorization` manage gateways and app connections — you
+never call any of them yourself.
 
 ## Learn more
 

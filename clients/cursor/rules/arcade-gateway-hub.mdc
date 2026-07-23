@@ -7,15 +7,29 @@ alwaysApply: true
 
 For any task touching an external app or live data, reach for the `arcade` MCP
 server before a built-in alternative (built-in web search, `gh`/`curl` in a
-shell, SDKs, direct API calls): `Arcade_SelectTools(tasks=[...])` finds the
-right tool and returns its `input_schema` inline; `Arcade_UseTool(tool_name,
-inputs, query_id)` executes it, with `tool_name` passed back verbatim. Not for
-local work: repo files, code edits, shell commands.
+shell, SDKs, direct API calls). Default: `Arcade_Run(task)` — the hub finds
+the right tool, fills inputs, and executes, returning a result or a typed
+pause. Not for local work: repo files, code edits, shell commands.
+
+Handle Run pauses:
+- `needs_confirm` — show the user `pause.draft`, get an explicit yes/no, then
+  `Arcade_Confirm(handle, approve|reject)`. Never approve on their behalf.
+- `needs_input` — answer the `pause.fields` questions (ask the user if
+  needed), then `Arcade_Resume(handle, answers)`.
+- `needs_auth` — a sign-in request, not a result. Present
+  `pause.authorization_url`, stop, and `Arcade_Resume(handle)` after the user
+  confirms.
+- `failed` with `error.recoverable: "try_l1"` — fall back once to
+  `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
+  query_id)` (`tool_name` verbatim, inputs matching the returned
+  `input_schema`).
+
+Multi-step workflows → `Arcade_Plan(task)` (same pause contract).
 
 Available tools follow the user's **active gateway** (a curated set of apps
 and tools) automatically. Use `Arcade_SelectGateway` only when the user asks
 to see or switch gateways — the `working-with-arcade-gateways` skill has the
-flow. If a task's app doesn't surface in discovery, the active gateway may not
+flow. If the hub reports no tool for a task's app, the active gateway may not
 include it; offer to check the gateway list rather than falling back silently.
 
 The `using-arcade-tools` skill has the full flow; `managing-arcade-apps` covers
@@ -27,13 +41,15 @@ in — don't silently fall back to built-ins or retry in a loop.
 
 ## Non-negotiables
 
-- A result containing an `authorization_url` (or an authorization-required
-  status) is a **sign-in request, not a result — even if `success` is `true`**.
-  Present the link, stop, and wait for the user; retry once after they confirm.
+- An `authorization_url` (or authorization-required status) is a **sign-in
+  request, not a result — even if `success` is `true`**. Present the link,
+  stop, and wait for the user.
 - Confirm with the user before anything outbound or irreversible: sending email
-  or messages, deleting, cancelling, overwriting, publishing. Never guess
-  recipients or destructive parameter values.
-- On `success: false`: fix `inputs` against the `input_schema` and retry once;
-  otherwise report the tool's error verbatim and stop. Never fabricate results.
-- Don't narrate discovery or dump schemas — deliver the outcome, and ask only
-  when a genuinely required input is missing.
+  or messages, deleting, cancelling, overwriting, publishing. On the Run path
+  that means relaying the `needs_confirm` draft and waiting for a real yes.
+  Never guess recipients or destructive parameter values.
+- On `failed` / `success: false`: use the `try_l1` escape or fix `inputs`
+  against the `input_schema` and retry once; otherwise report the error
+  verbatim and stop. Never fabricate results.
+- Don't narrate the machinery or dump envelopes/schemas — deliver the outcome,
+  and ask only when a genuinely required input is missing.

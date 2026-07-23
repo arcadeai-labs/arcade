@@ -8,6 +8,23 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.4.0] - 2026-07-23
+
+### Changed
+
+- **Run-first guidance across all clients.** The hub's Intent surface is now
+  live on `hub.arcade.dev`: agents default to `Arcade_Run` (task in → result
+  or typed pause) with `Arcade_Confirm` / `Arcade_Resume` for confirmation,
+  missing-input, and sign-in pauses, and `Arcade_Plan` for multi-step
+  workflows. `Arcade_SelectTools` / `Arcade_UseTool` remain the documented
+  escape hatch (`failed` + `recoverable: try_l1`, explicit catalog control,
+  or older hub deployments). Updated the `using-arcade-tools` skill, the
+  `arcade-operator` subagent, the Cursor always-on rule, OpenCode
+  instructions, the Claude Desktop manifest tool list, and the README.
+- Confirmation discipline: agents must relay the hub's `needs_confirm` draft
+  and wait for an explicit user yes/no — never approve on the user's behalf.
+- `requires hub ≥ 0.2.0` (Intent surface + pause contract).
+
 ## [0.3.1] - 2026-07-16
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "opencode-arcade-hub",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Arcade Agent Hub for OpenCode \u2014 external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) scoped to your Arcade gateways, over one MCP connection.",
   "type": "module",
   "main": "index.ts",
