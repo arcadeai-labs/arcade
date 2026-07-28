@@ -8,6 +8,22 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.4.2] - 2026-07-28
+
+### Fixed
+
+- **Claude Code installs work again.** Claude Code's manifest schema no longer
+  accepts a `logo` key, so `claude plugin install arcade@arcade` failed with
+  "invalid manifest file … Unrecognized key: `logo`", and `claude plugin
+  update` reported the installed 0.3.1 as already current — leaving every
+  Claude Code user stranded before the Run-first guidance in 0.4.0. Removed
+  `logo` from `.claude-plugin/plugin.json` and the `.claude-plugin/`
+  marketplace entry; `claude plugin validate .` now passes. Cursor's manifest
+  keeps its logo, which that client still supports. Verify after upgrading
+  with `claude plugin list`.
+- Packaging only — no guidance or tool change; floor unchanged at
+  `requires hub ≥ 0.2.0`.
+
 ## [0.4.1] - 2026-07-28
 
 ### Changed

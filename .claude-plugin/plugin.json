@@ -1,7 +1,7 @@
 {
   "name": "arcade",
   "description": "Connect your agent to your Arcade gateways \u2014 curated sets of apps and tools (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more) over a single MCP connection. Discovery and execution are scoped to the gateway you select, per app or account-wide. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": {
     "name": "Arcade.dev",
     "url": "https://hub.arcade.dev"
@@ -9,7 +9,6 @@
   "homepage": "https://hub.arcade.dev",
   "repository": "https://github.com/arcadeai-labs/arcade",
   "license": "Apache-2.0",
-  "logo": "assets/arcade.svg",
   "keywords": [
     "arcade",
     "gateway",
