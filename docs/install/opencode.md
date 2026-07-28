@@ -9,8 +9,9 @@ One command — the plugin is published to npm as
 opencode plugin opencode-arcade-hub
 ```
 
-Each release publishes a matching npm version, so `opencode plugin` upgrades
-you with the rest of the train.
+That writes the plugin into the current project's `.opencode/opencode.json`;
+add `-g` to install it globally instead. Each release publishes a matching npm
+version, so `opencode plugin` upgrades you with the rest of the train.
 
 To develop against a checkout instead, point at it from `opencode.json`
 (project) or `~/.config/opencode/opencode.json` (global):
