@@ -1,6 +1,6 @@
 # Client support matrix
 
-What each client gets, per install method, as of v0.2.0. Server-side
+What each client gets, per install method. Server-side
 behavior — gateway scoping, auto-selection, per-app defaults, OAuth
 sign-in flows, and the hub's built-in agent instructions — is delivered by
 the MCP connection itself, so **every** row below includes it.
@@ -9,9 +9,9 @@ the MCP connection itself, so **every** row below includes it.
 
 | | Cursor | Claude Code (CLI) | Claude Cowork / Code (desktop) | OpenCode |
 |---|---|---|---|---|
-| **Install** | add marketplace `arcadeai-labs/arcade` in Cursor's plugins panel (native: logo + all components + auto-update) | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode.json` `plugin: ["file:///…/clients/opencode"]` (npm publish pending) |
+| **Install** | add marketplace `arcadeai-labs/arcade` in Cursor's plugins panel (native: logo + all components + auto-update) | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode plugin opencode-arcade-hub` (npm) |
 | **One-command alternative** | `npx plugins add arcadeai-labs/arcade --target cursor` | `npx plugins add arcadeai-labs/arcade --target claude-code` | — | — |
-| **MCP tools (all 5)** | ✅ | ✅ | ✅ | ✅ |
+| **MCP tools (all 9)** | ✅ | ✅ | ✅ | ✅ |
 | **Skills (3)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
 | **Always-on rule** | ✅ `arcade-gateway-hub` | — (hook context instead) | — (hook context instead) | — (injected instructions instead) |
 | **Operator subagent** | ✅ `arcade-operator` | ✅ | ✅ | — |
@@ -25,7 +25,7 @@ the MCP connection itself, so **every** row below includes it.
 | | Cursor (button) | Claude Desktop Chat (`.mcpb`) | Claude Desktop Chat (connector) | claude.ai web / mobile | Any MCP client |
 |---|---|---|---|---|---|
 | **Install** | one-click deeplink from the README | download `.mcpb` from the release, double-click, Install | Settings → Connectors → add `https://hub.arcade.dev/mcp` (paid plans) | via account connector (paid plans) | add `https://hub.arcade.dev/mcp` |
-| **MCP tools (all 5)** | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
+| **MCP tools (all 9)** | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
 | **Skills** | — (install full plugin) | ✅ optional: upload the 3 skill ZIPs (Customize → Skills) | ✅ same ZIP uploads | ✅ uploads follow the account | — |
 | **Commands / subagent / hooks** | — | — (not supported by extensions) | — | — | — |
 | **Requires** | — | Node.js (`mcp-remote` bridge) | paid Claude plan | paid plan + code execution for skills | MCP + OAuth support |
@@ -41,10 +41,10 @@ Notes:
 - **Don't double-install for Cursor:** Cursor also auto-loads any plugin
   installed in Claude Code (the "Claude→Cursor bridge"). Installing arcade
   both natively in Cursor and in Claude Code makes Cursor show it twice and
-  split its components. Install in one place. The bridge path omits only the
-  Cursor-specific always-on rule (the Claude manifest has no rules concept);
-  the shared session hook detects the invoking client and emits that
-  client's native shape either way.
+  split its components. Install in one place. The bridge path is complete:
+  Cursor loads the always-on rule out of the Claude plugin cache, and the
+  shared session hook detects the invoking client and emits that client's
+  native shape either way.
 - Plain-language use ("switch to my work gateway") works identically in
   every row — the hub's server instructions carry the flow even with no
   plugin content installed.

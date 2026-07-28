@@ -71,3 +71,48 @@ jobs:
             clients/claude-desktop/arcade-gateway-hub.mcpb \
             clients/claude-desktop/skills/*.zip \
             arcade-claude-plugin-upload.zip
+
+  # OpenCode installs the plugin from npm, so a release that skips this step
+  # leaves `opencode plugin opencode-arcade-hub` serving whatever version was
+  # last published by hand — which is how the package fell two releases behind
+  # the guidance it ships. Requires an NPM_TOKEN secret with publish rights;
+  # without it the job is skipped and the npm package stays stale, so the
+  # release summary says so out loud.
+  publish-opencode:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    # The secrets context is unavailable in step-level `if`, so the token is
+    # mapped to env here and the steps branch on that.
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Publish opencode-arcade-hub
+        if: ${{ env.NPM_TOKEN != '' }}
+        working-directory: clients/opencode
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
+
+      - name: Warn when npm publishing is not configured
+        if: ${{ env.NPM_TOKEN == '' }}
+        run: |
+          VERSION=$(tr -d '[:space:]' < VERSION)
+          echo "::warning::NPM_TOKEN is not set — opencode-arcade-hub ${VERSION} was not published; OpenCode users stay on the previously published version."
+          {
+            echo "## OpenCode npm publish skipped"
+            echo "\`NPM_TOKEN\` is not configured, so \`opencode-arcade-hub@${VERSION}\` was not published."
+            echo "Publish manually from a checkout of this tag:"
+            echo '```bash'
+            echo "cd clients/opencode && npm publish --access public"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

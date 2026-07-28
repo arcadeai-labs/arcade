@@ -30,4 +30,10 @@ git push origin v$(tr -d '[:space:]' < VERSION)
 # 4. If coordinated with hub behavior: tag arcadeai-labs/hub the same vX.Y.Z
 ```
 
+The tag builds the GitHub Release artifacts and publishes
+`opencode-arcade-hub` to npm, which is how OpenCode installs the plugin. That
+publish needs an `NPM_TOKEN` repository secret with publish rights on the
+package; without it the release run warns and the npm version stays behind,
+so publish by hand from `clients/opencode/` and add the secret.
+
 See also: hub `docs/release-train.md`.
