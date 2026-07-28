@@ -24,7 +24,10 @@ Handle Run pauses:
   query_id)` (`tool_name` verbatim, inputs matching the returned
   `input_schema`).
 
-Multi-step workflows → `Arcade_Plan(task)` (same pause contract).
+Multi-step workflows → `Arcade_Plan(task)` (same pause contract). A paused
+plan is still running — read `steps[]` for real progress, and when `pauses[]`
+lists several waiting steps, resolve each on its own `handle` and ask for
+everything the user must supply in one message.
 
 Available tools follow the user's **active gateway** (a curated set of apps
 and tools) automatically. Use `Arcade_SelectGateway` only when the user asks

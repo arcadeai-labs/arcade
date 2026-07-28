@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "arcade-gateway-hub",
   "display_name": "Arcade Agent Hub",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Your Arcade gateways \u2014 curated sets of apps and tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) over one connection.",
   "long_description": "Connects Claude Desktop to the Arcade Agent Hub (https://hub.arcade.dev/mcp). Ask for what you want; the right tool from your active Arcade gateway runs, with one-time app sign-ins handled in the browser \u2014 no API keys. Includes Arcade_SelectGateway to view and switch gateways per app or account-wide. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
   "author": {
@@ -57,7 +57,7 @@
     },
     {
       "name": "Arcade_Plan",
-      "description": "Run a multi-step workflow as sequential steps (same pause contract as Arcade_Run)"
+      "description": "Run a multi-step workflow, executing independent steps together (same pause contract as Arcade_Run)"
     },
     {
       "name": "Arcade_SelectTools",

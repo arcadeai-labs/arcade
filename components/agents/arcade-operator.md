@@ -43,6 +43,21 @@ placeholder data.
    gateways (the main agent or `/arcade:gateway` handles switching). Do not
    switch gateways yourself.
 
+## Paused plans
+
+A paused plan keeps running: only the waiting step's own dependents stop, so
+`steps[]` is the real progress report — read it before you describe where
+things stand.
+
+When more than one step is waiting, `status` / `pause` / `handle` describe the
+primary one and `pauses[]` lists them all, each with its own `step_id` and
+`handle`. Resolve each on its own handle, and return everything the user must
+supply in **one** message — both drafts, or both sign-in links — rather than
+one round trip per step. One sign-in covers every step waiting on that same
+app. Confirm and Resume advance the plan and hand back the updated envelope;
+keep going until `status` is terminal, and never start a second
+`Arcade_Plan` for a plan that is already waiting.
+
 ## Domain care
 
 - **Email** — Before sending or replying, confirm the recipient and subject are

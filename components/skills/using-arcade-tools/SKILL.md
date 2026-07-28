@@ -62,6 +62,7 @@ when subagents are unavailable or the task is one quick call.
      escape hatch below. Otherwise report `error.message` verbatim and stop.
 3. Multi-step workflows ("email the report, then post to #eng") →
    `Arcade_Plan(task)` — same pause contract, plus `plan_id` and `steps`.
+   See "Plans that pause" for what a paused plan means.
 4. Retrying the same outbound action (timeouts, reconnects) → reuse the same
    `idempotency_key` so the hub replays instead of double-sending.
 
@@ -76,6 +77,45 @@ Show the draft → user approves →
 Arcade_Confirm(handle: "run_…", decision: "approve")
   → {status: "completed", result: {summary: "Posted message via Slack."}}
 Reply: "Posted to #eng."
+```
+
+## Plans that pause
+
+A paused plan is not a stopped plan. One step waiting on the user does not
+freeze the graph — every step whose dependencies are met keeps running, so
+`steps[]` is the honest progress report: read it before telling the user where
+things stand, and never describe a plan as blocked when only one branch is.
+
+Several steps can be waiting at once:
+
+- `status`, `pause`, and `handle` describe the **primary** pause — answer it
+  exactly as you would a Run pause.
+- `pauses[]` appears only when more than one step is waiting. Each entry
+  carries its own `kind`, `step_id`, and `handle`, and is resolved
+  independently: `Arcade_Confirm(<that handle>, …)` or
+  `Arcade_Resume(<that handle>, …)`. Use the entry's own handle, never the
+  primary one for a different step.
+- Collect what the user has to give in **one** exchange rather than one round
+  trip per step: present the two drafts together, or the sign-in links for
+  both apps, then resolve each handle.
+- One sign-in covers every step waiting on that same app, so don't ask twice
+  for the same app.
+
+Each Confirm or Resume advances the plan itself and returns the updated plan
+envelope — including any pause still open — so keep resolving handles until
+`status` is terminal. Never start a second `Arcade_Plan` for a plan that is
+already waiting on the user.
+
+```text
+Arcade_Plan(task: "Summarize yesterday's #eng thread and file a Linear issue")
+  → {status: "needs_auth", handle: "run_a…",
+     pause: {kind: "auth", app: "Linear", step_id: "s2"},
+     pauses: [{app: "Linear", step_id: "s2", handle: "run_a…"},
+              {app: "Slack", step_id: "s1", handle: "run_b…"}],
+     steps: [{id: "s1", status: "needs_auth"}, {id: "s2", status: "needs_auth"},
+             {id: "s3", status: "pending"}]}
+Present both sign-in links at once → user connects both →
+Arcade_Resume(handle: "run_a…")   then   Arcade_Resume(handle: "run_b…")
 ```
 
 ## Escape hatch: SelectTools / UseTool
