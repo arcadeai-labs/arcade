@@ -14,7 +14,10 @@ A sign-in link (`authorization_url`) is never a result — even if `success` is
 draft on the user's behalf. On `failed` with `recoverable: "try_l1"`, fall
 back once to `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name,
 inputs, query_id)` with the name passed back verbatim. Multi-step workflows →
-`Arcade_Plan`. Use `Arcade_SelectGateway` only when the user asks to list or
+`Arcade_Plan`; a paused plan still runs its independent steps, so read
+`steps[]` for progress and, when `pauses[]` lists several waiting steps,
+resolve each on its own `handle` and gather what the user must supply in one
+message. Use `Arcade_SelectGateway` only when the user asks to list or
 switch gateways — selection is otherwise automatic. If the hub reports no
 tool for a task's app, the active gateway may not include it; offer to check
 the gateway list.

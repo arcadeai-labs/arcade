@@ -8,6 +8,28 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.4.1] - 2026-07-28
+
+### Changed
+
+- **A paused plan is no longer treated as a stopped plan.** Since hub 0.5.0 a
+  step waiting on the user only holds back its own dependents — independent
+  branches keep executing — and several steps can wait at once. The guidance
+  previously described one pause per envelope, so agents reported a plan as
+  blocked when only one branch was, and resolved pauses one round trip at a
+  time. All four client surfaces now teach: read `steps[]` for real progress,
+  treat `pauses[]` (present when more than one step waits) as independently
+  resolvable by each entry's own `handle` and `step_id`, gather everything the
+  user must supply in one exchange, and rely on one sign-in covering every step
+  waiting on the same app. Updated the `using-arcade-tools` skill, the
+  `arcade-operator` subagent, the Cursor always-on rule, and the OpenCode
+  instructions.
+- Claude Desktop manifest: `Arcade_Plan` described as executing independent
+  steps together rather than "as sequential steps".
+- Documentation only — no tool, schema, or install change. `pauses[]` appears
+  only on hub ≥ 0.5.0; against older deployments the guidance is inert and the
+  single-pause path is unchanged, so the floor stays `requires hub ≥ 0.2.0`.
+
 ## [0.4.0] - 2026-07-23
 
 ### Changed
