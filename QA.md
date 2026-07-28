@@ -79,10 +79,10 @@ behavior and is verified by hand before tagging a release.
   `VERSION`.
 - [ ] `/arcade:status` shows `plugin … ↔ hub … (staging|prod)`.
 - [ ] npm shows the new `opencode-arcade-hub` version (`npm view
-  opencode-arcade-hub version`). The release workflow publishes it when the
-  `NPM_TOKEN` secret is set; if the run warns that publishing was skipped,
-  `npm publish --access public` from `clients/opencode/` by hand. A stale
-  npm version silently serves OpenCode users older guidance.
+  opencode-arcade-hub version`). The release workflow publishes it via npm
+  trusted publishing; if that job failed, `npm publish --access public` from
+  `clients/opencode/` by hand and check the package's trusted-publisher
+  config. A stale npm version silently serves OpenCode users older guidance.
 - [ ] Claude: `claude plugin validate .` passes (a manifest key the schema
   has since dropped fails installs *and* makes `update` report the old
   version as current), then verify `/plugin marketplace update arcade` picks

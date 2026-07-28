@@ -17,9 +17,8 @@ history); this repo targets the gateway hub deployment
   `opencode plugin opencode-arcade-hub` — the command in our own install guide
   — had served 0.3.1 since July 16: instructions that teach
   `Arcade_SelectTools` and never mention `Arcade_Run` or `Arcade_Plan`. The
-  release workflow now publishes the package on tag (needs an `NPM_TOKEN`
-  secret; without one the run warns instead of drifting silently), and the QA
-  checklist verifies the published version.
+  release workflow now publishes the package on tag and fails loudly instead
+  of drifting silently, and the QA checklist verifies the published version.
 
 ### Changed
 
