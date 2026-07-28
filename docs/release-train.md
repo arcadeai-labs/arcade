@@ -32,8 +32,10 @@ git push origin v$(tr -d '[:space:]' < VERSION)
 
 The tag builds the GitHub Release artifacts and publishes
 `opencode-arcade-hub` to npm, which is how OpenCode installs the plugin. That
-publish needs an `NPM_TOKEN` repository secret with publish rights on the
-package; without it the release run warns and the npm version stays behind,
-so publish by hand from `clients/opencode/` and add the secret.
+publish uses npm **trusted publishing** (OIDC) — no stored token — so the
+package on npmjs.com must list `arcadeai-labs/arcade` and `release.yml` as a
+trusted publisher. A failure there fails the release: publish by hand from
+`clients/opencode/` and fix the trusted-publisher config, because a stale npm
+version silently serves OpenCode users older guidance.
 
 See also: hub `docs/release-train.md`.
