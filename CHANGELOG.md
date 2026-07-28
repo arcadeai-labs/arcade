@@ -8,6 +8,29 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.4.3] - 2026-07-28
+
+### Fixed
+
+- **OpenCode installs current guidance again.** `opencode-arcade-hub` is
+  published on npm, but publishing was a manual step no release performed, so
+  `opencode plugin opencode-arcade-hub` — the command in our own install guide
+  — had served 0.3.1 since July 16: instructions that teach
+  `Arcade_SelectTools` and never mention `Arcade_Run` or `Arcade_Plan`. The
+  release workflow now publishes the package on tag (needs an `NPM_TOKEN`
+  secret; without one the run warns instead of drifting silently), and the QA
+  checklist verifies the published version.
+
+### Changed
+
+- Install docs corrected against what each path actually does: OpenCode
+  installs from npm rather than a `file://` checkout, the clients get all nine
+  hub tools rather than five, and Cursor's imported-from-Claude-Code copy does
+  carry the always-on rule — the previous claim that it lacked one pushed
+  users toward the double-install the same docs warn against.
+- Packaging and documentation only — no guidance or tool change; floor
+  unchanged at `requires hub ≥ 0.2.0`.
+
 ## [0.4.2] - 2026-07-28
 
 ### Fixed

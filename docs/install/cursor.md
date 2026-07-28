@@ -39,8 +39,8 @@ it twice and splits its components between the two entries. Pick one:
 
 - Cursor-first users: install natively in Cursor (above); don't also install
   it in Claude Code, or disable the imported copy in Cursor's Plugins panel.
-- Claude-Code-first users: the imported copy already gives Cursor everything
-  except the always-on rule — you don't need the native Cursor install too.
+- Claude-Code-first users: the imported copy already gives Cursor everything,
+  always-on rule included — you don't need the native Cursor install too.
 
 ## Updating
 

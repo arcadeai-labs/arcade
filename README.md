@@ -38,8 +38,13 @@ Endpoint: `https://hub.arcade.dev/mcp`
   `arcade-gateway-hub.mcpb`; double-click it, click **Install**, sign in.
   The skills can be added too, as uploadable ZIPs
   ([details & alternatives](docs/install/claude-desktop.md)).
-- **OpenCode** — `opencode plugin opencode-arcade-hub` once published; local
-  install today: [docs/install/opencode.md](docs/install/opencode.md).
+- **OpenCode** — one command:
+
+  ```bash
+  opencode plugin opencode-arcade-hub
+  ```
+
+  Details: [docs/install/opencode.md](docs/install/opencode.md).
 
 Cursor auto-loads Claude Code plugins, so if you use both editors, install in
 **one** place to avoid a duplicate entry in Cursor — see the note in the

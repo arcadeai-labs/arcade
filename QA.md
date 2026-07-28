@@ -17,8 +17,9 @@ behavior and is verified by hand before tagging a release.
   Confirm no duplicate "Imported" entry (would mean it's also installed in
   Claude Code). Start a new chat and confirm the sessionStart context appears
   (Hooks output channel shows no errors).
-- [ ] **OpenCode:** load via `file://` path (npm publish pending), restart,
-  confirm the `arcade` server is registered and tools list.
+- [ ] **OpenCode:** install the published plugin (`opencode plugin
+  opencode-arcade-hub`), restart, confirm the `arcade` server is registered
+  and tools list. For pre-release checks, load the checkout via `file://`.
 
 ## Gateway scenarios (any client)
 
@@ -77,8 +78,13 @@ behavior and is verified by hand before tagging a release.
   Release (download links use `releases/latest/download/…`). Tag must match
   `VERSION`.
 - [ ] `/arcade:status` shows `plugin … ↔ hub … (staging|prod)`.
-- [ ] `npm publish` from `clients/opencode/` once `opencode-arcade-hub` goes
-  public (version matches manifests).
-- [ ] Claude: verify `/plugin marketplace update arcade` picks up the new
-  version from a machine with the old version installed.
+- [ ] npm shows the new `opencode-arcade-hub` version (`npm view
+  opencode-arcade-hub version`). The release workflow publishes it when the
+  `NPM_TOKEN` secret is set; if the run warns that publishing was skipped,
+  `npm publish --access public` from `clients/opencode/` by hand. A stale
+  npm version silently serves OpenCode users older guidance.
+- [ ] Claude: `claude plugin validate .` passes (a manifest key the schema
+  has since dropped fails installs *and* makes `update` report the old
+  version as current), then verify `/plugin marketplace update arcade` picks
+  up the new version from a machine with the old version installed.
 - [ ] README upgrade note accurate for users on older cached versions.

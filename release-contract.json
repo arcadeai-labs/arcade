@@ -1,7 +1,7 @@
 {
   "release_train": "arcade-agent-hub",
   "component": "plugin",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "endpoint": "https://hub.arcade.dev/mcp",
   "requires": {
     "hub": ">=0.2.0"

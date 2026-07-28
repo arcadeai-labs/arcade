@@ -2,13 +2,17 @@
 
 ## Plugin
 
-Once `opencode-arcade-hub` is published to npm, it's one command:
+One command — the plugin is published to npm as
+[`opencode-arcade-hub`](https://www.npmjs.com/package/opencode-arcade-hub):
 
 ```bash
 opencode plugin opencode-arcade-hub
 ```
 
-Until then, load it from a checkout of this repo — add to `opencode.json`
+Each release publishes a matching npm version, so `opencode plugin` upgrades
+you with the rest of the train.
+
+To develop against a checkout instead, point at it from `opencode.json`
 (project) or `~/.config/opencode/opencode.json` (global):
 
 ```json
