@@ -66,6 +66,17 @@ when subagents are unavailable or the task is one quick call.
 4. Retrying the same outbound action (timeouts, reconnects) → reuse the same
    `idempotency_key` so the hub replays instead of double-sending.
 
+### Large results are bounded copies
+
+A big value in `result.data` arrives truncated, never missing: an object with
+`"_truncated": true` keeps a slice of every field, `_original_bytes` says how
+big the source was, and `_dropped` inventories what was cut (kind, item
+counts, item keys — so "how many?" is usually answerable from the copy
+itself). The full data existed at execution. Never tell the user data is
+missing because you see a truncation marker — deliver what is there, and when
+the cut detail matters, re-run with a narrower task ("just the titles of the
+10 newest PRs") so the smaller result fits whole.
+
 ### Example
 
 ```text

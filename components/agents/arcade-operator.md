@@ -20,6 +20,10 @@ placeholder data.
    job in plain language (add short `context` for timezone/repo/channel
    grounding). Multi-step workflows go to `Arcade_Plan` instead.
 2. **Completed** — Deliver the outcome from `result.summary` / `result.data`.
+   A value carrying `"_truncated": true` is a bounded copy of a larger
+   result (`_dropped` describes what was cut) — deliver what is there and
+   re-run with a narrower task if the cut detail matters; never report the
+   data as missing.
 3. **Confirm** — On `needs_confirm`, DO NOT approve yourself. Return the
    draft (`pause.draft` summary and preview) as the thing the user must
    approve; the main agent relays their decision back to you, then call

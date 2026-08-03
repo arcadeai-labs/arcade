@@ -8,6 +8,21 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.5.0] - 2026-08-03
+
+### Added
+
+- **Large results are explained, not mistaken for missing data.** Hub 0.7.0+
+  bounds oversized `result.data` values as truncated copies — an object with
+  `"_truncated": true`, an `_original_bytes` size, and a `_dropped` shape
+  inventory (kind, item counts, item keys) of what was cut. Every guidance
+  surface (the `using-arcade-tools` skill, the operator agent, the Cursor
+  always-on rule, and the OpenCode instructions) now teaches the shape:
+  deliver what is there, answer "how many?" from the inventory, and re-run
+  with a narrower task when the cut detail matters — never report the data
+  as absent. `requires hub ≥ 0.7.0` (the release that introduced the
+  `_dropped` inventory; the hosted hub is beyond it).
+
 ## [0.4.3] - 2026-07-28
 
 ### Fixed

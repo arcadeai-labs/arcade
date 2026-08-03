@@ -21,3 +21,7 @@ message. Use `Arcade_SelectGateway` only when the user asks to list or
 switch gateways — selection is otherwise automatic. If the hub reports no
 tool for a task's app, the active gateway may not include it; offer to check
 the gateway list.
+
+A large `result.data` value arrives as a bounded copy (`"_truncated": true`
+with a `_dropped` inventory of what was cut), never as missing data — deliver
+what is there and re-run with a narrower task if the cut detail matters.
