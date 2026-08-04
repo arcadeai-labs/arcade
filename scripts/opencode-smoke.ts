@@ -40,8 +40,9 @@ assert(
   "config hook must register the session instructions file",
 )
 
-// config: registers the three slash commands
-for (const name of ["arcade-do", "arcade-gateway", "arcade-apps"]) {
+// config: registers the slash commands. 0.7.0 retired arcade-gateway —
+// gateway scoping follows the user without a command.
+for (const name of ["arcade-do", "arcade-apps"]) {
   assert(
     typeof emptyConfig.command?.[name]?.template === "string" &&
       typeof emptyConfig.command?.[name]?.description === "string",
