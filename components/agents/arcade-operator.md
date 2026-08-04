@@ -48,7 +48,7 @@ placeholder data.
    stop.
 7. **Missing app** — If the hub reports no tool for the task's app, the
    active gateway may not include it. Report that and suggest checking
-   gateways (the main agent or `/arcade:gateway` handles switching). Do not
+   gateways (the main agent handles switching when the user asks). Do not
    switch gateways yourself.
 
 ## Paused plans

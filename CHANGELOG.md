@@ -8,6 +8,23 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.7.0] - 2026-08-04
+
+### Removed
+
+- **`/arcade:gateway` and `/arcade:tools`.** Both were surfaces for
+  machinery the hub now runs on its own. Gateway scoping follows the user
+  automatically and switching works in plain words (the
+  `working-with-arcade-gateways` skill still carries the flow when someone
+  asks), so a dedicated command taught users a meta concept they no longer
+  need — and its "preview tools per gateway" step was exactly the
+  discovery narration the always-on rule forbids. `/arcade:tools` was that
+  narration as a command. The OpenCode plugin drops its mirrored
+  `arcade-gateway` command, and its `arcade-do` template no longer
+  hardcodes the SelectTools→UseTool escape hatch. Four commands remain:
+  `/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`.
+  `requires hub ≥ 0.9.0` (unchanged from 0.6.0).
+
 ## [0.6.0] - 2026-08-04
 
 ### Changed

@@ -10,7 +10,7 @@ client gets exactly its intended bundle.
 |------|------------|---------|
 | `components/skills/` | `using-arcade-tools`, `managing-arcade-apps`, `working-with-arcade-gateways` skills | Cursor + Claude Code / Cowork |
 | `components/agents/` | The `arcade-operator` subagent | Cursor + Claude Code / Cowork |
-| `components/commands/` | `/arcade:do`, `/arcade:gateway`, `/arcade:apps`, `/arcade:tools` | Cursor + Claude Code / Cowork |
+| `components/commands/` | `/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status` | Cursor + Claude Code / Cowork |
 | `clients/cursor/` | Rule, Cursor-native session hook, MCP config | Cursor |
 | `clients/claude/` | Claude-native session hook, MCP config | Claude Code / Cowork |
 | `clients/claude-desktop/` | One-click `.mcpb` bundle + ready-to-merge connector config | Claude Desktop Chat |

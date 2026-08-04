@@ -245,8 +245,6 @@ for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hook
 const userFacing = [
   "components/commands/do.md",
   "components/commands/apps.md",
-  "components/commands/tools.md",
-  "components/commands/gateway.md",
   "components/commands/status.md",
   "components/commands/connect.md",
   "components/skills/using-arcade-tools/SKILL.md",
@@ -278,7 +276,6 @@ for (const archive of trackedArchives) {
 // The hub's defining tool must be documented wherever tools are enumerated.
 for (const file of [
   "components/skills/working-with-arcade-gateways/SKILL.md",
-  "components/commands/gateway.md",
   "README.md",
   "clients/opencode/README.md",
 ]) {

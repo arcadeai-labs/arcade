@@ -105,12 +105,7 @@ export const ArcadePlugin: Plugin = async ({ client }) => {
         "arcade-do": {
           description: "Do something with an external service via your Arcade gateway",
           template:
-            "Use the Arcade tools (Arcade_SelectTools then Arcade_UseTool) to accomplish this task and report only the result, a sign-in link, or one clarifying question: $ARGUMENTS",
-        },
-        "arcade-gateway": {
-          description: "See your Arcade gateways or switch the active one",
-          template:
-            "Use Arcade_SelectGateway to help with this gateway request (no arguments = list with the active gateway marked; a name = switch to it, scope this_app unless the user says everywhere; relay the confirmation summary): $ARGUMENTS",
+            "Use the Arcade tools to accomplish this task and report only the result, a sign-in link, or one clarifying question: $ARGUMENTS",
         },
         "arcade-apps": {
           description: "See, disconnect, or fix your connected Arcade apps",

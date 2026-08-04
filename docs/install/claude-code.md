@@ -14,11 +14,13 @@ Arcade. You get 3 skills, the `arcade-operator` subagent, the SessionStart
 hook, and the commands:
 
 - `/arcade:do <task>` — do something in an app (Slack, Gmail, GitHub, …)
-- `/arcade:gateway [name]` — see your gateways or switch the active one
 - `/arcade:apps` — see, disconnect, or fix your connected apps
 - `/arcade:connect <app>` — connect an app with a one-time sign-in
 - `/arcade:status` — check connection, sign-in, gateway, and apps
-- `/arcade:tools <query>` — preview which tools would run (debugging)
+
+Gateway questions ("which gateways do I have?", "switch to the support
+toolset") work in plain words — the active gateway follows you
+automatically, so there is no command to remember.
 
 Inside a session, the same install works as `/plugin marketplace add
 arcadeai-labs/arcade` then `/plugin install arcade@arcade`.

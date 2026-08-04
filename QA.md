@@ -8,7 +8,7 @@ behavior and is verified by hand before tagging a release.
 
 - [ ] **Claude Code:** `claude plugin validate .` passes, then load with
   `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
-  6 commands (`/arcade:do`, `/arcade:gateway`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`,  `/arcade:tools`), the SessionStart hook context, and the `arcade` MCP
+  4 commands (`/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`), the SessionStart hook context, and the `arcade` MCP
   server connect (sign in with an Arcade staging account).
 - [ ] **Cursor:** add the marketplace `arcadeai-labs/arcade` in Cursor's
   plugins panel (or `npx plugins add arcadeai-labs/arcade --target cursor`),
