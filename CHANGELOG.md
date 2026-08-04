@@ -8,6 +8,31 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.6.0] - 2026-08-04
+
+### Changed
+
+- **Truncated results are retrieved, not re-run.** Hub 0.9.0 keeps every
+  oversized result server-side for 24 hours and adds
+  `Arcade_RetrieveResult`, so "re-run with a narrower task" is no longer
+  the answer to a truncation marker. Every guidance surface (the
+  `using-arcade-tools` skill, the operator agent, the Cursor always-on
+  rule, and the OpenCode instructions) now teaches the retrieval contract:
+  copy a result's `_next` block verbatim to page, pass `query` to find
+  which records mention something (hits return as readable paths, with
+  byte-range slices into long text), or call with only the execution id
+  for the result's structure. New markers are taught alongside:
+  `_projected` (one fat field clipped across records; `full_value` names
+  the path to read one back), `"_binary": true` (file descriptors — report
+  name/type/size, never fetch base64), the `value_counts` census in
+  `_dropped` (status counts over the whole list, so three failures behind
+  997 successes are caught before declaring a bulk operation clean), and
+  `store_partial` / `_retrieval_partial` (a zero-match search over a
+  partial store is not evidence of absence). Re-running the original tool
+  is reserved for expired results and partial-store misses.
+  `requires hub ≥ 0.9.0` (the release that added `Arcade_RetrieveResult`
+  and the result budget; both hosted hubs are on it).
+
 ## [0.5.0] - 2026-08-03
 
 ### Added

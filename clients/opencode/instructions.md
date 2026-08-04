@@ -23,5 +23,11 @@ tool for a task's app, the active gateway may not include it; offer to check
 the gateway list.
 
 A large `result.data` value arrives as a bounded copy (`"_truncated": true`
-with a `_dropped` inventory of what was cut), never as missing data — deliver
-what is there and re-run with a narrower task if the cut detail matters.
+with a `_dropped` inventory and a `_next` block), never as missing data. The
+full result stays retrievable via `Arcade_RetrieveResult`: copy `_next`
+verbatim to page, pass `query` to find which records mention something, or
+pass nothing to see the structure. `"_binary": true` is a file descriptor —
+report name/type/size, don't fetch the bytes. Check `value_counts` in
+`_dropped` before declaring a bulk operation clean. Re-run the original tool
+only when retrieval says the result expired or a `store_partial` search
+misses.

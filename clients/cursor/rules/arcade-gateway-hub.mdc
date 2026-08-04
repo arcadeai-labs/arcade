@@ -35,9 +35,17 @@ to see or switch gateways — the `working-with-arcade-gateways` skill has the
 flow. If the hub reports no tool for a task's app, the active gateway may not
 include it; offer to check the gateway list rather than falling back silently.
 
-A large `result.data` value arrives as a bounded copy — `"_truncated": true`
-with a `_dropped` inventory of what was cut — never as missing data: deliver
-what is there and re-run with a narrower task if the cut detail matters.
+A large `result.data` value arrives as a bounded copy, never as missing
+data: `"_truncated": true` with a `_dropped` inventory and a `_next` block.
+The full result stays retrievable — call `Arcade_RetrieveResult`, copying
+`_next` verbatim to page, passing `query` to find which records mention
+something (hits come back as readable paths), or passing nothing to see the
+structure first. `_projected` means one fat field was clipped (read one back
+via its `full_value` path); `"_binary": true` is a file descriptor — report
+name/type/size, never fetch the bytes; a `value_counts` census counts things
+like status values across the whole list, so check it before declaring a
+bulk operation clean. Re-run the original tool only when retrieval says the
+result expired or a `store_partial` search misses.
 
 The `using-arcade-tools` skill has the full flow; `managing-arcade-apps` covers
 listing, disconnecting, and fixing the user's app connections.

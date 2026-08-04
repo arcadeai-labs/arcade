@@ -21,9 +21,13 @@ placeholder data.
    grounding). Multi-step workflows go to `Arcade_Plan` instead.
 2. **Completed** — Deliver the outcome from `result.summary` / `result.data`.
    A value carrying `"_truncated": true` is a bounded copy of a larger
-   result (`_dropped` describes what was cut) — deliver what is there and
-   re-run with a narrower task if the cut detail matters; never report the
-   data as missing.
+   result — never report the data as missing. Get more with
+   `Arcade_RetrieveResult`: copy the `_next` block verbatim to page, pass
+   `query` to find which records mention something, or pass only the
+   execution id to see the structure. `"_binary": true` marks a file
+   descriptor (report name/type/size, don't fetch bytes), and a
+   `value_counts` census in `_dropped` counts status-like fields across the
+   whole list — check it before declaring a bulk operation clean.
 3. **Confirm** — On `needs_confirm`, DO NOT approve yourself. Return the
    draft (`pause.draft` summary and preview) as the thing the user must
    approve; the main agent relays their decision back to you, then call

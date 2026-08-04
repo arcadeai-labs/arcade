@@ -66,16 +66,49 @@ when subagents are unavailable or the task is one quick call.
 4. Retrying the same outbound action (timeouts, reconnects) → reuse the same
    `idempotency_key` so the hub replays instead of double-sending.
 
-### Large results are bounded copies
+### Large results are bounded copies — retrieve, don't re-run
 
 A big value in `result.data` arrives truncated, never missing: an object with
 `"_truncated": true` keeps a slice of every field, `_original_bytes` says how
-big the source was, and `_dropped` inventories what was cut (kind, item
-counts, item keys — so "how many?" is usually answerable from the copy
-itself). The full data existed at execution. Never tell the user data is
-missing because you see a truncation marker — deliver what is there, and when
-the cut detail matters, re-run with a narrower task ("just the titles of the
-10 newest PRs") so the smaller result fits whole.
+big the source was, and `_dropped` inventories what was cut. The full result
+is kept server-side for 24 hours, and `Arcade_RetrieveResult` reads it — so
+the cut detail is one call away, not gone. Never tell the user data is
+missing because you see a truncation marker.
+
+Three ways to call `Arcade_RetrieveResult(execution_id, …)`:
+
+- **Follow `_next` verbatim.** A truncated result's `_next` block is a
+  ready-made call: its `result_id` is the `execution_id`, its `json_path` is
+  the next slice. Paste it as-is to page forward.
+- **Search with `query`.** "Which email mentions the contract?" is a search,
+  not a paging loop: pass `query` and get back the path of each hit, which
+  you then read (`json_path: "$.emails[417].subject"`). Hits inside long
+  text (CSV, logs, documents) also carry a `slice` — a ready-to-read byte
+  range. Prefer one search over walking slices.
+- **Call with only `execution_id`** to get the result's structure — shape
+  and dimensions, a few dozen tokens — before deciding what to read.
+
+Read the markers before acting on the copy:
+
+- **`_projected`** — one fat field (an email `body`, a page of HTML) was
+  clipped across all records so more records could fit. `full_value` shows
+  the path pattern to read one back whole (e.g. `$.emails[3].body`).
+- **`"_binary": true`** — an attachment or file descriptor (mime type,
+  size, path). The bytes are base64 you cannot use: report the file and its
+  size, never retrieve the payload itself.
+- **`_dropped.…value_counts`** — a census of enum-like fields over the
+  whole list, not just the visible slice. `{status: {ok: 997, error: 3}}`
+  means three failures are hiding past the cut: search for the rare value
+  and report it, don't declare success from the visible head.
+- **`_retrieval_partial` / `store_partial`** — the stored copy itself is a
+  prefix of the original. A zero-match search over a partial store is not
+  evidence of absence (the response says so).
+
+Re-run the original tool with a narrower task only when retrieval can't
+serve you: the result expired, or a `store_partial` search missed. One more
+bounded-copy note: a `needs_confirm` draft for a bulk write may arrive with
+its `preview` truncated to a counted sample — that is normal; judge the
+action by the summary, targets, and counts.
 
 ### Example
 
