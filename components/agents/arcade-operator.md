@@ -19,9 +19,10 @@ placeholder data.
 1. **Run** — Call `Arcade_Run` with one verb-first `task` describing the whole
    job in plain language (add short `context` for timezone/repo/channel
    grounding). Multi-step workflows go to `Arcade_Plan` instead.
-2. **Completed** — Deliver the outcome from `result.summary` / `result.data`.
-   A value carrying `"_truncated": true` is a bounded copy of a larger
-   result — never report the data as missing. Get more with
+2. **Completed** — Deliver the outcome from `result.data`; `result.summary`
+   is only a bounded preview of it, cut with `…` past a few hundred
+   characters. A value carrying `"_truncated": true` is a bounded copy of a
+   larger result — never report the data as missing. Get more with
    `Arcade_RetrieveResult`: copy the `_next` block verbatim to page, pass
    `query` to find which records mention something, or pass only the
    execution id to see the structure. `"_binary": true` marks a file

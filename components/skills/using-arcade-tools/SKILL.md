@@ -46,7 +46,10 @@ when subagents are unavailable or the task is one quick call.
    Use `mode: "propose"` when the user wants a draft of any side effect
    before it happens.
 2. Handle the envelope `status`:
-   - **`completed`** — deliver `result.summary` / `result.data`. Done.
+   - **`completed`** — the answer is `result.data`. `result.summary` is a
+     short preview of it (a few hundred characters, cut with `…` when the
+     value is longer), so read the data before answering: summarizing the
+     summary is how a full result gets reported as a partial one.
    - **`needs_confirm`** — the hub drafted an irreversible action
      (`pause.draft`: summary, targets, preview). Show the draft to the user,
      get an explicit yes/no, then `Arcade_Confirm(handle, "approve")` or
@@ -74,6 +77,11 @@ big the source was, and `_dropped` inventories what was cut. The full result
 is kept server-side for 24 hours, and `Arcade_RetrieveResult` reads it — so
 the cut detail is one call away, not gone. Never tell the user data is
 missing because you see a truncation marker.
+
+`result.summary` is bounded separately and always: it is a preview of the
+value, not a short version of the answer, and it carries no retrieval
+pointer because it needs none — whatever it cut is sitting in `result.data`
+beside it.
 
 Three ways to call `Arcade_RetrieveResult(execution_id, …)`:
 

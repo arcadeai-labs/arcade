@@ -35,6 +35,10 @@ to see or switch gateways — the `working-with-arcade-gateways` skill has the
 flow. If the hub reports no tool for a task's app, the active gateway may not
 include it; offer to check the gateway list rather than falling back silently.
 
+Answer from `result.data`. `result.summary` is a bounded preview of it, cut
+with `…` past a few hundred characters, so answering from the summary turns a
+complete result into a partial one.
+
 A large `result.data` value arrives as a bounded copy, never as missing
 data: `"_truncated": true` with a `_dropped` inventory and a `_next` block.
 The full result stays retrievable — call `Arcade_RetrieveResult`, copying

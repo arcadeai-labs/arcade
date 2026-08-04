@@ -8,6 +8,24 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.7.1] - 2026-08-04
+
+### Changed
+
+- **`result.summary` is a preview, and every surface now says so.** Hub
+  0.9.2 clamps a result summary to a few hundred characters, because it
+  rides next to `result.data` and an uncapped one shipped the payload
+  twice — a search tool whose output was 11 KB of JSON sent those bytes as
+  the summary as well. Nothing told the agent, so a model answering from
+  `result.summary` would silently report a complete result as a partial
+  one. The `using-arcade-tools` skill, the operator agent, the Cursor
+  always-on rule, and the OpenCode instructions now all say to answer from
+  `result.data` and treat the summary as a preview. Unlike a truncated
+  result, a cut summary carries no retrieval pointer and needs none: what
+  it dropped is in `result.data` beside it.
+  `requires hub ≥ 0.9.2` (raised from 0.9.0 — the release that bounded
+  summaries).
+
 ## [0.7.0] - 2026-08-04
 
 ### Removed
