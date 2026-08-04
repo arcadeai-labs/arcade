@@ -15,7 +15,7 @@ the MCP connection itself, so **every** row below includes it.
 | **Skills (3)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
 | **Always-on rule** | ✅ `arcade-gateway-hub` | — (hook context instead) | — (hook context instead) | — (injected instructions instead) |
 | **Operator subagent** | ✅ `arcade-operator` | ✅ | ✅ | — |
-| **Slash commands** | ✅ 6 (`do`, `gateway`, `apps`, `connect`, `status`, `tools`) | ✅ 6 | ✅ 6 | ✅ 3 (`arcade-do`, `arcade-gateway`, `arcade-apps`) |
+| **Slash commands** | ✅ 4 (`do`, `apps`, `connect`, `status`) | ✅ 4 | ✅ 4 | ✅ 2 (`arcade-do`, `arcade-apps`) |
 | **Session-start context** | ✅ native hook | ✅ native hook | ✅ native hook | ✅ injected `instructions.md` |
 | **Sign-in link surfacing** | via skills/rule | via skills/hook | via skills/hook | ✅ toast |
 | **Gateway-switch feedback** | via skill guidance | via skill guidance | via skill guidance | ✅ toast |
