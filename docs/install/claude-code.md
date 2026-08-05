@@ -10,8 +10,10 @@ claude plugin install arcade@arcade
 ```
 
 Then start `claude`, run `/mcp`, and sign in to the **arcade** server with
-Arcade. You get 3 skills, the `arcade-operator` subagent, the SessionStart
-hook, and the commands:
+Arcade. You get 3 skills, the `arcade-operator` subagent, two hooks — one
+stating at session start that Arcade is connected, one restating it alongside
+any prompt that looks like external-app or live-data work, since session-start
+context stops carrying by the thirtieth turn — and the commands:
 
 - `/arcade:do <task>` — do something in an app (Slack, Gmail, GitHub, …)
 - `/arcade:apps` — see, disconnect, or fix your connected apps

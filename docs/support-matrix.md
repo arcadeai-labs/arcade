@@ -17,6 +17,7 @@ the MCP connection itself, so **every** row below includes it.
 | **Operator subagent** | ✅ `arcade-operator` | ✅ | ✅ | — |
 | **Slash commands** | ✅ 4 (`do`, `apps`, `connect`, `status`) | ✅ 4 | ✅ 4 | ✅ 2 (`arcade-do`, `arcade-apps`) |
 | **Session-start context** | ✅ native hook | ✅ native hook | ✅ native hook | ✅ injected `instructions.md` |
+| **Per-turn reminder** | ✅ always-apply rule | ✅ `UserPromptSubmit` hook (fires only on app/live-data prompts) | ✅ same hook | — (session instructions only) |
 | **Sign-in link surfacing** | via skills/rule | via skills/hook | via skills/hook | ✅ toast |
 | **Gateway-switch feedback** | via skill guidance | via skill guidance | via skill guidance | ✅ toast |
 

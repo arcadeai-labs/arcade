@@ -241,6 +241,77 @@ for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hook
   }
 }
 
+// --- Per-turn reminder fires on app work and stays quiet on local work --------
+// Claude Code has no always-apply rule, so this hook is the only thing keeping
+// Arcade present after the session-start context has scrolled away. It has to
+// stay silent on coding turns: a reminder that fires on everything is both a
+// context cost and an invitation to reach for a remote tool to edit a file.
+const PROMPT_HOOK = "components/hooks/user-prompt-submit.mjs";
+const runPromptHook = (prompt) => {
+  try {
+    return execFileSync("node", [join(ROOT, PROMPT_HOOK)], {
+      encoding: "utf8",
+      timeout: 10_000,
+      input: JSON.stringify({ hook_event_name: "UserPromptSubmit", prompt }),
+    }).trim();
+  } catch (execError) {
+    fail(`${PROMPT_HOOK}: failed to execute — ${execError.message}`);
+    return "";
+  }
+};
+for (const prompt of [
+  "send a slack message to #eng that the deploy is done",
+  "what are my 5 most recent emails?",
+  "search the web for the Go 1.26 release date",
+  "what is on my calendar tomorrow",
+  "open a GitHub issue for this",
+]) {
+  const out = runPromptHook(prompt);
+  if (!out) {
+    fail(`${PROMPT_HOOK}: stayed silent on app work: ${JSON.stringify(prompt)}`);
+    continue;
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(out);
+  } catch {
+    fail(`${PROMPT_HOOK}: emitted non-JSON for ${JSON.stringify(prompt)}`);
+    continue;
+  }
+  if (parsed.hookSpecificOutput?.hookEventName !== "UserPromptSubmit") {
+    fail(`${PROMPT_HOOK}: hookEventName must be UserPromptSubmit`);
+  }
+  if (typeof parsed.hookSpecificOutput?.additionalContext !== "string") {
+    fail(`${PROMPT_HOOK}: must inject additionalContext`);
+  }
+}
+for (const prompt of [
+  "refactor this function to use a map",
+  "run the tests and fix the failure",
+  "git commit these changes and push",
+  "add an email validation regex to this file",
+  "why is this file failing to compile",
+]) {
+  if (runPromptHook(prompt) !== "") {
+    fail(`${PROMPT_HOOK}: fired on local work: ${JSON.stringify(prompt)}`);
+  }
+}
+// Malformed and empty input must never break a prompt.
+for (const raw of ["", "not json", "{}"]) {
+  try {
+    execFileSync("node", [join(ROOT, PROMPT_HOOK)], {
+      encoding: "utf8",
+      timeout: 10_000,
+      input: raw,
+    });
+  } catch (execError) {
+    fail(`${PROMPT_HOOK}: non-zero exit on ${JSON.stringify(raw)} — ${execError.message}`);
+  }
+}
+if (!read("clients/claude/hooks/hooks.json").includes(PROMPT_HOOK)) {
+  fail(`clients/claude/hooks/hooks.json: must wire ${PROMPT_HOOK} on UserPromptSubmit`);
+}
+
 // --- Language consistency -------------------------------------------------------
 const userFacing = [
   "components/commands/do.md",

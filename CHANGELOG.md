@@ -8,6 +8,31 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.8.0] - 2026-08-05
+
+### Added
+
+- **A per-turn reminder for the Claude clients.** Agents were reaching
+  for built-in web search or a shell command on tasks Arcade should
+  have run. The plugin already announced Arcade at session start, but
+  that is the wrong moment: by the thirtieth turn the model is anchored
+  on recent context and the announcement has scrolled out of reach.
+  Cursor solves this with the always-apply rule, which rides every
+  turn; Claude Code has no rule equivalent, so a `UserPromptSubmit`
+  hook now restates — alongside the prompt itself — that the `arcade`
+  server is connected, what it reaches, and that `Arcade_Run` takes a
+  task in plain language.
+
+  It fires only when the prompt looks like external-app or live-data
+  work: naming an app, asking about your own mail or calendar, or
+  asking for something current. A coding turn gets nothing, which keeps
+  the context cost at zero where it cannot help and avoids nudging an
+  agent toward a remote tool for work in the repo in front of it. The
+  wording is a factual statement rather than an instruction, because
+  out-of-band imperatives can trip Claude's prompt-injection defenses
+  and get surfaced to the user instead of read as context.
+  `requires hub ≥ 0.9.2` (unchanged from 0.7.1).
+
 ## [0.7.1] - 2026-08-04
 
 ### Changed
