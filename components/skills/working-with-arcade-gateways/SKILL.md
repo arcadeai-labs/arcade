@@ -75,8 +75,13 @@ default, pass `gateway` on the call itself:
 ## Errors
 
 - Unknown gateway id → `list` and match by name; never guess ids.
-- "No gateways are available" → the user's account has none; suggest creating
-  one in the Arcade dashboard.
+- An account with no gateways uses **All your apps** automatically —
+  everything available to it, shown by `list` as active. That is normal, not
+  a problem to fix; gateways are optional curation created in the Arcade
+  dashboard.
+- "No gateways are available" (with nothing active) → the account's setup
+  isn't finished; the Arcade dashboard is the fix, not anything answered
+  here.
 - A task's app is missing from discovery → the active gateway may not include
   it; check `list` and offer the gateway that does.
 

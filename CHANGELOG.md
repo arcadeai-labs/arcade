@@ -8,6 +8,21 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.9.2] - 2026-08-05
+
+Requires hub >= 0.9.8 (the all-apps fallback this guidance describes).
+
+### Changed
+
+- **Gateway guidance matches the all-apps fallback.** Hub 0.9.8 makes a
+  zero-gateway account work through a virtual "All your apps" scope, and
+  its gateway list now reports that scope as active. The
+  `working-with-arcade-gateways` skill previously told agents to treat
+  "no gateways" as a setup problem and send the user to the dashboard —
+  wrong for those accounts. It now explains that all-apps is normal,
+  gateways are optional curation, and only an account with *nothing*
+  active needs dashboard setup.
+
 ## [0.9.1] - 2026-08-05
 
 ### Changed
