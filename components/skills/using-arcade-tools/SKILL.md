@@ -18,7 +18,7 @@ include it: see the `working-with-arcade-gateways` skill.
 ```text
 Arcade_Run(task: "<one plain-language task>")        # hub finds, fills, executes
   → completed | needs_confirm | needs_input | needs_auth | failed
-Arcade_Confirm(handle, decision: approve|reject)     # after needs_confirm
+Arcade_Confirm(handle, decision: approve|approve_all|reject)  # after needs_confirm
 Arcade_Resume(handle, answers: {field: value})       # after needs_input / needs_auth
 ```
 
@@ -53,7 +53,11 @@ when subagents are unavailable or the task is one quick call.
    - **`needs_confirm`** — the hub drafted an irreversible action
      (`pause.draft`: summary, targets, preview). Show the draft to the user,
      get an explicit yes/no, then `Arcade_Confirm(handle, "approve")` or
-     `("reject")`. Never approve on the user's behalf.
+     `("reject")`. When a plan has several drafts waiting at once
+     (`pauses[]` lists them), show them all together and — after one
+     explicit yes to the batch — clear them in one call with
+     `Arcade_Confirm(handle, "approve_all")` instead of approving one by
+     one. Never approve on the user's behalf.
    - **`needs_input`** — answer the specific `pause.fields` questions
      (ask the user if you don't know), then
      `Arcade_Resume(handle, answers: {<field id>: <value>})`.
@@ -182,21 +186,29 @@ tool list (older hub deployments):
    returned (`Toolkit_Action` form: no `@version` suffix, no period); `inputs`
    matching the schema; forward `query_id`.
 
+For list tools that return a continuation token (`next_page_token`,
+`next_cursor`), pass `paginate: true` (optionally `max_pages`) and let the
+server walk the pages into one merged result — never hand-walk tokens call
+by call. The merged `_pagination` block says how many pages were fetched and
+carries the live token if more remain.
+
 The same sign-in and confirmation rules apply on this path — you own them
 yourself here, since the hub isn't drafting for you.
 
 ## Signing in to apps
 
 The first time a task needs an app the user hasn't connected, you get a
-sign-in link instead of a result — as a `needs_auth` pause from Run, or inline
-output from UseTool. **A response may say `success: true` — an
-`authorization_url` still means sign-in required, not a completed task.**
+sign-in link instead of a result — a `needs_auth` pause, from Run and UseTool
+alike (UseTool's carries a `retry` block naming the exact follow-up call).
+**On older hubs the challenge may arrive as `success: true` with an
+`authorization_url` in the output — that still means sign-in required, not a
+completed task.**
 
 1. Present the link: "Sign in to connect your **<App>** here, then tell me to
    continue."
 2. Stop and wait for the user — never poll or retry in a loop.
-3. After they confirm: `Arcade_Resume(handle)` (Run path) or retry the same
-   `Arcade_UseTool` call once (escape path).
+3. After they confirm: `Arcade_Resume(handle)` (Run path) or re-issue the same
+   `Arcade_UseTool` call once with the same inputs (escape path).
 
 ## Outbound and irreversible actions
 

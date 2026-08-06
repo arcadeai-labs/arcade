@@ -8,6 +8,33 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.10.0] - 2026-08-06
+
+Requires hub >= 0.10.0. Coordinated release: the hub adds typed
+needs_auth pauses on Arcade_UseTool, server-side pagination, and
+Arcade_Confirm approve_all; this release teaches every client's guidance
+those contracts.
+
+### Changed
+
+- **Sign-in guidance covers the UseTool pause.** A 1,221-call usage
+  study found that when an authorization URL arrived inside a
+  success:true UseTool result, zero of 15 threads ever completed the
+  call. Hub 0.10.0 returns a typed needs_auth pause with a retry block;
+  the skills, Cursor rule, opencode instructions, and operator agent now
+  say: present the link, stop, and re-issue the same call after the user
+  confirms (with the older success:true shape still called out for old
+  hubs).
+- **Pagination goes through the server.** The same study's largest
+  thread hand-walked 48 Gmail pages. Guidance now tells agents to pass
+  paginate: true on list tools with continuation tokens instead of
+  walking next_page_token/next_cursor call by call.
+- **Batch approvals.** When a plan stages several confirm gates at once,
+  show all the drafts, get one explicit yes to the batch, and clear them
+  with Arcade_Confirm(handle, "approve_all") — replacing the
+  approve-one-reveal-next treadmill observed to stall every multi-write
+  plan in the dataset.
+
 ## [0.9.2] - 2026-08-05
 
 Requires hub >= 0.9.8 (the all-apps fallback this guidance describes).

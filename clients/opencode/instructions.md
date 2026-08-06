@@ -10,14 +10,19 @@ questions, `Arcade_Resume(handle, answers)`. `needs_auth` → present the
 sign-in link, wait, then `Arcade_Resume(handle)`.
 
 A sign-in link (`authorization_url`) is never a result — even if `success` is
-`true`. Confirm before anything outbound or irreversible; never approve a
+`true` (older hubs); `Arcade_UseTool` returns it as a `needs_auth` pause whose
+`retry` block names the follow-up call to re-issue after the user signs in.
+Confirm before anything outbound or irreversible; never approve a
 draft on the user's behalf. On `failed` with `recoverable: "try_l1"`, fall
 back once to `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name,
-inputs, query_id)` with the name passed back verbatim. Multi-step workflows →
+inputs, query_id)` with the name passed back verbatim; for list tools with a
+continuation token, pass `paginate: true` rather than walking pages by hand.
+Multi-step workflows →
 `Arcade_Plan`; a paused plan still runs its independent steps, so read
 `steps[]` for progress and, when `pauses[]` lists several waiting steps,
 resolve each on its own `handle` and gather what the user must supply in one
-message. Use `Arcade_SelectGateway` only when the user asks to list or
+message; several confirm gates at once clear together with
+`Arcade_Confirm(handle, "approve_all")` after one explicit yes to the batch. Use `Arcade_SelectGateway` only when the user asks to list or
 switch gateways — selection is otherwise automatic. If the hub reports no
 tool for a task's app, the active gateway may not include it; offer to check
 the gateway list.

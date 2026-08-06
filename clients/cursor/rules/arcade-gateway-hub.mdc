@@ -16,18 +16,22 @@ Handle Run pauses:
   `Arcade_Confirm(handle, approve|reject)`. Never approve on their behalf.
 - `needs_input` — answer the `pause.fields` questions (ask the user if
   needed), then `Arcade_Resume(handle, answers)`.
-- `needs_auth` — a sign-in request, not a result. Present
-  `pause.authorization_url`, stop, and `Arcade_Resume(handle)` after the user
-  confirms.
+- `needs_auth` — a sign-in request, not a result, from `Arcade_Run` and
+  `Arcade_UseTool` alike. Present `pause.authorization_url`, stop, and after
+  the user confirms: `Arcade_Resume(handle)` (Run) or re-issue the same
+  UseTool call (its `retry` block names it).
 - `failed` with `error.recoverable: "try_l1"` — fall back once to
   `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
   query_id)` (`tool_name` verbatim, inputs matching the returned
-  `input_schema`).
+  `input_schema`). For list tools with a continuation token, pass
+  `paginate: true` instead of walking pages by hand.
 
 Multi-step workflows → `Arcade_Plan(task)` (same pause contract). A paused
 plan is still running — read `steps[]` for real progress, and when `pauses[]`
 lists several waiting steps, resolve each on its own `handle` and ask for
-everything the user must supply in one message.
+everything the user must supply in one message. Several confirm gates waiting
+at once: show all the drafts, get one explicit yes to the batch, then clear
+them together with `Arcade_Confirm(handle, "approve_all")`.
 
 Available tools follow the user's **active gateway** (a curated set of apps
 and tools) automatically. Use `Arcade_SelectGateway` only when the user asks

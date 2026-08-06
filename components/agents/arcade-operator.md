@@ -36,11 +36,12 @@ placeholder data.
 4. **Input** — On `needs_input`, answer `pause.fields` from the task if you
    can; otherwise return the specific question(s). Then
    `Arcade_Resume(handle, answers)`.
-5. **Sign in** — On `needs_auth` (or any `authorization_url` in output —
-   even with `success: true`), STOP. Return the link with a one-line
-   instruction ("Sign in to connect your app here, then ask me to retry").
-   Never poll or retry in a loop. After the user confirms,
-   `Arcade_Resume(handle)`.
+5. **Sign in** — On `needs_auth` (or, on older hubs, any `authorization_url`
+   in output — even with `success: true`), STOP. Return the link with a
+   one-line instruction ("Sign in to connect your app here, then ask me to
+   retry"). Never poll or retry in a loop. After the user confirms,
+   `Arcade_Resume(handle)` — or, for a UseTool pause, re-issue the same call
+   (its `retry` block names it).
 6. **Escape hatch** — On `failed` with `error.recoverable: "try_l1"` (or when
    `Arcade_Run` is not in the tool list), fall back once to
    `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
