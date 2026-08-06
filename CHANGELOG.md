@@ -8,6 +8,32 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.9.1] - 2026-08-05
+
+### Changed
+
+- **One reminder, on every prompt that carries a task.** 0.9.0 sent a
+  short line always and a fuller one when the prompt looked like app
+  work. Running two twenty-turn sessions through that classifier found
+  it wrong on roughly a third of ordinary phrasing: silent on "what
+  gateways do I have?", "disconnect my google account", "list open PRs
+  on <repo>", "is the API up?", "what did the CEO say in the
+  all-hands?", and firing on "update the changelog". Each miss was a
+  different gap — an unlisted noun, an unlisted verb, a word-gap limit
+  two words short, a polarity written only one way — so each fix bought
+  one phrasing rather than a class of them.
+
+  Classifying intent from a regex over one sentence was the wrong tool,
+  and it cost about the same as sending one text unconditionally. There
+  is now a single reminder and no matcher. The one exclusion is
+  structural rather than semantic: a prompt made entirely of
+  continuation words ("yes", "continue", "fix it") cannot be redirected
+  by a reminder, because the model is mid-flight on the previous turn
+  and already holds its context. Measured over the same two sessions,
+  this is cheaper than 0.9.0 — 53 tokens per turn against 69 — while
+  reaching every prompt the classifier used to miss.
+  `requires hub ≥ 0.9.2` (unchanged from 0.9.0).
+
 ## [0.9.0] - 2026-08-05
 
 ### Changed

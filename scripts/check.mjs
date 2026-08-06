@@ -241,13 +241,13 @@ for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hook
   }
 }
 
-// --- Per-turn reminder: short always, fuller on app work ----------------------
+// --- Per-turn reminder: every real prompt, never a bare continuation --------
 // Claude Code has no always-apply rule, so this hook is the only thing keeping
-// Arcade present after the session-start context has scrolled away. Every
-// prompt gets the one-line version; prompts that look like external-app or
-// live-data work get the fuller text instead. The distinction is what keeps
-// the always-on line affordable, so both halves are pinned here.
-const focusedOnly = "Arcade_Plan";
+// Arcade present after the session-start context has scrolled away. Earlier
+// versions classified which prompts deserved it and were wrong on about a
+// third of ordinary phrasing, so the reminder now goes out on every prompt
+// that carries a task. The only exclusion is structural: a prompt made
+// entirely of continuation words cannot be redirected by a reminder.
 const PROMPT_HOOK = "components/hooks/user-prompt-submit.mjs";
 const runPromptHook = (prompt) => {
   try {
@@ -262,42 +262,29 @@ const runPromptHook = (prompt) => {
   }
 };
 for (const prompt of [
-  // Named app, channel, handle, address, URL.
+  // App work of every shape, including the phrasings intent matching missed.
   "send a slack message to #eng that the deploy is done",
-  "open a GitHub issue for this",
   "email alex@example.com the release notes",
-  "summarize https://modelcontextprotocol.io/changelog",
-  "ask @priya whether the migration landed",
-  // The user's own accounts.
-  "what are my 5 most recent emails?",
-  "what is on my calendar tomorrow",
-  // Reaching people without naming a product.
-  "Ping the team about the outage",
-  "reply to Sarah and let her know it shipped",
-  "did anyone respond to my question",
-  // Scheduling, with modifiers between article and noun.
-  "book a 30 minute call with the design team",
-  // Trackers, docs, storage.
-  "file a ticket for this bug",
-  "create a doc summarizing the incident",
-  "upload the report to Drive",
-  // People and customers.
-  "who is the account owner for Acme",
-  // Research and anything time-sensitive.
-  "search the web for the Go 1.26 release date",
-  "what's the latest version of Go",
-  "any updates on the migration?",
-  "is github down right now",
-  "find out what our competitors charge",
-  // Comms verbs that are also nouns, here with a real recipient.
-  "message the team that we are live",
-  "email Sarah the release notes",
-  "notify everyone about the incident",
-  "make a doc for the launch",
+  "what gateways do I have?",
+  "disconnect my google account",
+  "list open PRs on arcadeai-labs/hub",
+  "is the API up?",
+  "what did the CEO say in the all-hands?",
+  "draft a customer apology and put it in a doc",
+  "find the invoice from last month",
+  "we're having an incident - page the on-call",
+  // Local work still gets it: the reminder states availability, and an agent
+  // that does not need Arcade simply does not call it.
+  "refactor this function to use a map",
+  "run the tests and fix the failure",
+  "git commit these changes and push",
+  // Short but substantive — must not be mistaken for a continuation.
+  "check slack",
+  "do it now for #eng",
 ]) {
   const out = runPromptHook(prompt);
   if (!out) {
-    fail(`${PROMPT_HOOK}: emitted nothing for app work: ${JSON.stringify(prompt)}`);
+    fail(`${PROMPT_HOOK}: emitted nothing for a real prompt: ${JSON.stringify(prompt)}`);
     continue;
   }
   let parsed;
@@ -310,51 +297,22 @@ for (const prompt of [
   if (parsed.hookSpecificOutput?.hookEventName !== "UserPromptSubmit") {
     fail(`${PROMPT_HOOK}: hookEventName must be UserPromptSubmit`);
   }
-  const context = parsed.hookSpecificOutput?.additionalContext;
-  if (typeof context !== "string") {
+  if (typeof parsed.hookSpecificOutput?.additionalContext !== "string") {
     fail(`${PROMPT_HOOK}: must inject additionalContext`);
-  } else if (!context.includes(focusedOnly)) {
-    fail(`${PROMPT_HOOK}: app work should get the focused text: ${JSON.stringify(prompt)}`);
   }
 }
+// Prompts carrying no task: the model is mid-flight and already holds context.
 for (const prompt of [
-  "refactor this function to use a map",
-  "run the tests and fix the failure",
-  "git commit these changes and push",
-  "add an email validation regex to this file",
-  "why is this file failing to compile",
-  "implement a retry function with backoff",
-  "rename the variable to userCount",
-  "update the README in this repo",
-  "write unit tests for the parser",
-  "fix the failing test in internal/run",
-  "explain what this code does",
-  "npm install the new dependency",
-  // The same comms words as nouns, with no recipient anywhere.
-  "write a parser for the message format",
-  "the message queue is backing up in this service",
-  "reduce ping latency in the client",
-  "rename the sendEmail function",
-  // Build-tool invocations that plain English would otherwise swallow.
-  "go test ./... and fix what breaks",
-  "make check then commit",
+  "yes",
+  "ok",
+  "continue",
+  "thanks",
+  "fix it",
+  "actually hold on",
+  "go ahead",
 ]) {
-  const out = runPromptHook(prompt);
-  if (!out) {
-    fail(`${PROMPT_HOOK}: every prompt gets the base line: ${JSON.stringify(prompt)}`);
-    continue;
-  }
-  let context;
-  try {
-    context = JSON.parse(out).hookSpecificOutput?.additionalContext;
-  } catch {
-    fail(`${PROMPT_HOOK}: emitted non-JSON for ${JSON.stringify(prompt)}`);
-    continue;
-  }
-  if (typeof context !== "string") {
-    fail(`${PROMPT_HOOK}: base line missing for ${JSON.stringify(prompt)}`);
-  } else if (context.includes(focusedOnly)) {
-    fail(`${PROMPT_HOOK}: local work should get the short line, not the focused text: ${JSON.stringify(prompt)}`);
+  if (runPromptHook(prompt) !== "") {
+    fail(`${PROMPT_HOOK}: spent context on a bare continuation: ${JSON.stringify(prompt)}`);
   }
 }
 // Malformed and empty input must never break a prompt.

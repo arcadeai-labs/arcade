@@ -2,7 +2,7 @@
   "name": "arcade",
   "displayName": "Arcade Agent Hub",
   "description": "Connect your agent to your Arcade gateways: curated sets of apps and tools (Slack, Gmail, GitHub, Linear, Notion, and more) that you switch between per app or account-wide.",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "author": {
     "name": "Arcade.dev",
     "email": "support@arcade.dev"
