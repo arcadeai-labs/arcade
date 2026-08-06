@@ -8,6 +8,32 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.8.1] - 2026-08-05
+
+### Changed
+
+- **The per-turn reminder covers far more of what people actually
+  ask.** 0.8.0 matched a list of product names and a handful of
+  live-data phrases, which missed most real requests: "ping the team
+  about the outage", "file a ticket", "book a 30 minute call", "any
+  updates on the migration", "who is the account owner for Acme",
+  "upload the report", "is github down". Matching is now three tiers —
+  unambiguous signals (an app by name, `#channel`, `@handle`, an email
+  address, a URL, "my calendar") fire on their own; a much broader set
+  of intents (reaching people, scheduling, tickets, docs, storage, CRM,
+  research, anything time-sensitive) fires unless the prompt is plainly
+  local work.
+
+  Widening the net exposed two ways English collides with the
+  suppression list. `go <word>` read "Go 1.26" as a go subcommand and
+  silenced a web search, and `make <word>` would have read "make a doc"
+  as a build target; build tools now require real subcommands. In the
+  other direction, comms verbs that are also nouns — "the message
+  format", "an email regex", "ping latency" — fired until the pattern
+  began requiring an actual recipient: a handle, a pronoun, a named
+  group, or a capitalized name. Both directions are pinned in
+  `scripts/check.mjs`. `requires hub ≥ 0.9.2` (unchanged from 0.8.0).
+
 ## [0.8.0] - 2026-08-05
 
 ### Added

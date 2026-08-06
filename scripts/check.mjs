@@ -260,11 +260,38 @@ const runPromptHook = (prompt) => {
   }
 };
 for (const prompt of [
+  // Named app, channel, handle, address, URL.
   "send a slack message to #eng that the deploy is done",
-  "what are my 5 most recent emails?",
-  "search the web for the Go 1.26 release date",
-  "what is on my calendar tomorrow",
   "open a GitHub issue for this",
+  "email sam@arcade.dev the release notes",
+  "summarize https://modelcontextprotocol.io/changelog",
+  "ask @priya whether the migration landed",
+  // The user's own accounts.
+  "what are my 5 most recent emails?",
+  "what is on my calendar tomorrow",
+  // Reaching people without naming a product.
+  "Ping the team about the outage",
+  "reply to Sarah and let her know it shipped",
+  "did anyone respond to my question",
+  // Scheduling, with modifiers between article and noun.
+  "book a 30 minute call with the design team",
+  // Trackers, docs, storage.
+  "file a ticket for this bug",
+  "create a doc summarizing the incident",
+  "upload the report to Drive",
+  // People and customers.
+  "who is the account owner for Acme",
+  // Research and anything time-sensitive.
+  "search the web for the Go 1.26 release date",
+  "what's the latest version of Go",
+  "any updates on the migration?",
+  "is github down right now",
+  "find out what our competitors charge",
+  // Comms verbs that are also nouns, here with a real recipient.
+  "message the team that we are live",
+  "email Sarah the release notes",
+  "notify everyone about the incident",
+  "make a doc for the launch",
 ]) {
   const out = runPromptHook(prompt);
   if (!out) {
@@ -291,6 +318,21 @@ for (const prompt of [
   "git commit these changes and push",
   "add an email validation regex to this file",
   "why is this file failing to compile",
+  "implement a retry function with backoff",
+  "rename the variable to userCount",
+  "update the README in this repo",
+  "write unit tests for the parser",
+  "fix the failing test in internal/run",
+  "explain what this code does",
+  "npm install the new dependency",
+  // The same comms words as nouns, with no recipient anywhere.
+  "write a parser for the message format",
+  "the message queue is backing up in this service",
+  "reduce ping latency in the client",
+  "rename the sendEmail function",
+  // Build-tool invocations that plain English would otherwise swallow.
+  "go test ./... and fix what breaks",
+  "make check then commit",
 ]) {
   if (runPromptHook(prompt) !== "") {
     fail(`${PROMPT_HOOK}: fired on local work: ${JSON.stringify(prompt)}`);
