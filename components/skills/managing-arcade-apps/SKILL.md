@@ -29,10 +29,10 @@ ids or raw permission strings.
 
 ```text
 Arcade_Apps(action: "list")
-  → {apps: [{app_id: "google", name: "Google", connected: true, account: "sam@arcade.dev"},
+  → {apps: [{app_id: "google", name: "Google", connected: true, account: "you@example.com"},
             {app_id: "slack", name: "Slack", connected: false}, ...]}
 Reply:
-  Connected: Google (sam@arcade.dev), GitHub (spartee)
+  Connected: Google (you@example.com), GitHub (your-handle)
   Not connected: Slack, Notion, Dropbox, …
 ```
 

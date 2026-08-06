@@ -8,6 +8,18 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.8.2] - 2026-08-05
+
+### Changed
+
+- **Example data looks like example data.** The
+  `managing-arcade-apps` skill illustrated a connected-apps reply with
+  a real person's email address and GitHub handle, and a hook test
+  fixture used the same address. Both now use `example.com`
+  placeholders. The skill ships to every install, so the address was
+  in shipped guidance rather than only in the repo.
+  `requires hub ≥ 0.9.2` (unchanged from 0.8.1).
+
 ## [0.8.1] - 2026-08-05
 
 ### Changed

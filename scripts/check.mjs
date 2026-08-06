@@ -263,7 +263,7 @@ for (const prompt of [
   // Named app, channel, handle, address, URL.
   "send a slack message to #eng that the deploy is done",
   "open a GitHub issue for this",
-  "email sam@arcade.dev the release notes",
+  "email alex@example.com the release notes",
   "summarize https://modelcontextprotocol.io/changelog",
   "ask @priya whether the migration landed",
   // The user's own accounts.
