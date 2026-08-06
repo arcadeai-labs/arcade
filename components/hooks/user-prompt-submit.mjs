@@ -9,6 +9,11 @@
 // hook, and UserPromptSubmit is the one event whose context lands alongside
 // the prompt it is about.
 //
+// Every prompt gets a reminder; matching decides which one. A short line
+// always goes out, because a model cannot choose a tool it has forgotten
+// exists, and the fuller text replaces it when the prompt looks like work
+// Arcade should do.
+//
 // Matching is three-tier, because the failure that matters is a miss, not a
 // stray reminder:
 //
@@ -21,11 +26,23 @@
 //
 // Always exits 0: a stuck or failing hook on this event stalls the prompt.
 
-// Written as a factual statement rather than an instruction. Anthropic's hook
-// documentation is explicit that out-of-band imperatives can trip Claude's
-// prompt-injection defenses, which surfaces the text to the user instead of
-// treating it as context.
-const REMINDER =
+// Both texts are written as factual statements rather than instructions.
+// Anthropic's hook documentation is explicit that out-of-band imperatives can
+// trip Claude's prompt-injection defenses, which surfaces the text to the user
+// instead of treating it as context.
+
+// BASE goes out on every prompt, so it is priced accordingly: one sentence,
+// roughly 50 tokens. Availability is the thing that decays, and a model cannot
+// choose a tool it has forgotten exists.
+const BASE_REMINDER =
+  'The "arcade" MCP server is connected: it runs tasks in the user\'s external ' +
+  "apps (Slack, Gmail, GitHub, Calendar, Notion, Linear, Drive) and returns " +
+  "live web data. Arcade_Run takes a task in plain language.";
+
+// FOCUSED replaces it when the prompt looks like external-app or live-data
+// work — about twice the size, spent only where it can change the next
+// decision.
+const FOCUSED_REMINDER =
   'The "arcade" MCP server is connected. It runs tasks in the user\'s external ' +
   "apps and returns live data — messaging, mail, calendars, issue trackers, " +
   "docs, CRMs, cloud storage, and web search — scoped to their active Arcade " +
@@ -164,20 +181,18 @@ try {
   } catch {
     // Unparseable input: stay silent. A reminder is never worth a broken turn.
   }
-  if (wantsArcade(prompt)) {
-    process.stdout.write(
-      JSON.stringify({
-        hookSpecificOutput: {
-          hookEventName: "UserPromptSubmit",
-          additionalContext: REMINDER,
-        },
-      }),
-    );
-  }
+  process.stdout.write(
+    JSON.stringify({
+      hookSpecificOutput: {
+        hookEventName: "UserPromptSubmit",
+        additionalContext: wantsArcade(prompt) ? FOCUSED_REMINDER : BASE_REMINDER,
+      },
+    }),
+  );
 } catch {
   // A hook must never break a prompt.
 }
 
 process.exit(0);
 
-export { wantsArcade, REMINDER };
+export { wantsArcade, BASE_REMINDER, FOCUSED_REMINDER };

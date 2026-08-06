@@ -8,6 +8,26 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.9.0] - 2026-08-05
+
+### Changed
+
+- **The reminder now goes out on every prompt, in two sizes.** A model
+  cannot choose a tool it has forgotten exists, and conditional
+  matching — however broad — can only ever be a guess about which
+  turns matter. Every prompt now carries a one-line statement that the
+  `arcade` server is connected and what it reaches (~50 tokens). The
+  fuller text, naming the gateway scoping and `Arcade_Plan`, replaces
+  it on prompts that look like external-app or live-data work, where
+  the extra detail can change the next decision.
+
+  The matcher did not go away; it now chooses between two texts rather
+  than between speaking and staying silent, so a miss costs detail
+  instead of costing availability. Budget for roughly 50 tokens per
+  prompt, about 100 on matching turns — near 10k over a 150-prompt
+  session, against 15k had the fuller text gone out every time.
+  `requires hub ≥ 0.9.2` (unchanged from 0.8.2).
+
 ## [0.8.2] - 2026-08-05
 
 ### Changed

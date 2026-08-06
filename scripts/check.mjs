@@ -241,11 +241,13 @@ for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hook
   }
 }
 
-// --- Per-turn reminder fires on app work and stays quiet on local work --------
+// --- Per-turn reminder: short always, fuller on app work ----------------------
 // Claude Code has no always-apply rule, so this hook is the only thing keeping
-// Arcade present after the session-start context has scrolled away. It has to
-// stay silent on coding turns: a reminder that fires on everything is both a
-// context cost and an invitation to reach for a remote tool to edit a file.
+// Arcade present after the session-start context has scrolled away. Every
+// prompt gets the one-line version; prompts that look like external-app or
+// live-data work get the fuller text instead. The distinction is what keeps
+// the always-on line affordable, so both halves are pinned here.
+const focusedOnly = "Arcade_Plan";
 const PROMPT_HOOK = "components/hooks/user-prompt-submit.mjs";
 const runPromptHook = (prompt) => {
   try {
@@ -295,7 +297,7 @@ for (const prompt of [
 ]) {
   const out = runPromptHook(prompt);
   if (!out) {
-    fail(`${PROMPT_HOOK}: stayed silent on app work: ${JSON.stringify(prompt)}`);
+    fail(`${PROMPT_HOOK}: emitted nothing for app work: ${JSON.stringify(prompt)}`);
     continue;
   }
   let parsed;
@@ -308,8 +310,11 @@ for (const prompt of [
   if (parsed.hookSpecificOutput?.hookEventName !== "UserPromptSubmit") {
     fail(`${PROMPT_HOOK}: hookEventName must be UserPromptSubmit`);
   }
-  if (typeof parsed.hookSpecificOutput?.additionalContext !== "string") {
+  const context = parsed.hookSpecificOutput?.additionalContext;
+  if (typeof context !== "string") {
     fail(`${PROMPT_HOOK}: must inject additionalContext`);
+  } else if (!context.includes(focusedOnly)) {
+    fail(`${PROMPT_HOOK}: app work should get the focused text: ${JSON.stringify(prompt)}`);
   }
 }
 for (const prompt of [
@@ -334,8 +339,22 @@ for (const prompt of [
   "go test ./... and fix what breaks",
   "make check then commit",
 ]) {
-  if (runPromptHook(prompt) !== "") {
-    fail(`${PROMPT_HOOK}: fired on local work: ${JSON.stringify(prompt)}`);
+  const out = runPromptHook(prompt);
+  if (!out) {
+    fail(`${PROMPT_HOOK}: every prompt gets the base line: ${JSON.stringify(prompt)}`);
+    continue;
+  }
+  let context;
+  try {
+    context = JSON.parse(out).hookSpecificOutput?.additionalContext;
+  } catch {
+    fail(`${PROMPT_HOOK}: emitted non-JSON for ${JSON.stringify(prompt)}`);
+    continue;
+  }
+  if (typeof context !== "string") {
+    fail(`${PROMPT_HOOK}: base line missing for ${JSON.stringify(prompt)}`);
+  } else if (context.includes(focusedOnly)) {
+    fail(`${PROMPT_HOOK}: local work should get the short line, not the focused text: ${JSON.stringify(prompt)}`);
   }
 }
 // Malformed and empty input must never break a prompt.
