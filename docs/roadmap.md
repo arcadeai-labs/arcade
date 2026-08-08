@@ -42,7 +42,16 @@ capability ceiling). Items are scoped to this repo unless noted.
 - [x] **`/arcade:connect <app>` command.** "Connect my Google account" as an
   explicit flow (ManageToolAuthorization `authorize` + sign-in link
   etiquette) instead of waiting for a task to trip over the missing app.
-- [x] **Vendor-neutral `.plugin/plugin.json` + `npx plugins add` support.**
+- [x] **Agent Plugins 1.0.0 conformance.** Root `plugin.json` + `mcp.json` +
+  `skills/` make the repo a portable package, adding Codex, Copilot, VS Code,
+  and Kiro without touching the Cursor or Claude Code bundles (their
+  manifests resolve first). Rules, subagents, commands, and hooks are not
+  portable component types in 1.0.0 and stay in the client packages; revisit
+  if the TSC standardizes them.
+- [x] **Vendor-neutral manifest + `npx plugins add` support.** Superseded by
+  Agent Plugins 1.0.0: the legacy `.plugin/plugin.json` was removed because
+  Copilot CLI resolves it ahead of the root manifest, and `npx plugins`
+  discovers the package identically without it.
   Vercel's installer CLI (vercel-labs/plugins) translates a neutral manifest
   into every detected client (Claude Code, Cursor; Codex/Copilot/Grok/Kimi
   per their docs). Add the neutral manifest, test

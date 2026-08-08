@@ -28,6 +28,13 @@ jobs:
       - name: Claude plugin validation
         run: npx -y @anthropic-ai/claude-code plugin validate .
 
+      # The portable manifests are validated offline by check.mjs (the closed
+      # Agent Plugins schemas are enforced field by field, so the repo stays
+      # dependency-free). This step covers the other half: that the neutral
+      # installer still resolves the repo to exactly one plugin.
+      - name: Agent Plugins discovery smoke test
+        run: npx -y plugins discover .
+
       - uses: oven-sh/setup-bun@v2
 
       - name: OpenCode plugin smoke test

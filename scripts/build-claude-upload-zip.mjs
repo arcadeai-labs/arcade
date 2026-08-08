@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 // Builds the Claude plugin-directory upload zip.
 //
-// The claude.ai plugin uploader validates `commands` and `agents` manifest
-// entries as DIRECTORIES, while this repo keeps those files under
-// components/ (shared across clients) and lists them individually — a form
-// Claude Code accepts but the uploader rejects ("No command files found in
-// specified directories"). This script stages the tracked tree, copies
-// commands/agents into top-level directories, rewrites the manifest to
-// directory form, and zips the result.
+// Components live at Claude Code's default locations, so the shipped manifest
+// leaves `agents` and `commands` undeclared and lets discovery find them once.
+// The claude.ai uploader does not discover: it validates those two fields as
+// DIRECTORIES and fails without them ("No command files found in specified
+// directories"). This script adds them at package time. Nothing is copied —
+// the directories are already at the plugin root.
 //
 // Usage: node scripts/build-claude-upload-zip.mjs [output.zip]
 import { execSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -27,15 +26,10 @@ try {
     shell: "/bin/bash",
   });
 
-  mkdirSync(join(stage, "commands"), { recursive: true });
-  mkdirSync(join(stage, "agents"), { recursive: true });
-  cpSync(join(stage, "components/commands"), join(stage, "commands"), { recursive: true });
-  cpSync(join(stage, "components/agents"), join(stage, "agents"), { recursive: true });
-
   const manifestPath = join(stage, ".claude-plugin/plugin.json");
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-  manifest.commands = "./commands/";
   manifest.agents = "./agents/";
+  manifest.commands = "./commands/";
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
 
   rmSync(out, { force: true });
