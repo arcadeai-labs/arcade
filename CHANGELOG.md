@@ -8,6 +8,79 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.11.0] - 2026-08-08
+
+Requires hub >= 0.10.0. Packaging and copy only — no hub change.
+
+### Added
+
+- **Agent Plugins 1.0.0 support.** A root `plugin.json` and `mcp.json`
+  make this a conformant Agent Plugin, so ChatGPT/Codex, GitHub Copilot,
+  Kiro, and VS Code load the three skills and the `arcade` MCP server
+  from the same package Cursor and Claude Code already use. Cursor
+  resolves `.cursor-plugin/plugin.json` ahead of the root manifest, so
+  native Cursor and Claude Code installs are unchanged: the always-on
+  rule, operator subagent, commands, and hooks all still load.
+- **The subagent and hooks now reach GitHub Copilot CLI.** Copilot applies
+  Agent Plugins semantics *additively on top of* its standard plugin loading,
+  so components sitting at its default locations load alongside the portable
+  core. Moving them to the root means one copy of the operator subagent and
+  the two session hooks now serves Claude Code, Cursor, and Copilot CLI.
+- **A page per client.** New install guides for
+  [VS Code](docs/install/vscode.md), [Copilot CLI](docs/install/copilot.md),
+  [Codex / ChatGPT](docs/install/codex.md), and [Kiro](docs/install/kiro.md),
+  plus an [index](docs/install/README.md) covering every client. `check.mjs`
+  fails if a guide is unlinked or a link points at a missing page.
+- **Branded README with one-click install.** A centered Arcade wordmark that
+  follows the reader's light or dark theme, a complete support matrix, and
+  working install buttons — real deeplinks for Cursor, VS Code, and the
+  Claude Desktop extension; the guide for everything else.
+- **Portable-core validation in `check.mjs`.** Both root documents are
+  checked against the closed Agent Plugins schemas offline — allowed
+  fields, name constraints, transport variants, and matching spec
+  versions — plus three regressions worth guarding: a client manifest must
+  never declare `$schema`, `clients/claude/mcp.json` must keep
+  `type: "http"` because Claude Code has no `streamable-http` literal, and
+  `.plugin/` must not come back.
+
+### Removed
+
+- **The legacy `.plugin/plugin.json` manifest.** GitHub Copilot CLI resolves
+  that path *before* the root manifest, so keeping it would have pinned
+  Copilot to legacy loading — where the portable `streamable-http` transport
+  is not recognized and the `arcade` server fails to register. Removing it
+  lets Copilot fall through to the Agent Plugins manifest. `npx plugins
+  discover` resolves the package and all 3 skills identically without it, so
+  no install path regresses.
+
+### Changed
+
+- **Every component moved to the location the most clients read.**
+  `components/` is gone: skills are at `skills/` (required by the standard),
+  and the subagent, commands, and Claude-format hooks are at `agents/`,
+  `commands/`, and `hooks/` — the default discovery paths for Claude Code,
+  Cursor, and Copilot CLI. Every manifest points at the same files, so there
+  is one copy of each component rather than one per client. Content is
+  unchanged; only `rules/` stays under `clients/`, since Cursor alone reads
+  it.
+- **The subagent is now `arcade-operator.agent.md`.** Copilot CLI only
+  discovers agents matching `*.agent.md`, while Claude Code and Cursor accept
+  any `.md`, so the double extension satisfies all three from one file.
+- **`.claude-plugin/plugin.json` no longer declares component paths.**
+  Everything except the MCP config now sits at a Claude Code default location,
+  and Claude does not document whether a declared path replaces or merges with
+  its default — a merged hooks list would fire the session-start and per-turn
+  hooks twice. The manifest names only the non-default `mcpServers`, so each
+  component is discovered exactly once. The claude.ai uploader validates
+  rather than discovers, so the upload build adds `agents` and `commands` at
+  package time. Cursor keeps its explicit declarations, since Cursor documents
+  that a declared path replaces folder discovery.
+- **Descriptions lead with what the plugin does, not how it is scoped.**
+  Every manifest and marketplace entry now says the plugin lets any agent
+  use Arcade, instead of describing gateways. Gateway behavior itself is
+  unchanged and still covered by the skills, `Arcade_SelectGateway`, and
+  `/arcade:status`.
+
 ## [0.10.0] - 2026-08-06
 
 Requires hub >= 0.10.0. Coordinated release: the hub adds typed

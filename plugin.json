@@ -1,7 +1,8 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "arcade",
-  "version": "0.10.0",
-  "description": "Arcade Agent Hub \u2014 your Arcade gateways (curated sets of apps and tools like Slack, Gmail, GitHub, Calendar, Notion, Linear) over one MCP connection, with skills, commands, and an operator subagent.",
+  "version": "0.11.0",
+  "description": "Let any agent use Arcade — one MCP connection that finds and runs the right tool across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more. App sign-in happens in the browser; no API keys.",
   "author": {
     "name": "Arcade.dev",
     "url": "https://arcade.dev"
@@ -11,7 +12,7 @@
   "license": "Apache-2.0",
   "keywords": [
     "arcade",
-    "gateway",
+    "agent",
     "mcp",
     "tools",
     "tool-discovery",

@@ -33,7 +33,7 @@ const shortDescriptions = {
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-const skillsDir = join(ROOT, "components/skills");
+const skillsDir = join(ROOT, "skills");
 const built = [];
 for (const skillName of readdirSync(skillsDir)) {
   const source = readFileSync(join(skillsDir, skillName, "SKILL.md"), "utf8");

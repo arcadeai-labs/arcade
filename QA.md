@@ -20,6 +20,12 @@ behavior and is verified by hand before tagging a release.
 - [ ] **OpenCode:** install the published plugin (`opencode plugin
   opencode-arcade-hub`), restart, confirm the `arcade` server is registered
   and tools list. For pre-release checks, load the checkout via `file://`.
+- [ ] **Agent Plugins client:** install the checkout into a client that reads
+  the root `plugin.json` (`npx plugins add . --target vscode --scope local`)
+  and confirm 3 skills plus the `arcade` MCP server, with browser sign-in
+  working. Then re-check the Cursor and Claude Code rows above: the portable
+  manifest is resolved last, so it must not shadow, duplicate, or strip
+  anything from either native install.
 
 ## Gateway scenarios (any client)
 

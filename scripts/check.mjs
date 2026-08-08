@@ -36,19 +36,152 @@ for (const file of jsonFiles) {
   }
 }
 
-// --- No root default-discovery locations ------------------------------------
-for (const forbidden of ["skills", "agents", "commands", "hooks", "rules", "mcp.json", ".mcp.json"]) {
+// --- Root layout -------------------------------------------------------------
+// Agent Plugins 1.0.0 fixes the two portable component types at the plugin
+// root and forbids relocating them. Everything else is client-specific, so it
+// stays under components/ or clients/ and is declared explicitly — otherwise a
+// client picks it up by folder convention in a bundle that never intended it.
+// skills/ and mcp.json are the portable component types, fixed at the root by
+// the standard. agents/, commands/, and hooks/ are *not* portable, but the
+// root is where Claude Code, Cursor, and Copilot CLI look for them by default,
+// so keeping one copy there is what gets the same components loaded in every
+// client that supports them.
+for (const required of ["plugin.json", "mcp.json", "skills", "agents", "commands", "hooks/hooks.json"]) {
+  if (!existsSync(join(ROOT, required))) {
+    fail(`root ${required} is missing — clients discover components there by default`);
+  }
+}
+// rules/ is Cursor-only, and .mcp.json is the legacy MCP location that would
+// register the server a second time alongside the portable mcp.json.
+for (const forbidden of ["rules", ".mcp.json"]) {
   if (existsSync(join(ROOT, forbidden))) {
-    fail(`root ${forbidden} exists — components must live under components/ or clients/ and be declared explicitly`);
+    fail(`root ${forbidden} exists — it belongs under clients/ and must be declared explicitly`);
+  }
+}
+
+// --- Agent Plugins portable core ----------------------------------------------
+// Both schemas are closed: an unknown top-level key makes the package
+// non-conformant, and a client that does not recognize a $schema value rejects
+// the plugin outright rather than ignoring the field.
+const PLUGIN_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json";
+const MCP_SCHEMA = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json";
+const PLUGIN_NAME = /^(?!.*(?:--|\.\.))[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/;
+const PLUGIN_FIELDS = new Set([
+  "$schema", "name", "version", "description", "author",
+  "homepage", "repository", "license", "keywords", "extensions",
+]);
+const AUTHOR_FIELDS = new Set(["name", "email", "url"]);
+const MCP_VARIANTS = {
+  stdio: new Set(["type", "command", "args", "env", "cwd"]),
+  "streamable-http": new Set(["type", "url", "headers"]),
+  sse: new Set(["type", "url", "headers"]),
+};
+
+const portable = json["plugin.json"];
+if (portable) {
+  if (portable.$schema !== PLUGIN_SCHEMA) {
+    fail(`plugin.json: $schema must be ${PLUGIN_SCHEMA}`);
+  }
+  if (typeof portable.name !== "string" || portable.name.length > 64 || !PLUGIN_NAME.test(portable.name)) {
+    fail(`plugin.json: name ${JSON.stringify(portable.name)} violates the Agent Plugins name constraints`);
+  }
+  for (const key of Object.keys(portable)) {
+    if (!PLUGIN_FIELDS.has(key)) {
+      fail(`plugin.json: "${key}" is not an allowed top-level field — the manifest schema is closed (client data belongs under "extensions")`);
+    }
+  }
+  for (const key of Object.keys(portable.author ?? {})) {
+    if (!AUTHOR_FIELDS.has(key)) fail(`plugin.json: author.${key} is not allowed (name, email, url only)`);
+  }
+}
+
+const portableMcp = json["mcp.json"];
+if (portableMcp) {
+  if (portableMcp.$schema !== MCP_SCHEMA) {
+    fail(`mcp.json: $schema must be ${MCP_SCHEMA}`);
+  }
+  if (portable && portableMcp.$schema !== undefined && portable.$schema !== undefined) {
+    const pluginVersion = String(portable.$schema).split("/").at(-2);
+    const mcpVersion = String(portableMcp.$schema).split("/").at(-2);
+    if (pluginVersion !== mcpVersion) {
+      fail(`mcp.json targets Agent Plugins ${mcpVersion} but plugin.json targets ${pluginVersion} — the versions must match`);
+    }
+  }
+  for (const key of Object.keys(portableMcp)) {
+    if (key !== "$schema" && key !== "mcpServers") {
+      fail(`mcp.json: "${key}" is not allowed — the document holds only $schema and mcpServers`);
+    }
+  }
+  for (const [server, config] of Object.entries(portableMcp.mcpServers ?? {})) {
+    const allowed = MCP_VARIANTS[config?.type];
+    if (!allowed) {
+      fail(`mcp.json: server "${server}" declares unsupported type ${JSON.stringify(config?.type)}`);
+      continue;
+    }
+    for (const key of Object.keys(config)) {
+      if (!allowed.has(key)) {
+        fail(`mcp.json: server "${server}" has "${key}", which does not belong to the ${config.type} variant`);
+      }
+    }
+  }
+  if (portableMcp.mcpServers?.arcade?.type !== "streamable-http") {
+    fail('mcp.json: the arcade server must use the portable "streamable-http" transport');
+  }
+}
+
+// A client manifest must never carry an Agent Plugins $schema. Cursor resolves
+// .cursor-plugin/plugin.json ahead of the root manifest and treats an
+// unrecognized schema id as unsupported, which rejects the whole plugin.
+for (const manifest of [".cursor-plugin/plugin.json", ".claude-plugin/plugin.json"]) {
+  if (json[manifest]?.$schema !== undefined) {
+    fail(`${manifest}: must not declare $schema — only the root portable manifests do`);
+  }
+}
+
+// The legacy OpenPlugin manifest must stay gone. GitHub Copilot CLI resolves
+// .plugin/plugin.json *before* the root manifest, so reintroducing it would
+// shadow the Agent Plugins core and drop Copilot back to legacy loading, where
+// the portable "streamable-http" transport is not understood.
+if (existsSync(join(ROOT, ".plugin"))) {
+  fail(".plugin/ exists — it shadows the root Agent Plugins manifest in Copilot CLI; the portable core replaces it");
+}
+
+// Claude Code has no "streamable-http" transport literal, so pointing it at
+// the portable mcp.json would silently drop the server.
+if (json["clients/claude/mcp.json"]?.mcpServers?.arcade?.type !== "http") {
+  fail('clients/claude/mcp.json: the arcade server must keep type "http" for Claude Code');
+}
+
+// skills/, agents/, commands/, and hooks/hooks.json are all Claude Code
+// default locations. Declaring them again in the manifest risks a merged
+// rather than replaced list, which for hooks means firing twice per session
+// and per prompt.
+for (const key of ["skills", "agents", "commands", "hooks"]) {
+  if (key in (json[".claude-plugin/plugin.json"] ?? {})) {
+    fail(`.claude-plugin/plugin.json: drop "${key}" — it sits at a Claude default location, and declaring it too risks loading it twice`);
+  }
+}
+// The claude.ai uploader is the exception: it validates `agents` and
+// `commands` as directories, so the upload build adds them at package time.
+for (const field of ['manifest.agents = "./agents/"', 'manifest.commands = "./commands/"']) {
+  if (!read("scripts/build-claude-upload-zip.mjs").includes(field)) {
+    fail(`scripts/build-claude-upload-zip.mjs: must set ${field} for the claude.ai uploader`);
   }
 }
 
 // --- Manifest component paths exist ------------------------------------------
 // Rules are a Cursor-only component; every other component must be declared
 // explicitly in both manifests.
+// Cursor documents that a declared path *replaces* folder discovery, so its
+// manifest names every component explicitly and nothing is ambiguous. Claude
+// Code does not specify whether a declared path replaces or merges with its
+// default, so anything already sitting at a Claude default location is left
+// undeclared and discovered exactly once — a merged hooks list would fire the
+// session-start and per-turn hooks twice. Only the non-default MCP path is
+// named there.
 const manifestKeys = {
   ".cursor-plugin/plugin.json": ["rules", "skills", "agents", "commands", "hooks", "mcpServers"],
-  ".claude-plugin/plugin.json": ["skills", "agents", "commands", "hooks", "mcpServers"],
+  ".claude-plugin/plugin.json": ["mcpServers"],
 };
 for (const [manifest, pathKeys] of Object.entries(manifestKeys)) {
   const data = json[manifest];
@@ -86,8 +219,8 @@ const registerName = (name, source) => {
   else componentNames.set(name, source);
 };
 
-for (const skillDir of readdirSync(join(ROOT, "components/skills"))) {
-  const path = `components/skills/${skillDir}/SKILL.md`;
+for (const skillDir of readdirSync(join(ROOT, "skills"))) {
+  const path = `skills/${skillDir}/SKILL.md`;
   const fields = frontmatter(path);
   if (!fields?.name || !fields?.description) fail(`${path}: frontmatter must include name and description`);
   else {
@@ -96,8 +229,14 @@ for (const skillDir of readdirSync(join(ROOT, "components/skills"))) {
     registerName(fields.name, path);
   }
 }
-for (const agentFile of readdirSync(join(ROOT, "components/agents"))) {
-  const path = `components/agents/${agentFile}`;
+for (const agentFile of readdirSync(join(ROOT, "agents"))) {
+  const path = `agents/${agentFile}`;
+  // Copilot CLI only discovers agents whose filename ends in .agent.md, while
+  // Claude Code and Cursor accept any .md — the double extension satisfies all
+  // three from one file.
+  if (!agentFile.endsWith(".agent.md")) {
+    fail(`${path}: agent files must end in .agent.md so Copilot CLI discovers them`);
+  }
   const fields = frontmatter(path);
   if (!fields?.name || !fields?.description) fail(`${path}: frontmatter must include name and description`);
   else {
@@ -105,8 +244,8 @@ for (const agentFile of readdirSync(join(ROOT, "components/agents"))) {
     registerName(fields.name, path);
   }
 }
-for (const commandFile of readdirSync(join(ROOT, "components/commands"))) {
-  const path = `components/commands/${commandFile}`;
+for (const commandFile of readdirSync(join(ROOT, "commands"))) {
+  const path = `commands/${commandFile}`;
   const fields = frontmatter(path);
   if (!fields?.description) fail(`${path}: frontmatter must include description`);
   registerName(commandFile.replace(/\.md$/, ""), path);
@@ -121,10 +260,10 @@ for (const ruleFile of readdirSync(join(ROOT, "clients/cursor/rules"))) {
 
 // --- Version consistency ------------------------------------------------------
 const versions = {
+  "plugin.json": json["plugin.json"]?.version,
   ".cursor-plugin/plugin.json": json[".cursor-plugin/plugin.json"]?.version,
   ".claude-plugin/plugin.json": json[".claude-plugin/plugin.json"]?.version,
   "clients/opencode/package.json": json["clients/opencode/package.json"]?.version,
-  ".plugin/plugin.json": json[".plugin/plugin.json"]?.version,
   "clients/claude-desktop/mcpb/manifest.json": json["clients/claude-desktop/mcpb/manifest.json"]?.version,
 };
 if (new Set(Object.values(versions)).size !== 1) {
@@ -192,6 +331,7 @@ if (!contract) {
 
 // --- Endpoint consistency ------------------------------------------------------
 for (const file of [
+  "mcp.json",
   "clients/cursor/mcp.json",
   "clients/claude/mcp.json",
   "clients/claude-desktop/claude_desktop_config.json",
@@ -203,7 +343,7 @@ for (const file of [
 }
 
 // --- MCP server key ------------------------------------------------------------
-for (const file of ["clients/cursor/mcp.json", "clients/claude/mcp.json", "clients/claude-desktop/claude_desktop_config.json"]) {
+for (const file of ["mcp.json", "clients/cursor/mcp.json", "clients/claude/mcp.json", "clients/claude-desktop/claude_desktop_config.json"]) {
   if (!json[file]?.mcpServers?.arcade) fail(`${file}: mcpServers must define the "arcade" server key`);
 }
 
@@ -225,7 +365,7 @@ const runHook = (script, stdinPayload) => {
     return null;
   }
 };
-const HOOK_SCRIPT = "components/hooks/session-start.mjs";
+const HOOK_SCRIPT = "hooks/session-start.mjs";
 const cursorHook = runHook(HOOK_SCRIPT, JSON.stringify({ conversation_id: "c", workspace_roots: ["/tmp"] }));
 if (cursorHook && typeof cursorHook.additional_context !== "string") {
   fail(`${HOOK_SCRIPT}: cursor-shaped stdin must emit flat { additional_context }`);
@@ -235,8 +375,8 @@ if (claudeHook && claudeHook.hookSpecificOutput?.hookEventName !== "SessionStart
   fail(`${HOOK_SCRIPT}: claude-shaped stdin must emit hookSpecificOutput.hookEventName = SessionStart`);
 }
 // Both hooks.json files must reference the shared script.
-for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hooks/hooks.json"]) {
-  if (!read(hooksFile).includes("components/hooks/session-start.mjs")) {
+for (const hooksFile of ["clients/cursor/hooks/hooks.json", "hooks/hooks.json"]) {
+  if (!read(hooksFile).includes("hooks/session-start.mjs")) {
     fail(`${hooksFile}: must reference the shared ${HOOK_SCRIPT}`);
   }
 }
@@ -248,7 +388,7 @@ for (const hooksFile of ["clients/cursor/hooks/hooks.json", "clients/claude/hook
 // third of ordinary phrasing, so the reminder now goes out on every prompt
 // that carries a task. The only exclusion is structural: a prompt made
 // entirely of continuation words cannot be redirected by a reminder.
-const PROMPT_HOOK = "components/hooks/user-prompt-submit.mjs";
+const PROMPT_HOOK = "hooks/user-prompt-submit.mjs";
 const runPromptHook = (prompt) => {
   try {
     return execFileSync("node", [join(ROOT, PROMPT_HOOK)], {
@@ -327,19 +467,37 @@ for (const raw of ["", "not json", "{}"]) {
     fail(`${PROMPT_HOOK}: non-zero exit on ${JSON.stringify(raw)} — ${execError.message}`);
   }
 }
-if (!read("clients/claude/hooks/hooks.json").includes(PROMPT_HOOK)) {
-  fail(`clients/claude/hooks/hooks.json: must wire ${PROMPT_HOOK} on UserPromptSubmit`);
+if (!read("hooks/hooks.json").includes(PROMPT_HOOK)) {
+  fail(`hooks/hooks.json: must wire ${PROMPT_HOOK} on UserPromptSubmit`);
+}
+
+// --- Install docs are reachable and real ----------------------------------------
+// Every client we claim to support needs a page, that page has to be linked
+// from the index, and every link in the README has to resolve.
+const installIndex = read("docs/install/README.md");
+for (const page of readdirSync(join(ROOT, "docs/install"))) {
+  if (page === "README.md" || !page.endsWith(".md")) continue;
+  if (!installIndex.includes(`(${page})`)) {
+    fail(`docs/install/${page}: not linked from docs/install/README.md`);
+  }
+}
+for (const source of ["README.md", "docs/support-matrix.md"]) {
+  for (const [, page] of read(source).matchAll(/\((?:docs\/)?install\/([a-z0-9-]+\.md)[)#]/g)) {
+    if (!existsSync(join(ROOT, "docs/install", page))) {
+      fail(`${source}: links docs/install/${page}, which does not exist`);
+    }
+  }
 }
 
 // --- Language consistency -------------------------------------------------------
 const userFacing = [
-  "components/commands/do.md",
-  "components/commands/apps.md",
-  "components/commands/status.md",
-  "components/commands/connect.md",
-  "components/skills/using-arcade-tools/SKILL.md",
-  "components/skills/managing-arcade-apps/SKILL.md",
-  "components/skills/working-with-arcade-gateways/SKILL.md",
+  "commands/do.md",
+  "commands/apps.md",
+  "commands/status.md",
+  "commands/connect.md",
+  "skills/using-arcade-tools/SKILL.md",
+  "skills/managing-arcade-apps/SKILL.md",
+  "skills/working-with-arcade-gateways/SKILL.md",
   "clients/cursor/rules/arcade-gateway-hub.mdc",
 ];
 for (const file of userFacing) {
@@ -365,7 +523,7 @@ for (const archive of trackedArchives) {
 // --- Gateway coverage ------------------------------------------------------------
 // The hub's defining tool must be documented wherever tools are enumerated.
 for (const file of [
-  "components/skills/working-with-arcade-gateways/SKILL.md",
+  "skills/working-with-arcade-gateways/SKILL.md",
   "README.md",
   "clients/opencode/README.md",
 ]) {

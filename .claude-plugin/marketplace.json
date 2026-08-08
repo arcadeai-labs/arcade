@@ -5,13 +5,13 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "Arcade Agent Hub — dynamic tool discovery and execution scoped to your Arcade gateways."
+    "description": "Arcade Agent Hub — let any agent use Arcade: tool discovery and execution across the apps you connect."
   },
   "plugins": [
     {
       "name": "arcade",
       "source": "./",
-      "description": "Your Arcade gateways (curated sets of apps and tools) over a single MCP connection, with an operator subagent, skills, slash commands, and hooks. Discovery and execution follow the gateway you select.",
+      "description": "Let any agent use Arcade — one MCP connection that finds and runs the right tool across the apps you connect, with an operator subagent, skills, and slash commands. App sign-in happens in the browser; no API keys.",
       "author": {
         "name": "Arcade.dev"
       },
@@ -20,7 +20,7 @@
       "license": "Apache-2.0",
       "keywords": [
         "arcade",
-        "gateway",
+        "agent",
         "mcp",
         "tool-discovery",
         "integrations"

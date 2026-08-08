@@ -1,54 +1,81 @@
-# Arcade Agent Hub
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/arcade-wordmark-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/arcade-wordmark-light.svg">
+    <img alt="Arcade" src="assets/arcade-wordmark-light.svg" width="340">
+  </picture>
+</p>
 
-The hub between you and all your apps — across any agent you connect. Ask
-for what you want; the right tool runs, scoped to your active Arcade
-**gateway** (a curated set of apps and tools like Slack, Gmail, GitHub,
-Calendar, Notion, Linear), and one-time app sign-ins happen in the browser.
-No API keys.
+<h3 align="center">Agent Hub</h3>
 
-Endpoint: `https://hub.arcade.dev/mcp`
+<p align="center">
+  Let any agent use Arcade. Ask for what you want and the right tool runs across
+  <br>Slack, Gmail, GitHub, Calendar, Notion, Linear, and more.
+  <br>App sign-in happens in the browser. No API keys.
+</p>
 
-> **Staging deployment.** The Arcade Agent Hub currently runs against Arcade
-> staging, so sign in with your **staging** Arcade account (the sign-in page
-> is served by `cloud.bosslevel.dev`, not `arcade.dev`). Everything below is
-> otherwise production-shaped.
+<p align="center">
+  <a href="https://hub.arcade.dev"><img alt="Endpoint" src="https://img.shields.io/badge/endpoint-hub.arcade.dev%2Fmcp-ff5c37"></a>
+  <a href="https://agent-plugins.org"><img alt="Agent Plugins 1.0.0" src="https://img.shields.io/badge/Agent_Plugins-1.0.0-4f46e5"></a>
+  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-555"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-555"></a>
+</p>
 
-## Add it to your client
+---
 
-| Client | Install |
-|--------|---------|
-| **Cursor** | [![Install MCP server in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGUuZGV2L21jcCJ9) |
-| **Claude Code** | [![Install plugin in Claude Code](https://img.shields.io/badge/Claude_Code-install_plugin-d97757?logo=claude&logoColor=white)](docs/install/claude-code.md) |
-| **Claude Desktop** | [![Download extension for Claude Desktop](https://img.shields.io/badge/Claude_Desktop-download_extension-d97757?logo=claude&logoColor=white)](https://github.com/arcadeai-labs/arcade/releases/latest/download/arcade-gateway-hub.mcpb) |
-| **OpenCode** | [![Install plugin in OpenCode](https://img.shields.io/badge/OpenCode-install_plugin-333333?logo=iterm2&logoColor=white)](docs/install/opencode.md) |
+## Install
 
-- **Cursor** — the button adds the `arcade` MCP server only (tools, no
-  skills/commands/rule). For the full plugin, add the marketplace
-  `arcadeai-labs/arcade` in Cursor's plugins panel (or
-  `npx plugins add arcadeai-labs/arcade --target cursor`), then sign in under
-  **Settings → MCP**. Details: [docs/install/cursor.md](docs/install/cursor.md).
-- **Claude Code** — two commands, no session needed:
+Every client below gets the same `arcade` MCP server. What else comes with it
+depends on what that client can load — the full breakdown is in the
+[support matrix](docs/support-matrix.md).
 
-  ```bash
-  claude plugin marketplace add arcadeai-labs/arcade
-  claude plugin install arcade@arcade
-  ```
+| Client | Install | Instructions |
+|---|---|---|
+| **Cursor** | [![Install in Cursor](https://img.shields.io/badge/Cursor-one--click-000000)](https://cursor.com/install-mcp?name=arcade&config=eyJ1cmwiOiJodHRwczovL2h1Yi5hcmNhZGUuZGV2L21jcCJ9) | [cursor.md](docs/install/cursor.md) |
+| **Claude Code** | [![Install in Claude Code](https://img.shields.io/badge/Claude_Code-install-d97757?logo=claude&logoColor=white)](docs/install/claude-code.md) | [claude-code.md](docs/install/claude-code.md) |
+| **Claude Desktop** | [![Download extension](https://img.shields.io/badge/Claude_Desktop-download_.mcpb-d97757?logo=claude&logoColor=white)](https://github.com/arcadeai-labs/arcade/releases/latest/download/arcade-gateway-hub.mcpb) | [claude-desktop.md](docs/install/claude-desktop.md) |
+| **VS Code** | [![Install in VS Code](https://img.shields.io/badge/VS_Code-one--click-0098FF?logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=arcade&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fhub.arcade.dev%2Fmcp%22%7D) | [vscode.md](docs/install/vscode.md) |
+| **GitHub Copilot CLI** | [![Install in Copilot CLI](https://img.shields.io/badge/Copilot_CLI-install-24292e?logo=githubcopilot&logoColor=white)](docs/install/copilot.md) | [copilot.md](docs/install/copilot.md) |
+| **Codex / ChatGPT** | [![Install in Codex](https://img.shields.io/badge/Codex_·_ChatGPT-install-000000?logo=openai&logoColor=white)](docs/install/codex.md) | [codex.md](docs/install/codex.md) |
+| **Kiro** | [![Install in Kiro](https://img.shields.io/badge/Kiro-install-6b46c1)](docs/install/kiro.md) | [kiro.md](docs/install/kiro.md) |
+| **OpenCode** | [![Install in OpenCode](https://img.shields.io/badge/OpenCode-install-333333?logo=iterm2&logoColor=white)](docs/install/opencode.md) | [opencode.md](docs/install/opencode.md) |
+| **Any MCP client** | `https://hub.arcade.dev/mcp` | [agent-plugins.md](docs/install/agent-plugins.md) |
 
-- **Claude Desktop** — the button downloads
-  `arcade-gateway-hub.mcpb`; double-click it, click **Install**, sign in.
-  The skills can be added too, as uploadable ZIPs
-  ([details & alternatives](docs/install/claude-desktop.md)).
-- **OpenCode** — one command:
+One command covers most of them:
 
-  ```bash
-  opencode plugin opencode-arcade-hub
-  ```
+```bash
+npx plugins add arcadeai-labs/arcade
+```
 
-  Details: [docs/install/opencode.md](docs/install/opencode.md).
+Cursor also auto-loads any plugin you install in Claude Code, so if you use
+both, install in **one** place — otherwise Cursor lists it twice and splits
+its components between the entries. See
+[cursor.md](docs/install/cursor.md#avoid-installing-twice).
 
-Cursor auto-loads Claude Code plugins, so if you use both editors, install in
-**one** place to avoid a duplicate entry in Cursor — see the note in the
-[Cursor guide](docs/install/cursor.md#avoid-installing-twice).
+> **Staging deployment.** The hub currently runs against Arcade staging, so
+> sign in with your **staging** Arcade account (the sign-in page is served by
+> `cloud.bosslevel.dev`, not `arcade.dev`). Everything else is
+> production-shaped.
+
+## What each client gets
+
+| | Tools | Skills | Subagent | Commands | Rule | Hooks |
+|---|:--:|:--:|:--:|:--:|:--:|:--:|
+| **Cursor** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | ✅ | ✅ |
+| **Claude Code** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
+| **Claude Cowork / desktop** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
+| **GitHub Copilot CLI** | ✅ 9 | ✅ 3 | ✅ | — | — | ✅ 2 |
+| **VS Code** | ✅ 9 | ✅ 3 | — | — | — | — |
+| **Codex / ChatGPT** | ✅ 9 | ✅ 3 | — | — | — | — |
+| **Kiro** | ✅ 9 | ✅ 3 | — | — | — | — |
+| **OpenCode** | ✅ 9 | — | — | ✅ 2 | — | ✅ |
+| **Claude Desktop (.mcpb)** | ✅ 9 | upload | — | — | — | — |
+| **Any MCP client** | ✅ 9 | — | — | — | — | — |
+
+Rules, subagents, commands, and hooks are not portable component types in
+Agent Plugins 1.0.0, so each client gets whatever its own plugin format
+supports. Full detail, including version floors and install methods, is in the
+[support matrix](docs/support-matrix.md).
 
 ## Try it
 
@@ -68,10 +95,11 @@ never call any of them yourself.
 
 ## Learn more
 
-- [Gateways — how selection and scoping work](docs/gateways.md)
-- [Client support matrix — what each install gets](docs/support-matrix.md)
-- [Release train (shared semver with hub)](docs/release-train.md)
-- [Install guides](docs/install/) · [Development & repo layout](docs/development.md)
+- [Install guides](docs/install/) — one page per client
+- [Client support matrix](docs/support-matrix.md) — what each install gets
+- [Gateways](docs/gateways.md) — how selection and scoping work
+- [Agent Plugins](docs/install/agent-plugins.md) — the portable package format
+- [Release train](docs/release-train.md) · [Development](docs/development.md)
 - Privacy: tasks run through Arcade's hosted hub and the apps you connect —
   [privacy policy](https://www.arcade.dev/privacy-policy).
 
