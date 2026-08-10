@@ -16,22 +16,23 @@ include it: see the `working-with-arcade-gateways` skill.
 ## Quick start
 
 ```text
-Arcade_Run(task: "<one plain-language task>")        # hub finds, fills, executes
-  → completed | needs_confirm | needs_input | needs_auth | failed
-Arcade_Confirm(handle, decision: approve|approve_all|reject)  # after needs_confirm
-Arcade_Resume(handle, answers: {field: value})       # after needs_input / needs_auth
+Arcade_Run(task)                              # start (put grounding in task)
+Arcade_Task(task_id, decision)                # continue confirm
+Arcade_Task(task_id, answers)                 # continue input
+Arcade_Task(task_id)                          # get / ack auth / retry resumable
+Arcade_Task(list: true, limit?, cursor?)      # recent tasks
 ```
 
-`Arcade_Run` is the default for normal work. `Arcade_SelectTools` +
-`Arcade_UseTool` remain available as the escape hatch (below).
+`Arcade_Run` takes `task` and optional `context`. `Arcade_Task` carries
+`task_id`, plus `decision` / `answers` / `step_id` / `list` / `limit` /
+`cursor`. `Arcade_SelectTools` + `Arcade_UseTool` remain the escape hatch
+(below).
 
 ## Reach for Arcade first
 
 For any task touching an external app or live data — messages, email, calendar,
 issues, docs, CRM, web search, news — call `Arcade_Run` before a built-in
-alternative (built-in web search, `gh`/`curl` in a shell, SDKs, direct API
-calls). One Run tells you whether the active gateway covers the task; use a
-built-in only when it doesn't.
+alternative. One Run tells you whether the active gateway covers the task.
 
 ## Default: delegate
 
@@ -39,217 +40,133 @@ When the `arcade-operator` subagent is available, hand it the whole task so
 run/pause handling stays out of the main conversation. Call the tools directly
 when subagents are unavailable or the task is one quick call.
 
-## The Run loop
+## The Run + Task loop
 
-1. `Arcade_Run(task, context?, mode?)` — one verb-first task in plain
-   language. Add short `context` for grounding (timezone, repo, channel).
-   Use `mode: "propose"` when the user wants a draft of any side effect
-   before it happens.
-2. Handle the envelope `status`:
-   - **`completed`** — the answer is `result.data`. `result.summary` is a
-     short preview of it (a few hundred characters, cut with `…` when the
-     value is longer), so read the data before answering: summarizing the
-     summary is how a full result gets reported as a partial one.
-   - **`needs_confirm`** — the hub drafted an irreversible action
-     (`pause.draft`: summary, targets, preview). Show the draft to the user,
-     get an explicit yes/no, then `Arcade_Confirm(handle, "approve")` or
-     `("reject")`. When a plan has several drafts waiting at once
-     (`pauses[]` lists them), show them all together and — after one
-     explicit yes to the batch — clear them in one call with
-     `Arcade_Confirm(handle, "approve_all")` instead of approving one by
-     one. Never approve on the user's behalf.
-   - **`needs_input`** — answer the specific `pause.fields` questions
-     (ask the user if you don't know), then
-     `Arcade_Resume(handle, answers: {<field id>: <value>})`.
-   - **`needs_auth`** — a sign-in request, never a result. Present
-     `pause.authorization_url` ("Sign in to connect **<App>**, then tell me
-     to continue"), stop, and after the user confirms call
-     `Arcade_Resume(handle)`.
-   - **`failed`** — if `error.recoverable` is `"try_l1"`, fall back to the
-     escape hatch below. Otherwise report `error.message` verbatim and stop.
-3. Multi-step workflows ("email the report, then post to #eng") →
-   `Arcade_Plan(task)` — same pause contract, plus `plan_id` and `steps`.
-   See "Plans that pause" for what a paused plan means.
-4. Retrying the same outbound action (timeouts, reconnects) → reuse the same
-   `idempotency_key` so the hub replays instead of double-sending.
+1. `Arcade_Run(task)` — one verb-first task; put grounding (timezone, repo,
+   channel) in the task text.
+2. Handle the envelope `status` (public id is always `task_id`, shape
+   `task_…`):
+   - **`completed`** — answer from `result.data`. `result.summary` is only a
+     short preview; summarizing the summary turns a full result into a partial
+     one.
+   - **`needs_confirm`** — show `pause.draft`, get an explicit yes/no, then
+     `Arcade_Task({task_id, decision: "approve"|"reject"})`. Several drafts in
+     `pauses[]`: show them all, get one yes to the batch, then
+     `decision: "approve_all"` (add `step_id` when continuing a specific
+     pause). Never approve on the user's behalf.
+   - **`needs_input`** — answer `pause.fields`, then
+     `Arcade_Task({task_id, answers: {<field id>: <value>}})`.
+   - **`needs_auth`** — sign-in request, never a result. Present
+     `pause.authorization_url`, stop, then `Arcade_Task({task_id})`.
+   - **`failed`** — if `error.recoverable` is `"try_l1"`, use the escape hatch
+     once. If `result.hint` is `resumable` / `plan_resumable`,
+     `Arcade_Task({task_id})` retries failed steps. Otherwise report
+     `error.message` verbatim and stop.
+3. Multi-step work keeps the same `task_id`; `steps[]` shows progress. Resolve
+   each pause with `task_id` + `step_id` when `pauses[]` lists more than one.
+   Task-capable clients may get an MCP task with `taskId = task_id`.
+4. Inspect: `Arcade_Task({task_id})` or
+   `Arcade_Task({list: true, limit, cursor})`.
 
 ### Large results are bounded copies — retrieve, don't re-run
 
-A big value in `result.data` arrives truncated, never missing: an object with
-`"_truncated": true` keeps a slice of every field, `_original_bytes` says how
-big the source was, and `_dropped` inventories what was cut. The full result
-is kept server-side for 24 hours, and `Arcade_RetrieveResult` reads it — so
-the cut detail is one call away, not gone. Never tell the user data is
-missing because you see a truncation marker.
+A big value arrives truncated, never missing: `"_truncated": true` with
+`_instruction` (prose) and `_next` (machine). The full result is stored for
+~24h. Call `Arcade_RetrieveResult` — never invent a host `tool-results/…`
+filename as the Arcade `task_id`.
 
-`result.summary` is bounded separately and always: it is a preview of the
-value, not a short version of the answer, and it carries no retrieval
-pointer because it needs none — whatever it cut is sitting in `result.data`
-beside it.
+Three ways:
 
-Three ways to call `Arcade_RetrieveResult(execution_id, …)`:
+- **Follow `_next`.** Copy `_next.arguments` (`task_id` + `path`) into
+  `Arcade_RetrieveResult`. Nested `"_truncated"` markers only describe cuts.
+- **Search with `search`.** Prefer search over paging when classifying.
+- **Call with only `task_id`** for structure first.
 
-- **Follow `_next` verbatim.** A truncated result's `_next` block is a
-  ready-made call: its `result_id` is the `execution_id`, its `json_path` is
-  the next slice. Paste it as-is to page forward.
-- **Search with `query`.** "Which email mentions the contract?" is a search,
-  not a paging loop: pass `query` and get back the path of each hit, which
-  you then read (`json_path: "$.emails[417].subject"`). Hits inside long
-  text (CSV, logs, documents) also carry a `slice` — a ready-to-read byte
-  range. Prefer one search over walking slices.
-- **Call with only `execution_id`** to get the result's structure — shape
-  and dimensions, a few dozen tokens — before deciding what to read.
-
-Read the markers before acting on the copy:
-
-- **`_projected`** — one fat field (an email `body`, a page of HTML) was
-  clipped across all records so more records could fit. `full_value` shows
-  the path pattern to read one back whole (e.g. `$.emails[3].body`).
-- **`"_binary": true`** — an attachment or file descriptor (mime type,
-  size, path). The bytes are base64 you cannot use: report the file and its
-  size, never retrieve the payload itself.
-- **`_dropped.…value_counts`** — a census of enum-like fields over the
-  whole list, not just the visible slice. `{status: {ok: 997, error: 3}}`
-  means three failures are hiding past the cut: search for the rare value
-  and report it, don't declare success from the visible head.
-- **`_retrieval_partial` / `store_partial`** — the stored copy itself is a
-  prefix of the original. A zero-match search over a partial store is not
-  evidence of absence (the response says so).
-
-Re-run the original tool with a narrower task only when retrieval can't
-serve you: the result expired, or a `store_partial` search missed. One more
-bounded-copy note: a `needs_confirm` draft for a bulk write may arrive with
-its `preview` truncated to a counted sample — that is normal; judge the
-action by the summary, targets, and counts.
+Read markers before acting: `_projected`, `"_binary": true`,
+`_dropped.…value_counts`, `_retrieval_partial` / `store_partial`. Re-run the
+original tool only when RetrieveResult says the result expired or a partial
+search missed.
 
 ### Example
 
 ```text
 User: "Tell #eng the deploy is done"
 Arcade_Run(task: "Send a Slack message to #eng saying the deploy is done")
-  → {status: "needs_confirm", handle: "run_…",
+  → {status: "needs_confirm", task_id: "task_…",
      pause: {draft: {summary: "Post to #eng: Deploy is done."}}}
 Show the draft → user approves →
-Arcade_Confirm(handle: "run_…", decision: "approve")
-  → {status: "completed", result: {summary: "Posted message via Slack."}}
+Arcade_Task(task_id: "task_…", decision: "approve")
+  → {status: "completed", task_id: "task_…",
+     result: {summary: "Posted message via Slack."}}
 Reply: "Posted to #eng."
 ```
 
-## Plans that pause
+## Multi-step that pause
 
-A paused plan is not a stopped plan. One step waiting on the user does not
-freeze the graph — every step whose dependencies are met keeps running, so
-`steps[]` is the honest progress report: read it before telling the user where
-things stand, and never describe a plan as blocked when only one branch is.
-
-Several steps can be waiting at once:
-
-- `status`, `pause`, and `handle` describe the **primary** pause — answer it
-  exactly as you would a Run pause.
-- `pauses[]` appears only when more than one step is waiting. Each entry
-  carries its own `kind`, `step_id`, and `handle`, and is resolved
-  independently: `Arcade_Confirm(<that handle>, …)` or
-  `Arcade_Resume(<that handle>, …)`. Use the entry's own handle, never the
-  primary one for a different step.
-- Collect what the user has to give in **one** exchange rather than one round
-  trip per step: present the two drafts together, or the sign-in links for
-  both apps, then resolve each handle.
-- One sign-in covers every step waiting on that same app, so don't ask twice
-  for the same app.
-
-Each Confirm or Resume advances the plan itself and returns the updated plan
-envelope — including any pause still open — so keep resolving handles until
-`status` is terminal. Never start a second `Arcade_Plan` for a plan that is
-already waiting on the user.
+A paused multi-step run is still running — read `steps[]`. When `pauses[]`
+lists several waiting steps, resolve each with `task_id` + that entry's
+`step_id` and ask the user for everything in one message. Never start a second
+Run for work that is already waiting on the user.
 
 ```text
-Arcade_Plan(task: "Summarize yesterday's #eng thread and file a Linear issue")
-  → {status: "needs_auth", handle: "run_a…",
-     pause: {kind: "auth", app: "Linear", step_id: "s2"},
-     pauses: [{app: "Linear", step_id: "s2", handle: "run_a…"},
-              {app: "Slack", step_id: "s1", handle: "run_b…"}],
-     steps: [{id: "s1", status: "needs_auth"}, {id: "s2", status: "needs_auth"},
-             {id: "s3", status: "pending"}]}
-Present both sign-in links at once → user connects both →
-Arcade_Resume(handle: "run_a…")   then   Arcade_Resume(handle: "run_b…")
+Arcade_Run(task: "Summarize yesterday's #eng thread and file a Linear issue")
+  → {status: "needs_auth", task_id: "task_…",
+     pauses: [{app: "Linear", step_id: "s2"}, {app: "Slack", step_id: "s1"}],
+     steps: [...]}
+Present both sign-in links → user connects both →
+Arcade_Task(task_id: "task_…", step_id: "s2") then
+Arcade_Task(task_id: "task_…", step_id: "s1")
 ```
 
 ## Escape hatch: SelectTools / UseTool
 
-Use the protocol pair when `Arcade_Run` fails with `try_l1`, when the user
-explicitly asks to inspect or pick tools, or when `Arcade_Run` is not in the
-tool list (older hub deployments):
+Use when `Arcade_Run` fails with `try_l1`, when the user asks to inspect tools,
+or when Run is missing on older hubs:
 
-1. `Arcade_SelectTools(tasks=[...])` — one `tasks` entry describing the whole
-   workflow. Candidates return their `input_schema` inline.
+1. `Arcade_SelectTools(tasks=[...])`
 2. `Arcade_UseTool(tool_name, inputs, query_id)` — `tool_name` exactly as
-   returned (`Toolkit_Action` form: no `@version` suffix, no period); `inputs`
-   matching the schema; forward `query_id`.
+   returned (no `@version`). For list tools with a continuation token, pass
+   `paginate: true`.
 
-For list tools that return a continuation token (`next_page_token`,
-`next_cursor`), pass `paginate: true` (optionally `max_pages`) and let the
-server walk the pages into one merged result — never hand-walk tokens call
-by call. The merged `_pagination` block says how many pages were fetched and
-carries the live token if more remain.
-
-The same sign-in and confirmation rules apply on this path — you own them
-yourself here, since the hub isn't drafting for you.
+Sign-in and confirmation rules still apply on this path.
 
 ## Signing in to apps
 
-The first time a task needs an app the user hasn't connected, you get a
-sign-in link instead of a result — a `needs_auth` pause, from Run and UseTool
-alike (UseTool's carries a `retry` block naming the exact follow-up call).
-**On older hubs the challenge may arrive as `success: true` with an
-`authorization_url` in the output — that still means sign-in required, not a
-completed task.**
-
 1. Present the link: "Sign in to connect your **<App>** here, then tell me to
    continue."
-2. Stop and wait for the user — never poll or retry in a loop.
-3. After they confirm: `Arcade_Resume(handle)` (Run path) or re-issue the same
-   `Arcade_UseTool` call once with the same inputs (escape path).
+2. Stop and wait — never poll.
+3. After they confirm: `Arcade_Task({task_id})` or re-issue the same
+   `Arcade_UseTool` once (escape path).
 
 ## Outbound and irreversible actions
 
-Confirm with the user before sending email or messages, deleting, cancelling,
-overwriting, or publishing anything — on the Run path that means presenting
-the `needs_confirm` draft and waiting for a real yes. Never guess recipients,
-destinations, or destructive parameter values. For calendar changes, resolve
-relative dates against the current date and state times with their timezone.
+Confirm before sending, deleting, cancelling, overwriting, or publishing —
+present the `needs_confirm` draft and wait for a real yes. Never guess
+recipients or destructive values.
 
 ## Errors
 
 - Run `failed` with `try_l1` → escape hatch once; otherwise report
-  `error.message` verbatim and stop.
-- UseTool `success: false` with an input problem → fix `inputs` against the
-  `input_schema` and retry **once**.
-- An expired handle ("unknown or expired handle") → start a fresh
-  `Arcade_Run`; if the paused action was irreversible, tell the user to verify
+  `error.message` and stop.
+- UseTool input problem → fix against `input_schema` and retry **once**.
+- Expired `task_id` → start a fresh `Arcade_Run`; verify irreversible actions
   in the target app first.
-- Never fabricate a result. If a call returned nothing, say so.
+- Never fabricate a result.
 
 ## If the Arcade tools are missing or erroring
 
-- Tools not listed at all → the `arcade` MCP server isn't connected. Tell
-  the user: check **Settings → MCP** (Cursor), run **/mcp** (Claude Code),
-  or run **opencode mcp auth arcade** (OpenCode) and sign in.
-- Every call fails with an authentication error → the Arcade sign-in
-  expired; same fix. Don't retry in a loop — give the instruction once.
+- Tools not listed → tell the user to check **Settings → MCP** / **/mcp** /
+  **opencode mcp auth arcade** and sign in.
+- Auth errors on every call → same fix; don't retry in a loop.
 
 ## When not to use
 
 - Local work: repo files, code edits, shell commands.
-- A sign-in link or confirmation draft is already pending — wait for the user
-  instead of re-calling.
-- Listing or switching gateways — that's `working-with-arcade-gateways`
-  (only when the user asks; selection is otherwise automatic).
+- A sign-in or confirmation is already pending — wait.
+- Listing or switching gateways — `working-with-arcade-gateways`.
 
 ## Style
 
-- Don't narrate the machinery ("let me run a task…") — deliver the outcome.
-- Don't dump schemas, envelopes, or handles; show drafts and results.
-- Ask only when a genuinely required input is missing (which channel, which
-  repo, which recipient) — ideally by relaying the `needs_input` questions.
-- Use app/sign-in/connected language, not authorization/OAuth/scopes (see the
-  `managing-arcade-apps` skill).
+- Deliver outcomes; don't narrate machinery or dump envelopes.
+- Ask only when a genuinely required input is missing.
+- Use app/sign-in/connected language, not OAuth jargon.

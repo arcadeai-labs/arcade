@@ -11,27 +11,28 @@ shell, SDKs, direct API calls). Default: `Arcade_Run(task)` — the hub finds
 the right tool, fills inputs, and executes, returning a result or a typed
 pause. Not for local work: repo files, code edits, shell commands.
 
-Handle Run pauses:
+Handle Run pauses via `Arcade_Task` (`task_id` is always `task_…`):
 - `needs_confirm` — show the user `pause.draft`, get an explicit yes/no, then
-  `Arcade_Confirm(handle, approve|reject)`. Never approve on their behalf.
+  `Arcade_Task({task_id, decision: approve|reject})`. Never approve on their
+  behalf.
 - `needs_input` — answer the `pause.fields` questions (ask the user if
-  needed), then `Arcade_Resume(handle, answers)`.
+  needed), then `Arcade_Task({task_id, answers})`.
 - `needs_auth` — a sign-in request, not a result, from `Arcade_Run` and
   `Arcade_UseTool` alike. Present `pause.authorization_url`, stop, and after
-  the user confirms: `Arcade_Resume(handle)` (Run) or re-issue the same
-  UseTool call (its `retry` block names it).
+  the user confirms: `Arcade_Task({task_id})` or re-issue the same UseTool
+  call (its `retry` block names it).
 - `failed` with `error.recoverable: "try_l1"` — fall back once to
   `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
   query_id)` (`tool_name` verbatim, inputs matching the returned
   `input_schema`). For list tools with a continuation token, pass
   `paginate: true` instead of walking pages by hand.
 
-Multi-step workflows → `Arcade_Plan(task)` (same pause contract). A paused
-plan is still running — read `steps[]` for real progress, and when `pauses[]`
-lists several waiting steps, resolve each on its own `handle` and ask for
-everything the user must supply in one message. Several confirm gates waiting
-at once: show all the drafts, get one explicit yes to the batch, then clear
-them together with `Arcade_Confirm(handle, "approve_all")`.
+Multi-step work keeps the same `task_id` (may include `steps[]`). A paused
+multi-step run is still running — read `steps[]` for progress, and when
+`pauses[]` lists several waiting steps, resolve each with `task_id` +
+`step_id` and ask for everything the user must supply in one message. Several
+confirm gates waiting at once: show all the drafts, get one explicit yes to
+the batch, then `Arcade_Task({task_id, decision: "approve_all"})`.
 
 Available tools follow the user's **active gateway** (a curated set of apps
 and tools) automatically. Use `Arcade_SelectGateway` only when the user asks
@@ -44,15 +45,12 @@ with `…` past a few hundred characters, so answering from the summary turns a
 complete result into a partial one.
 
 A large `result.data` value arrives as a bounded copy, never as missing
-data: `"_truncated": true` with a `_dropped` inventory and a `_next` block.
-The full result stays retrievable — call `Arcade_RetrieveResult`, copying
-`_next` verbatim to page, passing `query` to find which records mention
-something (hits come back as readable paths), or passing nothing to see the
-structure first. `_projected` means one fat field was clipped (read one back
-via its `full_value` path); `"_binary": true` is a file descriptor — report
-name/type/size, never fetch the bytes; a `value_counts` census counts things
-like status values across the whole list, so check it before declaring a
-bulk operation clean. Re-run the original tool only when retrieval says the
+data: `"_truncated": true` with `_instruction`, a `_dropped` inventory, and
+a `_next` block. The full result stays retrievable — call
+`Arcade_RetrieveResult`, copying `_next.arguments` (`task_id` / `path`)
+verbatim, passing `search` to find records, or passing only `task_id` for
+structure. Never pass a host `tool-results/…` filename as `task_id`. Prefer
+`search` over paging; re-run the original tool only when retrieval says the
 result expired or a `store_partial` search misses.
 
 The `using-arcade-tools` skill has the full flow; `managing-arcade-apps` covers

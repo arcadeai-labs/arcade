@@ -1,8 +1,8 @@
 {
   "name": "arcade",
   "displayName": "Arcade Agent Hub",
-  "description": "Let your agent use Arcade — ask for what you want and the right tool runs across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more. App sign-in happens in the browser; no API keys.",
-  "version": "0.11.0",
+  "description": "Let your agent use Arcade \u2014 ask for what you want and the right tool runs across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more. App sign-in happens in the browser; no API keys.",
+  "version": "0.14.0",
   "author": {
     "name": "Arcade.dev",
     "email": "support@arcade.dev"
