@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "arcade-gateway-hub",
   "display_name": "Arcade Agent Hub",
-  "version": "0.11.0",
+  "version": "0.14.0",
   "description": "Let Claude use Arcade \u2014 one connection to Slack, Gmail, GitHub, Calendar, Notion, Linear, and more.",
   "long_description": "Connects Claude Desktop to the Arcade Agent Hub (https://hub.arcade.dev/mcp). Ask for what you want; Arcade finds and runs the right tool, with one-time app sign-ins handled in the browser \u2014 no API keys. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
   "author": {
@@ -45,19 +45,15 @@
   "tools": [
     {
       "name": "Arcade_Run",
-      "description": "Execute a plain-language task end to end (pauses for confirmation, missing details, or sign-in)"
+      "description": "Start a task in connected apps from a plain-language objective"
     },
     {
-      "name": "Arcade_Confirm",
-      "description": "Approve or reject an action Arcade_Run drafted for you"
+      "name": "Arcade_Task",
+      "description": "Get, list, or continue a task by task_id (confirm / auth / input)"
     },
     {
-      "name": "Arcade_Resume",
-      "description": "Continue a paused run after answering questions or signing in"
-    },
-    {
-      "name": "Arcade_Plan",
-      "description": "Run a multi-step workflow, executing independent steps together (same pause contract as Arcade_Run)"
+      "name": "Arcade_RetrieveResult",
+      "description": "Read more of a truncated Arcade result by task_id (path or search)"
     },
     {
       "name": "Arcade_SelectTools",

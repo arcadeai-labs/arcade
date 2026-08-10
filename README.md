@@ -17,7 +17,7 @@
 <p align="center">
   <a href="https://hub.arcade.dev"><img alt="Endpoint" src="https://img.shields.io/badge/endpoint-hub.arcade.dev%2Fmcp-ff5c37"></a>
   <a href="https://agent-plugins.org"><img alt="Agent Plugins 1.0.0" src="https://img.shields.io/badge/Agent_Plugins-1.0.0-4f46e5"></a>
-  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-555"></a>
+  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.14.0-555"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-555"></a>
 </p>
 
@@ -85,13 +85,12 @@ supports. Full detail, including version floors and install methods, is in the
 - `/arcade:status` — check your connection, sign-in, and active gateway
 - `/arcade:connect google` — connect an app ahead of time
 
-Your assistant speaks intent to the hub: `Arcade_Run` executes a task end to
-end (pausing for your confirmation, missing details, or a sign-in — handled
-via `Arcade_Confirm` / `Arcade_Resume`, with `Arcade_Plan` for multi-step
-workflows), while `Arcade_SelectTools` / `Arcade_UseTool` remain the manual
-escape hatch and `Arcade_SelectGateway`, `Arcade_Apps`,
-`Arcade_ManageToolAuthorization` manage gateways and app connections — you
-never call any of them yourself.
+Your assistant speaks intent to the hub: `Arcade_Run` starts a task and
+`Arcade_Task` continues it by `task_id` (confirmation, missing details, or a
+sign-in; multi-step keeps the same `task_id`), while
+`Arcade_SelectTools` / `Arcade_UseTool` remain the manual escape hatch and
+`Arcade_SelectGateway`, `Arcade_Apps`, `Arcade_ManageToolAuthorization`
+manage gateways and app connections — you never call any of them yourself.
 
 ## Learn more
 

@@ -1,7 +1,7 @@
 {
   "name": "arcade",
-  "description": "Let any agent use Arcade — one MCP connection that finds and runs the right tool across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more, with app sign-in handled in the browser and no API keys. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
-  "version": "0.11.0",
+  "description": "Let any agent use Arcade \u2014 one MCP connection that finds and runs the right tool across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more, with app sign-in handled in the browser and no API keys. Ships an operator subagent, skills, and slash commands so the discovery loop stays out of your main conversation.",
+  "version": "0.14.0",
   "author": {
     "name": "Arcade.dev",
     "url": "https://hub.arcade.dev"

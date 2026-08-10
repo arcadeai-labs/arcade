@@ -4,39 +4,34 @@ The `arcade` MCP server is connected — external-app tools (Slack, Gmail,
 GitHub, Calendar, Notion, and more) scoped to the user's active Arcade
 gateway. Prefer it for tasks in external apps or live data. Default:
 `Arcade_Run(task)` — the hub finds the tool, fills inputs, and executes,
-returning a result or a typed pause. `needs_confirm` → show the draft, get a
-yes/no, `Arcade_Confirm(handle, approve|reject)`. `needs_input` → answer the
-questions, `Arcade_Resume(handle, answers)`. `needs_auth` → present the
-sign-in link, wait, then `Arcade_Resume(handle)`.
+returning a result or a typed pause with `task_id`. Continue with
+`Arcade_Task`: `needs_confirm` → show the draft, get a yes/no, then
+`Arcade_Task({task_id, decision: approve|reject})`. `needs_input` →
+`Arcade_Task({task_id, answers})`. `needs_auth` → present the sign-in link,
+wait, then `Arcade_Task({task_id})`. Multi-step may include `step_id` /
+`steps[]`.
 
 A sign-in link (`authorization_url`) is never a result — even if `success` is
 `true` (older hubs); `Arcade_UseTool` returns it as a `needs_auth` pause whose
 `retry` block names the follow-up call to re-issue after the user signs in.
-Confirm before anything outbound or irreversible; never approve a
-draft on the user's behalf. On `failed` with `recoverable: "try_l1"`, fall
-back once to `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name,
-inputs, query_id)` with the name passed back verbatim; for list tools with a
-continuation token, pass `paginate: true` rather than walking pages by hand.
-Multi-step workflows →
-`Arcade_Plan`; a paused plan still runs its independent steps, so read
-`steps[]` for progress and, when `pauses[]` lists several waiting steps,
-resolve each on its own `handle` and gather what the user must supply in one
-message; several confirm gates at once clear together with
-`Arcade_Confirm(handle, "approve_all")` after one explicit yes to the batch. Use `Arcade_SelectGateway` only when the user asks to list or
-switch gateways — selection is otherwise automatic. If the hub reports no
-tool for a task's app, the active gateway may not include it; offer to check
-the gateway list.
+Confirm before anything outbound or irreversible; never approve a draft on
+the user's behalf. On `failed` with `recoverable: "try_l1"`, fall back once
+to `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
+query_id)` with the name passed back verbatim; for list tools with a
+continuation token, pass `paginate: true`. Multi-step keeps the same
+`task_id`; when `pauses[]` lists several waiting steps, resolve each with
+`task_id` + `step_id` and gather what the user must supply in one message;
+several confirm gates clear with `decision: "approve_all"` after one explicit
+yes. Use `Arcade_SelectGateway` only when the user asks to list or switch
+gateways.
 
-Answer from `result.data`. `result.summary` is a bounded preview of it, cut
-with `…` past a few hundred characters, so answering from the summary turns a
-complete result into a partial one.
+Answer from `result.data`. `result.summary` is a bounded preview — don't
+answer from the summary alone.
 
 A large `result.data` value arrives as a bounded copy (`"_truncated": true`
-with a `_dropped` inventory and a `_next` block), never as missing data. The
-full result stays retrievable via `Arcade_RetrieveResult`: copy `_next`
-verbatim to page, pass `query` to find which records mention something, or
-pass nothing to see the structure. `"_binary": true` is a file descriptor —
-report name/type/size, don't fetch the bytes. Check `value_counts` in
-`_dropped` before declaring a bulk operation clean. Re-run the original tool
-only when retrieval says the result expired or a `store_partial` search
+with `_instruction`, `_dropped`, and `_next`). Call
+`Arcade_RetrieveResult` with `_next.arguments` (`task_id` / `path`), or
+`search`, or `task_id` alone for shape. Never pass a host `tool-results/`
+filename as `task_id`. Prefer `search` when classifying. Re-run the original
+tool only when retrieval says the result expired or a `store_partial` search
 misses.

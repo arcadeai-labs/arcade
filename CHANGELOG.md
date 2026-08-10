@@ -8,6 +8,23 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.14.0] - 2026-08-10
+
+Breaking Intent guidance aligned with hub `0.14.0`:
+`requires hub >= 0.14.0`.
+
+### Changed
+
+- Skills, Cursor rule, and Claude Desktop manifest teach **`Arcade_Run`
+  (start)** + **`Arcade_Task` (get / list / continue)** (no `Arcade_Plan` /
+  `Arcade_Confirm` / `Arcade_Resume` tools; no public `mode`). Pause
+  continue uses `task_id` + `decision` / `answers` (+ `step_id`); list
+  uses `limit` + `cursor`.
+- Retrieve guidance uses
+  `Arcade_RetrieveResult({task_id, path|search})` and nested
+  `_next.arguments`; never pass a host `tool-results/` filename as
+  `task_id`.
+
 ## [0.11.0] - 2026-08-08
 
 Requires hub >= 0.10.0. Packaging and copy only — no hub change.
