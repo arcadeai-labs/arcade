@@ -5,9 +5,8 @@ description: List, disconnect, reconnect, and fix the apps Arcade is connected t
 
 # Managing connected apps
 
-`Arcade_Apps` lives on the `arcade` MCP server. The apps shown belong to the
-user's **active gateway** — switching gateways can change which apps appear
-(see `working-with-arcade-gateways`).
+`Arcade_Apps` lives on the `arcade` MCP server. It shows every app available
+to the user, connected or not.
 
 ## Quick start
 

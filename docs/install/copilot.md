@@ -1,7 +1,7 @@
 # Install in GitHub Copilot CLI
 
 Copilot CLI gets the most of any Agent Plugins client: the `arcade` MCP
-server, all 3 skills, the `arcade-operator` subagent, and both session hooks.
+server, both skills, the `arcade-operator` subagent, and both session hooks.
 
 ## Install
 

@@ -17,7 +17,7 @@
 <p align="center">
   <a href="https://hub.arcade.dev"><img alt="Endpoint" src="https://img.shields.io/badge/endpoint-hub.arcade.dev%2Fmcp-ff5c37"></a>
   <a href="https://agent-plugins.org"><img alt="Agent Plugins 1.0.0" src="https://img.shields.io/badge/Agent_Plugins-1.0.0-4f46e5"></a>
-  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.14.0-555"></a>
+  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.15.0-555"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-555"></a>
 </p>
 
@@ -61,13 +61,13 @@ its components between the entries. See
 
 | | Tools | Skills | Subagent | Commands | Rule | Hooks |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Cursor** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | ✅ | ✅ |
-| **Claude Code** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
-| **Claude Cowork / desktop** | ✅ 9 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
-| **GitHub Copilot CLI** | ✅ 9 | ✅ 3 | ✅ | — | — | ✅ 2 |
-| **VS Code** | ✅ 9 | ✅ 3 | — | — | — | — |
-| **Codex / ChatGPT** | ✅ 9 | ✅ 3 | — | — | — | — |
-| **Kiro** | ✅ 9 | ✅ 3 | — | — | — | — |
+| **Cursor** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | ✅ | ✅ |
+| **Claude Code** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | — | ✅ 2 |
+| **Claude Cowork / desktop** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | — | ✅ 2 |
+| **GitHub Copilot CLI** | ✅ 9 | ✅ 2 | ✅ | — | — | ✅ 2 |
+| **VS Code** | ✅ 9 | ✅ 2 | — | — | — | — |
+| **Codex / ChatGPT** | ✅ 9 | ✅ 2 | — | — | — | — |
+| **Kiro** | ✅ 9 | ✅ 2 | — | — | — | — |
 | **OpenCode** | ✅ 9 | — | — | ✅ 2 | — | ✅ |
 | **Claude Desktop (.mcpb)** | ✅ 9 | upload | — | — | — | — |
 | **Any MCP client** | ✅ 9 | — | — | — | — | — |
@@ -79,24 +79,23 @@ supports. Full detail, including version floors and install methods, is in the
 
 ## Try it
 
-- "What gateways do I have?" / "Switch to Full Suite."
+- "What apps do I have connected?"
 - "Send a Slack message to #eng that the deploy is done."
 - "What's on my calendar tomorrow?"
-- `/arcade:status` — check your connection, sign-in, and active gateway
+- `/arcade:status` — check your connection, sign-in, and connected apps
 - `/arcade:connect google` — connect an app ahead of time
 
 Your assistant speaks intent to the hub: `Arcade_Run` starts a task and
 `Arcade_Task` continues it by `task_id` (confirmation, missing details, or a
 sign-in; multi-step keeps the same `task_id`), while
 `Arcade_SelectTools` / `Arcade_UseTool` remain the manual escape hatch and
-`Arcade_SelectGateway`, `Arcade_Apps`, `Arcade_ManageToolAuthorization`
-manage gateways and app connections — you never call any of them yourself.
+`Arcade_Apps` / `Arcade_ManageToolAuthorization` manage app connections — you
+never call any of them yourself.
 
 ## Learn more
 
 - [Install guides](docs/install/) — one page per client
 - [Client support matrix](docs/support-matrix.md) — what each install gets
-- [Gateways](docs/gateways.md) — how selection and scoping work
 - [Agent Plugins](docs/install/agent-plugins.md) — the portable package format
 - [Release train](docs/release-train.md) · [Development](docs/development.md)
 - Privacy: tasks run through Arcade's hosted hub and the apps you connect —

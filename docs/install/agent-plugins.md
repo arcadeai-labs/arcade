@@ -10,8 +10,8 @@ The standard covers two component types, and this plugin ships both:
 
 - **The `arcade` MCP server** (`mcp.json`) — all 9 hub tools over
   `https://hub.arcade.dev/mcp`.
-- **Three skills** (`skills/`) — `using-arcade-tools`,
-  `managing-arcade-apps`, `working-with-arcade-gateways`.
+- **Two skills** (`skills/`) — `using-arcade-tools`,
+  `managing-arcade-apps`.
 
 Rules, the `arcade-operator` subagent, slash commands, and session hooks are
 **not** portable component types in 1.0.0. If your client is Cursor or Claude
@@ -55,7 +55,7 @@ task continues.
 
 Ask your agent:
 
-- "What can Arcade do?" — the three skills should be discoverable.
+- "What can Arcade do?" — the two skills should be discoverable.
 - "What's on my calendar tomorrow?" — should route through the `arcade`
   server and, the first time, return a sign-in link.
 

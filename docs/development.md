@@ -12,7 +12,7 @@ declared explicitly, so no client picks it up by folder convention.
 |------|------------|---------|
 | `plugin.json` | Agent Plugins 1.0.0 manifest (portable core) | Codex, Copilot, Kiro, VS Code, any conformant client |
 | `mcp.json` | Portable MCP config (`streamable-http` → the hub) | Same |
-| `skills/` | `using-arcade-tools`, `managing-arcade-apps`, `working-with-arcade-gateways` skills | Every client with a skill system |
+| `skills/` | `using-arcade-tools`, `managing-arcade-apps` skills | Every client with a skill system |
 | `agents/arcade-operator.agent.md` | The operator subagent | Claude Code / Cowork, Cursor, Copilot CLI |
 | `commands/` | `/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status` | Cursor + Claude Code / Cowork |
 | `hooks/` | Claude-format `hooks.json` + the two shared hook scripts | Claude Code / Cowork, Copilot CLI |
@@ -21,7 +21,7 @@ declared explicitly, so no client picks it up by folder convention.
 | `clients/claude-desktop/` | One-click `.mcpb` bundle + ready-to-merge connector config | Claude Desktop Chat |
 | `clients/opencode/` | The `opencode-arcade-hub` npm plugin + MCP server config | OpenCode |
 | `.cursor-plugin/` / `.claude-plugin/` | Plugin + marketplace manifests | Cursor / Claude |
-| `docs/` | Install guides, gateway explainer, release-train, this file | — |
+| `docs/` | Install guides, release-train, this file | — |
 | `VERSION` + `release-contract.json` | Shared semver train with `arcadeai-labs/hub` | CI (`check.mjs`) |
 
 ### Which manifest a client reads
@@ -60,7 +60,7 @@ cd clients/opencode && npm pack --dry-run
 
 All of these run in CI (`.github/workflows/check.yml`) on every push/PR,
 along with artifact builds. `QA.md` documents the manual release checklist
-(client loads, gateway scenarios, auth-flow scenarios).
+(client loads, auth-flow scenarios).
 
 ## Binary artifacts (.mcpb + skill ZIPs)
 
@@ -123,10 +123,9 @@ Release steps live at the bottom of `QA.md`.
 - **Client-native hooks.** Cursor gets a flat `{ additional_context }`
   sessionStart hook; Claude gets `hookSpecificOutput.hookEventName =
   "SessionStart"`. Shapes are executed and validated by `check.mjs`.
-- **Apps and gateways language.** User-facing copy says sign-in link / app /
-  connected / gateway — never authorization/OAuth/scopes/provider. `check.mjs`
-  rejects "authorization link" in user-facing files and requires
-  `Arcade_SelectGateway` coverage where tools are enumerated.
+- **Apps language.** User-facing copy says sign-in link / app / connected —
+  never authorization/OAuth/scopes/provider/gateway. `check.mjs` rejects
+  "authorization link" in user-facing files.
 - **Server identity.** The MCP server key is `arcade` in every client; the
   hosted endpoint is `https://hub.arcade.dev/mcp` (enforced by
   `check.mjs`).

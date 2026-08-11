@@ -41,7 +41,7 @@ assert(
 )
 
 // config: registers the slash commands. 0.7.0 retired arcade-gateway —
-// gateway scoping follows the user without a command.
+// all connected apps are available without a command to pick from them.
 for (const name of ["arcade-do", "arcade-apps"]) {
   assert(
     typeof emptyConfig.command?.[name]?.template === "string" &&
@@ -107,31 +107,6 @@ await after(
   { output: "Sign in at https://slack.com/oauth/authorize?state=z to continue" } as never,
 )
 assert(toasts.length === 2, "regex fallback must still catch sign-in links in plain-text Arcade output")
-
-// toast: gateway switch confirmation from Arcade_SelectGateway
-await after(
-  { tool: "arcade_Arcade_SelectGateway" } as never,
-  {
-    output: JSON.stringify({
-      gateway: "gw_123",
-      name: "Full Suite",
-      scope: "this_app",
-      tool_count: 494,
-      message: "Connected to Full Suite …",
-    }),
-  } as never,
-)
-assert(
-  toasts.length === 3 && toasts[2].includes("Full Suite") && toasts[2].includes("this app"),
-  "gateway switch must toast with the gateway name and scope",
-)
-
-// no toast: gateway list output (no scope field) must stay silent
-await after(
-  { tool: "arcade_Arcade_SelectGateway" } as never,
-  { output: JSON.stringify({ gateways: [], count: 0 }) } as never,
-)
-assert(toasts.length === 3, "gateway list output must not toast")
 
 if (failures.length > 0) {
   console.error(`opencode-smoke: ${failures.length} failure(s)`)

@@ -8,6 +8,37 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.15.0] - 2026-08-11
+
+Gateway selection retired, matching the hub's new opt-in all-apps-only mode
+(no `Arcade_SelectGateway` tool, no "active gateway" concept):
+`requires hub >= 0.15.0` (`hub.all_apps_only`, shipped in hub 0.15.0).
+
+### Removed
+
+- **Gateway selection, end to end.** The `working-with-arcade-gateways`
+  skill and `docs/gateways.md` are gone; every "active gateway" / "what
+  gateways do I have" reference across the skills, hooks, the Cursor rule,
+  the OpenCode instructions and plugin (including the gateway-switch toast
+  and its smoke tests), the commands, the install docs, the support matrix,
+  and the Claude Desktop manifest's tool list is rewritten around "all your
+  connected apps are available" instead. `check.mjs`'s "Gateway coverage"
+  assertion — which required `Arcade_SelectGateway` coverage in three
+  files — is removed along with it.
+- Skill count drops from three to two everywhere it's mentioned (README,
+  QA.md, support matrix, install guides); the stale
+  `working-with-arcade-gateways.zip` build artifact is deleted.
+
+### Fixed
+
+- **`arcade-operator` subagent taught the current `Arcade_Task` API.** It
+  still called retired `Arcade_Confirm` / `Arcade_Resume` / `Arcade_Plan`
+  tools — stale since 0.14.0 migrated every other surface to `Arcade_Run`
+  (start) + `Arcade_Task` (get / list / continue). Brought in line with
+  `skills/using-arcade-tools/SKILL.md` and the commands. The same stale
+  `Arcade_Plan` reference in the `UserPromptSubmit` reminder
+  (`hooks/user-prompt-submit.mjs`) is fixed too.
+
 ## [0.14.0] - 2026-08-10
 
 Breaking Intent guidance aligned with hub `0.14.0`:

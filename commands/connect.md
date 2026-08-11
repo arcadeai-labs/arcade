@@ -18,8 +18,7 @@ Help the user connect the app they name to Arcade, using the
    `Arcade_ManageToolAuthorization(action: "status", ...)` and report the
    connected account.
 
-If the app isn't in the list, the active gateway may not include it — check
-`Arcade_SelectGateway(action: "list")` and offer the gateway that has it.
+If the app isn't in the list, it may not be supported yet.
 
 App to connect:
 

@@ -1,8 +1,8 @@
 # Arcade Agent Hub
 
 The `arcade` MCP server is connected — external-app tools (Slack, Gmail,
-GitHub, Calendar, Notion, and more) scoped to the user's active Arcade
-gateway. Prefer it for tasks in external apps or live data. Default:
+GitHub, Calendar, Notion, and more) across all of the user's connected apps.
+Prefer it for tasks in external apps or live data. Default:
 `Arcade_Run(task)` — the hub finds the tool, fills inputs, and executes,
 returning a result or a typed pause with `task_id`. Continue with
 `Arcade_Task`: `needs_confirm` → show the draft, get a yes/no, then
@@ -22,8 +22,7 @@ continuation token, pass `paginate: true`. Multi-step keeps the same
 `task_id`; when `pauses[]` lists several waiting steps, resolve each with
 `task_id` + `step_id` and gather what the user must supply in one message;
 several confirm gates clear with `decision: "approve_all"` after one explicit
-yes. Use `Arcade_SelectGateway` only when the user asks to list or switch
-gateways.
+yes.
 
 Answer from `result.data`. `result.summary` is a bounded preview — don't
 answer from the summary alone.

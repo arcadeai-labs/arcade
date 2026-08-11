@@ -34,11 +34,10 @@ multi-step run is still running — read `steps[]` for progress, and when
 confirm gates waiting at once: show all the drafts, get one explicit yes to
 the batch, then `Arcade_Task({task_id, decision: "approve_all"})`.
 
-Available tools follow the user's **active gateway** (a curated set of apps
-and tools) automatically. Use `Arcade_SelectGateway` only when the user asks
-to see or switch gateways — the `working-with-arcade-gateways` skill has the
-flow. If the hub reports no tool for a task's app, the active gateway may not
-include it; offer to check the gateway list rather than falling back silently.
+All of the user's connected apps are available automatically — there's no
+curated set to manage. If the hub reports no tool for a task's app, that app
+either isn't connected yet (the `managing-arcade-apps` skill has the sign-in
+flow) or isn't supported; don't fall back silently.
 
 Answer from `result.data`. `result.summary` is a bounded preview of it, cut
 with `…` past a few hundred characters, so answering from the summary turns a

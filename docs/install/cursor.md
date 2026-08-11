@@ -15,11 +15,11 @@ npx plugins add arcadeai-labs/arcade --target cursor
 ```
 
 Either way installs the plugin natively in Cursor — the logo, the MCP server,
-all 3 skills, the `arcade-operator` subagent, all 4 commands, the always-on
+both skills, the `arcade-operator` subagent, all 4 commands, the always-on
 rule, and the session-start hook — and enables auto-updates. After reload,
 open **Settings → MCP**, find **arcade**, and sign in with Arcade.
 
-Verify under **Settings → Customize**: 1 rule, 3 skills, 1 agent, 4 commands,
+Verify under **Settings → Customize**: 1 rule, 2 skills, 1 agent, 4 commands,
 1 hook, 1 MCP server.
 
 ## Tools only (one click)
@@ -50,5 +50,5 @@ it twice and splits its components between the two entries. Pick one:
 ## First steps
 
 - `/arcade:status` to verify the connection end to end.
-- "What gateways do I have?" / "Switch to <gateway> for this app."
+- "What apps do I have connected?"
 - "Send a Slack message to #eng that the deploy is done."

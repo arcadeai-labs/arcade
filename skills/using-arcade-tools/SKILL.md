@@ -8,10 +8,9 @@ description: Send, post, fetch, search, schedule, create, or update anything in 
 The tools live on the `arcade` MCP server — use tool names exactly as your
 client lists them. The hub owns tool discovery and execution; you speak intent.
 
-Which tools can run depends on the user's **active gateway** (a curated set of
-apps and tools). Scoping is automatic — don't manage it during normal tasks.
-If the hub reports no tool for a task's app, the active gateway may not
-include it: see the `working-with-arcade-gateways` skill.
+All of the user's connected apps are available — there's no curated set to
+manage. If the hub reports no tool for a task's app, that app either isn't
+connected yet (see `managing-arcade-apps`) or isn't supported.
 
 ## Quick start
 
@@ -32,7 +31,7 @@ Arcade_Task(list: true, limit?, cursor?)      # recent tasks
 
 For any task touching an external app or live data — messages, email, calendar,
 issues, docs, CRM, web search, news — call `Arcade_Run` before a built-in
-alternative. One Run tells you whether the active gateway covers the task.
+alternative. One Run tells you whether Arcade can cover the task.
 
 ## Default: delegate
 
@@ -163,7 +162,6 @@ recipients or destructive values.
 
 - Local work: repo files, code edits, shell commands.
 - A sign-in or confirmation is already pending — wait.
-- Listing or switching gateways — `working-with-arcade-gateways`.
 
 ## Style
 

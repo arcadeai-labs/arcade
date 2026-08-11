@@ -1,22 +1,22 @@
 # Client support matrix
 
 Every install below connects to the same endpoint,
-`https://hub.arcade.dev/mcp`. Server-side behavior — gateway scoping,
-auto-selection, per-app defaults, sign-in flows, and the hub's built-in agent
-instructions — is delivered by the MCP connection itself, so **every** row
-gets it. The rows differ only in how much of the plugin the client can load.
+`https://hub.arcade.dev/mcp`. Server-side behavior — sign-in flows and the
+hub's built-in agent instructions — is delivered by the MCP connection
+itself, so **every** row gets it. The rows differ only in how much of the
+plugin the client can load.
 
 ## Everything at a glance
 
 | Client | Tools | Skills | Subagent | Commands | Rule | Hooks | Install |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|---|
-| **Cursor** | 9 | 3 | ✅ | 4 | ✅ | ✅ | [guide](install/cursor.md) |
-| **Claude Code (CLI)** | 9 | 3 | ✅ | 4 | — | 2 | [guide](install/claude-code.md) |
-| **Claude Cowork / Code desktop** | 9 | 3 | ✅ | 4 | — | 2 | [guide](install/claude-code.md) |
-| **GitHub Copilot CLI** | 9 | 3 | ✅ | — | — | 2 | [guide](install/copilot.md) |
-| **VS Code** | 9 | 3 | — | — | — | — | [guide](install/vscode.md) |
-| **Codex / ChatGPT** | 9 | 3 | — | — | — | — | [guide](install/codex.md) |
-| **Kiro** | 9 | 3 | — | — | — | — | [guide](install/kiro.md) |
+| **Cursor** | 9 | 2 | ✅ | 4 | ✅ | ✅ | [guide](install/cursor.md) |
+| **Claude Code (CLI)** | 9 | 2 | ✅ | 4 | — | 2 | [guide](install/claude-code.md) |
+| **Claude Cowork / Code desktop** | 9 | 2 | ✅ | 4 | — | 2 | [guide](install/claude-code.md) |
+| **GitHub Copilot CLI** | 9 | 2 | ✅ | — | — | 2 | [guide](install/copilot.md) |
+| **VS Code** | 9 | 2 | — | — | — | — | [guide](install/vscode.md) |
+| **Codex / ChatGPT** | 9 | 2 | — | — | — | — | [guide](install/codex.md) |
+| **Kiro** | 9 | 2 | — | — | — | — | [guide](install/kiro.md) |
 | **OpenCode** | 9 | — | — | 2 | — | ✅ | [guide](install/opencode.md) |
 | **Claude Desktop (.mcpb)** | 9 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
 | **claude.ai web / mobile** | 9 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
@@ -54,14 +54,13 @@ any `.md`, so one file satisfies all three.
 | **Install** | add marketplace `arcadeai-labs/arcade` in Cursor's plugins panel (native: logo + all components + auto-update) | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode plugin opencode-arcade-hub` (npm) |
 | **One-command alternative** | `npx plugins add arcadeai-labs/arcade --target cursor` | `npx plugins add arcadeai-labs/arcade --target claude-code` | — | — |
 | **MCP tools (all 9)** | ✅ | ✅ | ✅ | ✅ |
-| **Skills (3)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
+| **Skills (2)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
 | **Always-on rule** | ✅ `arcade-gateway-hub` | — (hook context instead) | — (hook context instead) | — (injected instructions instead) |
 | **Operator subagent** | ✅ `arcade-operator` | ✅ | ✅ | — |
 | **Slash commands** | ✅ 4 (`do`, `apps`, `connect`, `status`) | ✅ 4 | ✅ 4 | ✅ 2 (`arcade-do`, `arcade-apps`) |
 | **Session-start context** | ✅ native hook | ✅ native hook | ✅ native hook | ✅ injected `instructions.md` |
 | **Per-turn reminder** | ✅ always-apply rule | ✅ `UserPromptSubmit` hook | ✅ same hook | — (session instructions only) |
 | **Sign-in link surfacing** | via skills/rule | via skills/hook | via skills/hook | ✅ toast |
-| **Gateway-switch feedback** | via skill guidance | via skill guidance | via skill guidance | ✅ toast |
 
 ## Agent Plugins clients
 
@@ -72,7 +71,7 @@ These read the root `plugin.json` and load the portable component types.
 | **Install** | `copilot plugin install arcadeai-labs/arcade` | **Chat: Install Plugin From Source** with the repo URL | `npx plugins add … --target codex` | Agent Steering & Skills → import from GitHub URL or folder |
 | **Requires** | Copilot CLI with Open Plugin Spec support | `chat.plugins.enabled` (Preview) | Codex with Agent Plugins manifest support | Kiro ≥ 1.0.288 |
 | **MCP tools (all 9)** | ✅ | ✅ | ✅ | ✅ |
-| **Skills (3)** | ✅ | ✅ | ✅ | ✅ |
+| **Skills (2)** | ✅ | ✅ | ✅ | ✅ |
 | **Operator subagent** | ✅ (`agents/*.agent.md`) | — | — | — |
 | **Hooks** | ✅ 2 (`hooks/hooks.json`) | — | — | — |
 | **Slash commands** | — (no default discovery path) | — | — | — |
@@ -111,7 +110,7 @@ Notes:
 |---|---|---|---|---|---|---|
 | **Install** | one-click deeplink from the README | one-click deeplink from the README | download `.mcpb` from the release, double-click, Install | Settings → Connectors → add `https://hub.arcade.dev/mcp` (paid plans) | via account connector (paid plans) | add `https://hub.arcade.dev/mcp` |
 | **MCP tools (all 9)** | ✅ | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
-| **Skills** | — (install full plugin) | — (install full plugin) | ✅ optional: upload the 3 skill ZIPs (Customize → Skills) | ✅ same ZIP uploads | ✅ uploads follow the account | — |
+| **Skills** | — (install full plugin) | — (install full plugin) | ✅ optional: upload the 2 skill ZIPs (Customize → Skills) | ✅ same ZIP uploads | ✅ uploads follow the account | — |
 | **Commands / subagent / hooks** | — | — | — (not supported by extensions) | — | — | — |
 | **Requires** | — | — | Node.js (`mcp-remote` bridge) | paid Claude plan | paid plan + code execution for skills | MCP + OAuth support |
 
@@ -130,6 +129,6 @@ Notes:
   complete: Cursor loads the always-on rule out of the Claude plugin cache,
   and the shared session hook detects the invoking client and emits that
   client's native shape either way.
-- Plain-language use ("switch to my work gateway") works identically in
+- Plain-language use ("send a Slack message to #eng") works identically in
   every row — the hub's server instructions carry the flow even with no
   plugin content installed.

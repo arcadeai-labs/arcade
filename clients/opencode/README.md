@@ -1,10 +1,9 @@
 # opencode-arcade-hub
 
-[Arcade Agent Hub](https://hub.arcade.dev) for **OpenCode** — your
-Arcade **gateways** (curated sets of apps and tools like Slack, Gmail, GitHub,
-Google Calendar, Notion, Linear) over a single MCP connection. Just ask for
-what you want; Arcade picks the right tool from your active gateway and
-handles the app sign-in.
+[Arcade Agent Hub](https://hub.arcade.dev) for **OpenCode** — all of your
+connected apps (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and
+more) over a single MCP connection. Just ask for what you want; Arcade picks
+the right tool and handles the app sign-in.
 
 ## Install
 
@@ -41,12 +40,10 @@ Prefer configuring the MCP server yourself instead of using the plugin? Add:
 
 ## What you get
 
-Five meta-tools that resolve to your gateways' tools on demand:
+Meta-tools that resolve to your connected apps' tools on demand:
 
-- `Arcade_SelectTools` — find the right tool for a task (scoped to your
-  active gateway)
+- `Arcade_SelectTools` — find the right tool for a task
 - `Arcade_UseTool` — run it
-- `Arcade_SelectGateway` — see your gateways or switch the active one
 - `Arcade_Apps` — see or disconnect your connected apps
 - `Arcade_ManageToolAuthorization` — fix an app connection (switch account,
   expired sign-in, missing permissions)

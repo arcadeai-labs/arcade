@@ -11,9 +11,9 @@
 //
 // Earlier versions tried to classify which prompts deserved the reminder.
 // Three rounds of widening later it was still wrong on about a third of
-// ordinary phrasing — silent on "what gateways do I have?", on "disconnect my
-// google account", on "list open PRs", and firing on "update the changelog" —
-// and each fix bought one phrasing rather than a class of them. Classifying
+// ordinary phrasing — silent on "disconnect my google account", on "list
+// open PRs", and firing on "update the changelog" — and each fix bought one
+// phrasing rather than a class of them. Classifying
 // intent from a regex over one sentence is the wrong tool, and the reminder
 // costs about the same whether it goes out always or two thirds of the time.
 // So it goes out always, and the only thing left to decide is cheap and
@@ -26,10 +26,11 @@
 // prompt-injection defenses, which surfaces the text to the user instead of
 // treating it as context.
 const REMINDER =
-  'The "arcade" MCP server is connected. It runs tasks in the user\'s external ' +
-  "apps — Slack, Gmail, GitHub, Calendar, Notion, Linear, Drive — and returns " +
-  "live web data, scoped to their active Arcade gateway. Arcade_Run takes a " +
-  "task in plain language; Arcade_Plan handles multi-step work.";
+  'The "arcade" MCP server is connected. It runs tasks across all of the ' +
+  "user's connected apps — Slack, Gmail, GitHub, Calendar, Notion, Linear, " +
+  "Drive — and returns live web data. Arcade_Run takes a task in plain " +
+  "language; Arcade_Task continues it (confirm, input, sign-in) and " +
+  "carries multi-step work by task_id.";
 
 // A prompt that carries no task cannot be redirected by a reminder: the model
 // is mid-flight on the previous turn and already holds its context. Skipping

@@ -1,6 +1,6 @@
 {
   "name": "opencode-arcade-hub",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Let OpenCode use Arcade \u2014 external-service tools (Slack, Gmail, GitHub, Calendar, Notion, Linear, and more) over one MCP connection, with app sign-in handled in the browser.",
   "type": "module",
   "main": "index.ts",

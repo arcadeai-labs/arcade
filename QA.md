@@ -7,12 +7,12 @@ behavior and is verified by hand before tagging a release.
 ## Local loads
 
 - [ ] **Claude Code:** `claude plugin validate .` passes, then load with
-  `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
+  `claude --plugin-dir .` — verify 2 skills, 1 agent (`arcade-operator`),
   4 commands (`/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`), the SessionStart hook context, and the `arcade` MCP
   server connect (sign in with an Arcade staging account).
 - [ ] **Cursor:** add the marketplace `arcadeai-labs/arcade` in Cursor's
   plugins panel (or `npx plugins add arcadeai-labs/arcade --target cursor`),
-  reload, and in Customize verify exactly: 1 rule, 3 skills, 1 agent,
+  reload, and in Customize verify exactly: 1 rule, 2 skills, 1 agent,
   6 commands, 1 hook, 1 MCP server — and nothing else, with the arcade logo.
   Confirm no duplicate "Imported" entry (would mean it's also installed in
   Claude Code). Start a new chat and confirm the sessionStart context appears
@@ -22,32 +22,17 @@ behavior and is verified by hand before tagging a release.
   and tools list. For pre-release checks, load the checkout via `file://`.
 - [ ] **Agent Plugins client:** install the checkout into a client that reads
   the root `plugin.json` (`npx plugins add . --target vscode --scope local`)
-  and confirm 3 skills plus the `arcade` MCP server, with browser sign-in
+  and confirm 2 skills plus the `arcade` MCP server, with browser sign-in
   working. Then re-check the Cursor and Claude Code rows above: the portable
   manifest is resolved last, so it must not shadow, duplicate, or strip
   anything from either native install.
 
-## Gateway scenarios (any client)
+## All-apps scope (any client)
 
-- [ ] **List:** "what gateways do I have" → readable list with names, apps,
-  tool counts; active gateway marked; unrestricted gateways say "all tools";
-  no raw JSON dump.
-- [ ] **Switch (this app):** "switch to <gateway>" → confirmation summary
-  (gateway, apps, tool count, "applies to this app"); a follow-up discovery
-  only returns the new gateway's tools.
-- [ ] **Cross-client isolation:** switching with the default scope in one
-  client does not change another client's active gateway.
-- [ ] **Switch (everywhere):** explicit "everywhere"/"all my apps" request
-  uses `scope: "everywhere"` and says so.
-- [ ] **Inspect:** "what's in <gateway>?" answered from the list output
-  (apps + tool count) without switching.
-- [ ] **Missing app:** a task whose app is outside the active gateway →
-  agent explains the gateway doesn't include it and offers the gateway that
-  does; it does not switch on its own or silently fall back.
-- [ ] **Unknown name:** a made-up gateway name → agent lists and asks, never
-  guesses an id.
-- [ ] **No speculative calls:** ordinary tasks don't trigger
-  `Arcade_SelectGateway`.
+There is no gateway to inspect or switch — every connected app is available
+to every client. Confirm a task against an app you haven't connected yet
+still returns a sign-in link rather than a "not in your gateway" message, and
+that no client surfaces gateway language anywhere in its output.
 
 ## Auth-flow scenarios (any client)
 

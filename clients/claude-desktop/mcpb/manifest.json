@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "arcade-gateway-hub",
   "display_name": "Arcade Agent Hub",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Let Claude use Arcade \u2014 one connection to Slack, Gmail, GitHub, Calendar, Notion, Linear, and more.",
   "long_description": "Connects Claude Desktop to the Arcade Agent Hub (https://hub.arcade.dev/mcp). Ask for what you want; Arcade finds and runs the right tool, with one-time app sign-ins handled in the browser \u2014 no API keys. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
   "author": {
@@ -57,15 +57,11 @@
     },
     {
       "name": "Arcade_SelectTools",
-      "description": "Find the right tool for a task (scoped to your active gateway)"
+      "description": "Find the right tool for a task"
     },
     {
       "name": "Arcade_UseTool",
       "description": "Run a tool found by Arcade_SelectTools"
-    },
-    {
-      "name": "Arcade_SelectGateway",
-      "description": "See your gateways or switch the active one (this app or everywhere)"
     },
     {
       "name": "Arcade_Apps",

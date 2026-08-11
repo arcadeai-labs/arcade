@@ -12,18 +12,17 @@ a pinned `mcp-remote` proxy).
 
 > The extension carries the MCP server (all nine Arcade tools), and the
 > server's own instructions teach Claude the flow — so plain-language
-> requests like "switch to my work gateway" work out of the box. Slash
-> commands and subagents are Claude Code / Cowork plugin features
+> requests like "post to #eng that the deploy is done" work out of the box.
+> Slash commands and subagents are Claude Code / Cowork plugin features
 > ([install guide](claude-code.md)); the plugin's *skills*, however, can be
 > added to Claude Desktop too — see below.
 
 ## Add the skills (optional)
 
-The plugin's three skills ship as upload-ready ZIPs for the Claude apps:
+The plugin's two skills ship as upload-ready ZIPs for the Claude apps:
 
 - [`using-arcade-tools.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/using-arcade-tools.zip)
 - [`managing-arcade-apps.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/managing-arcade-apps.zip)
-- [`working-with-arcade-gateways.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/working-with-arcade-gateways.zip)
 
 To install them:
 

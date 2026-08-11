@@ -10,7 +10,7 @@ claude plugin install arcade@arcade
 ```
 
 Then start `claude`, run `/mcp`, and sign in to the **arcade** server with
-Arcade. You get 3 skills, the `arcade-operator` subagent, two hooks — one
+Arcade. You get 2 skills, the `arcade-operator` subagent, two hooks — one
 stating at session start that Arcade is connected, one restating it alongside
 any prompt that looks like external-app or live-data work, since session-start
 context stops carrying by the thirtieth turn — and the commands:
@@ -18,11 +18,10 @@ context stops carrying by the thirtieth turn — and the commands:
 - `/arcade:do <task>` — do something in an app (Slack, Gmail, GitHub, …)
 - `/arcade:apps` — see, disconnect, or fix your connected apps
 - `/arcade:connect <app>` — connect an app with a one-time sign-in
-- `/arcade:status` — check connection, sign-in, gateway, and apps
+- `/arcade:status` — check connection, sign-in, and apps
 
-Gateway questions ("which gateways do I have?", "switch to the support
-toolset") work in plain words — the active gateway follows you
-automatically, so there is no command to remember.
+All of your connected apps are available automatically — there is no
+gateway or command to remember.
 
 Inside a session, the same install works as `/plugin marketplace add
 arcadeai-labs/arcade` then `/plugin install arcade@arcade`.

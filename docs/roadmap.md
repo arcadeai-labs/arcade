@@ -62,10 +62,9 @@ capability ceiling). Items are scoped to this repo unless noted.
   config dir; the plugin currently ships tools + toasts only. Evaluate
   installing `/arcade-do`, `/arcade-gateway`, `/arcade-apps` equivalents
   (oh-my-opencode demonstrates command + skill loading from a plugin).
-- [ ] **Per-gateway context primer (exploration).** Vercel front-loads a
-  knowledge graph; our equivalent would be a session-start line naming the
-  user's active gateway and its apps (requires a cheap authenticated call
-  from a hook — weigh the latency/auth cost before building).
+- [x] **Per-gateway context primer (exploration).** Superseded/dropped — the
+  hub is moving to an all-apps-only mode with no gateway concept, so a
+  session-start line naming the "active gateway" has nothing left to name.
 
 ## Reliability
 

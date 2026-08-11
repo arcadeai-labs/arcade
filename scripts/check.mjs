@@ -497,7 +497,6 @@ const userFacing = [
   "commands/connect.md",
   "skills/using-arcade-tools/SKILL.md",
   "skills/managing-arcade-apps/SKILL.md",
-  "skills/working-with-arcade-gateways/SKILL.md",
   "clients/cursor/rules/arcade-gateway-hub.mdc",
 ];
 for (const file of userFacing) {
@@ -518,18 +517,6 @@ const trackedArchives = execFileSync("git", ["ls-files", "*.zip", "*.mcpb", "*.d
   .filter(Boolean);
 for (const archive of trackedArchives) {
   fail(`${archive}: archives must not be committed (breaks Claude plugin installs) — attach to a GitHub Release instead`);
-}
-
-// --- Gateway coverage ------------------------------------------------------------
-// The hub's defining tool must be documented wherever tools are enumerated.
-for (const file of [
-  "skills/working-with-arcade-gateways/SKILL.md",
-  "README.md",
-  "clients/opencode/README.md",
-]) {
-  if (!read(file).includes("Arcade_SelectGateway")) {
-    fail(`${file}: does not mention Arcade_SelectGateway`);
-  }
 }
 
 // --- Report --------------------------------------------------------------------

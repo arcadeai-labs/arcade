@@ -5,8 +5,8 @@ import type { Plugin } from "@opencode-ai/plugin"
 // Installing this plugin does two things:
 //   1. Registers the `arcade` remote MCP server (https://hub.arcade.dev/mcp)
 //      via the `config` hook, so the Arcade tools (Slack, Gmail, GitHub,
-//      Calendar, Notion, Linear, and more — scoped to the user's active
-//      Arcade gateway) are available — no keys, OAuth is auto-discovered.
+//      Calendar, Notion, Linear, and more — across all your connected apps)
+//      are available — no keys, OAuth is auto-discovered.
 //      (You can also configure this manually in opencode.json; see
 //      clients/opencode/opencode.json.)
 //   2. Surfaces the one-time app sign-in link as a toast when an Arcade tool
@@ -52,24 +52,6 @@ const extractSignInUrl = (rawOutput: unknown): string | null => {
   return match ? match[0] : null
 }
 
-// extractGatewaySwitch returns the confirmation message from a successful
-// Arcade_SelectGateway select result, or null.
-const extractGatewaySwitch = (rawOutput: unknown): string | null => {
-  const text =
-    typeof rawOutput === "string" ? rawOutput : JSON.stringify(rawOutput ?? "")
-  try {
-    const parsed = JSON.parse(text) as { gateway?: unknown; scope?: unknown; name?: unknown }
-    if (typeof parsed?.gateway === "string" && typeof parsed?.scope === "string") {
-      const name = typeof parsed.name === "string" && parsed.name ? parsed.name : parsed.gateway
-      const where = parsed.scope === "everywhere" ? "everywhere" : "this app"
-      return `Arcade: now using ${name} (${where})`
-    }
-  } catch {
-    // Not JSON — not a select result.
-  }
-  return null
-}
-
 // Session instructions shipped with the package (see instructions.md): the
 // same one-paragraph orientation the Cursor/Claude session hooks inject.
 const INSTRUCTIONS_PATH = new URL("./instructions.md", import.meta.url).pathname
@@ -103,7 +85,7 @@ export const ArcadePlugin: Plugin = async ({ client }) => {
       cfg.command = cfg.command ?? {}
       const commands: Record<string, { description: string; template: string }> = {
         "arcade-do": {
-          description: "Do something with an external service via your Arcade gateway",
+          description: "Do something with an external service via Arcade",
           template:
             "Use the Arcade tools to accomplish this task and report only the result, a sign-in link, or one clarifying question: $ARGUMENTS",
         },
@@ -118,9 +100,9 @@ export const ArcadePlugin: Plugin = async ({ client }) => {
       }
     },
 
-    // Surface Arcade moments as toasts: one-time app sign-in links and
-    // gateway switches. Scoped to Arcade tool executions so unrelated
-    // OAuth-looking URLs from other tools never trigger it.
+    // Surface Arcade moments as toasts: one-time app sign-in links. Scoped to
+    // Arcade tool executions so unrelated OAuth-looking URLs from other tools
+    // never trigger it.
     "tool.execute.after": async (input, output) => {
       try {
         const call = input as { tool?: unknown }
@@ -136,16 +118,6 @@ export const ArcadePlugin: Plugin = async ({ client }) => {
               variant: "info",
             },
           })
-          return
-        }
-
-        if (typeof call?.tool === "string" && /selectgateway/i.test(call.tool)) {
-          const switched = extractGatewaySwitch(raw)
-          if (switched) {
-            await client.tui.showToast({
-              body: { message: switched, variant: "success" },
-            })
-          }
         }
       } catch {
         // A plugin hook must never break the tool flow.
