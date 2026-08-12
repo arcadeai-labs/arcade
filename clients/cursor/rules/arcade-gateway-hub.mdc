@@ -34,10 +34,14 @@ multi-step run is still running — read `steps[]` for progress, and when
 confirm gates waiting at once: show all the drafts, get one explicit yes to
 the batch, then `Arcade_Task({task_id, decision: "approve_all"})`.
 
-All of the user's connected apps are available automatically — there's no
-curated set to manage. If the hub reports no tool for a task's app, that app
-either isn't connected yet (the `managing-arcade-apps` skill has the sign-in
-flow) or isn't supported; don't fall back silently.
+Most of the user's connected apps are available automatically, without any
+curated set to manage day to day. Org, project, and (where curated gateways
+exist) gateway are still real, explicit choices — set once via a
+mandatory setup pause on the account's first hub call, and changeable any
+time with `Arcade_SelectScope` (the `setting-up-arcade-scope` skill has the
+flow). If the hub reports no tool for a task's app, that app either isn't
+connected yet (the `managing-arcade-apps` skill has the sign-in flow) or
+isn't supported; don't fall back silently.
 
 Answer from `result.data`. `result.summary` is a bounded preview of it, cut
 with `…` past a few hundred characters, so answering from the summary turns a

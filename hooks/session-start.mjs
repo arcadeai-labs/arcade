@@ -10,11 +10,12 @@
 
 const CONTEXT =
   'Arcade Agent Hub is connected as the "arcade" MCP server — external-app ' +
-  "tools (Slack, Gmail, GitHub, Calendar, Notion, and more) across all of " +
-  "the user's connected apps; prefer it for tasks in external apps or live " +
-  "data. The using-arcade-tools and managing-arcade-apps skills describe " +
-  "the flow; the arcade-operator subagent runs these tasks end-to-end " +
-  "where available.";
+  "tools (Slack, Gmail, GitHub, Calendar, Notion, and more) across the " +
+  "user's connected apps, scoped to their org, project, and (if set) " +
+  "gateway; prefer it for tasks in external apps or live data. The " +
+  "using-arcade-tools, managing-arcade-apps, and setting-up-arcade-scope " +
+  "skills describe the flow; the arcade-operator subagent runs these tasks " +
+  "end-to-end where available.";
 
 const readStdin = async () => {
   if (process.stdin.isTTY) return "";

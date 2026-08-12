@@ -8,9 +8,13 @@ description: Send, post, fetch, search, schedule, create, or update anything in 
 The tools live on the `arcade` MCP server — use tool names exactly as your
 client lists them. The hub owns tool discovery and execution; you speak intent.
 
-All of the user's connected apps are available — there's no curated set to
-manage. If the hub reports no tool for a task's app, that app either isn't
-connected yet (see `managing-arcade-apps`) or isn't supported.
+Most of the user's connected apps are available without any curated set to
+manage day to day. Org, project, and (where curated gateways exist) gateway
+are still real, explicit choices — set once via a mandatory setup pause on
+the account's first hub call, and changeable any time with
+`Arcade_SelectScope` (see `setting-up-arcade-scope`). If the hub reports no
+tool for a task's app, that app either isn't connected yet (see
+`managing-arcade-apps`) or isn't supported.
 
 ## Quick start
 

@@ -27,6 +27,8 @@ const shortDescriptions = {
     "Do tasks in external apps — Slack, Gmail, GitHub, Calendar, Notion, Linear, and more — plus live web search, via Arcade tool discovery. Use for any task touching an external app or live data.",
   "managing-arcade-apps":
     "List, disconnect, and fix the apps Arcade is connected to — switch accounts, expired sign-ins, missing permissions, one-time sign-ins. Use when the user asks about their connected apps.",
+  "setting-up-arcade-scope":
+    "Handle Arcade's one-time org/project/gateway setup pause and Arcade_SelectScope changes. Use on the mandatory first-call menu pause or when the user asks to change org, project, or gateway.",
 };
 
 mkdirSync(OUT_DIR, { recursive: true });

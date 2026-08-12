@@ -36,8 +36,17 @@ plainly and stop — do not invent placeholder data.
    drafts in `pauses[]`: get one yes to the batch, then
    `decision: "approve_all"` (add `step_id` when continuing a specific
    pause).
-4. **Input** — On `needs_input`, answer `pause.fields` from the task if you
-   can; otherwise return the specific question(s). Then
+4. **Input** — On `needs_input`, first check whether `pause.fields` is a MENU
+   — one or more fields that enumerate named choices to pick ONE from (most
+   commonly the mandatory-once org/project/gateway setup pause that fires on
+   an account's very first hub call, or an explicit org/project/gateway
+   change) — rather than an ordinary fill-in-a-value field. For an ordinary
+   field, answer from the task if you can; otherwise return the specific
+   question(s). For a MENU field, never guess or auto-pick, even when one
+   choice looks obvious: present the named choices to the user, get a real
+   answer for each, and treat it as fully blocking — no other part of the
+   task proceeds until it's resolved, since (for the mandatory setup pause)
+   nothing else can succeed without it. Either way, continue with
    `Arcade_Task({task_id, answers: {<field id>: <value>}})`.
 5. **Sign in** — On `needs_auth` (or, on older hubs, any `authorization_url`
    in output — even with `success: true`), STOP. Return the link with a

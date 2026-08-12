@@ -8,6 +8,45 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.16.0] - 2026-08-11
+
+Org/project/gateway scope is back, in a different shape than the retired
+gateway skill: `requires hub >= 0.16.0` (adds `Arcade_SelectScope` and the
+mandatory-once setup pause).
+
+### Added
+
+- **`Arcade_SelectScope`** — a new hub tool for viewing and changing the
+  account's org, project, and (where a deployment has curated gateways
+  outside `all_apps_only`) gateway. `Arcade_SelectScope(action: "list")`
+  shows the current and available choices; `Arcade_SelectScope(action:
+  "select", ...)` changes one or more of them. Documented in a new
+  `setting-up-arcade-scope` skill (skill count: three).
+- **The mandatory-once setup pause.** Every account that has never made an
+  explicit scope choice hits exactly one blocking pause on its very next
+  hub call: a `needs_input` response whose `pause.fields` present a MENU of
+  org/project (and optionally gateway) choices to pick from, distinct from
+  an ordinary single-value `needs_input` field. Nothing else in that task
+  can proceed until it's answered via `Arcade_Task({task_id, answers})`;
+  once answered, it's persisted and invisible unless the user later asks to
+  change org, project, or gateway. `setting-up-arcade-scope` covers
+  recognizing and presenting this pause; `arcade-operator`'s `## Loop` step
+  4 now distinguishes a MENU-shaped pause (blocking, never auto-picked) from
+  an ordinary fill-in field, and `/arcade:status` reports the active
+  org/project/gateway alongside sign-in and connected-app status.
+
+### Changed
+
+- **Absolutist "no curated set" / "no gateway" language corrected.** The
+  0.15.0 rewrite (premised on `all_apps_only` making gateway selection
+  permanently unavailable) said categorically that there is no org/project/
+  gateway concept anymore. That premise no longer holds: `using-arcade-tools`,
+  the Cursor always-on rule, the `SessionStart` hook context, and `QA.md`
+  now say most apps are available without manual curation, while org and
+  project remain real, explicit, settable choices for every account, and
+  gateway selection still exists wherever a deployment has curated gateways
+  configured.
+
 ## [0.15.0] - 2026-08-11
 
 Gateway selection retired, matching the hub's new opt-in all-apps-only mode

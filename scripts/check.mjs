@@ -497,6 +497,7 @@ const userFacing = [
   "commands/connect.md",
   "skills/using-arcade-tools/SKILL.md",
   "skills/managing-arcade-apps/SKILL.md",
+  "skills/setting-up-arcade-scope/SKILL.md",
   "clients/cursor/rules/arcade-gateway-hub.mdc",
 ];
 for (const file of userFacing) {

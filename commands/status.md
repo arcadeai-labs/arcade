@@ -1,5 +1,5 @@
 ---
-description: Check your Arcade connection — server, sign-in, connected apps, and plugin↔hub versions.
+description: Check your Arcade connection — server, sign-in, org/project/gateway scope, connected apps, and plugin↔hub versions.
 ---
 
 Run a quick health check of the user's Arcade setup and present a short
@@ -16,7 +16,13 @@ one-line fix:
    the Engine host from `health.engine` only if useful. If `/health` fails,
    say the hub health endpoint is unreachable and continue with sign-in
    checks. If `health.version` is missing, omit the hub side of the line.
-3. **Sign-in + apps** — Call `Arcade_Apps(action: "list")`.
+3. **Scope** — Call `Arcade_SelectScope(action: "list")` and report the
+   active org and project, plus the active gateway if one is set, e.g.
+   `org: Acme · project: Support · gateway: Full Suite` (omit the gateway
+   segment when the deployment has none). If the tool isn't available or the
+   call errors, skip this line silently — it's informational, not a health
+   check that should block the rest of the status report.
+4. **Sign-in + apps** — Call `Arcade_Apps(action: "list")`.
    - An authentication error → "You're not signed in — open the arcade
      server's sign-in prompt in your client settings."
    - Success → report how many apps are connected vs available (names for
