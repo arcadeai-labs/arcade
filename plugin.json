@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "arcade",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Let any agent use Arcade \u2014 one MCP connection that finds and runs the right tool across Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and more. App sign-in happens in the browser; no API keys.",
   "author": {
     "name": "Arcade.dev",

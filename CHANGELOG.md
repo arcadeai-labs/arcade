@@ -1,12 +1,37 @@
 # Changelog
 
-All notable changes to the Arcade Agent Hub plugins are documented here.
+All notable changes to the Arcade Plugin are documented here.
 This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
+
+## [0.16.1] - 2026-08-12
+
+Content-only; no hub dependency change: `requires hub >= 0.16.0` (floor
+unchanged).
+
+### Changed
+
+- **Renamed "Arcade Agent Hub" to "Arcade Plugin"** everywhere the plugin
+  describes itself to a user or model — hook context, skill descriptions,
+  the `arcade-operator` description, and every manifest's display
+  name/description (`plugin.json`, `.cursor-plugin/*.json`,
+  `.claude-plugin/marketplace.json`, the Claude Desktop `.mcpb` manifest,
+  the OpenCode client). `hub.arcade.dev`'s own product name is unaffected —
+  this is plugin-side branding only.
+- **Dropped specific app/brand names from narrative text** — hook context,
+  skill descriptions and examples, the Cursor rule, the `arcade-operator`
+  description, and client manifest descriptions now say "every app you've
+  connected" instead of listing Slack/Gmail/GitHub/Calendar/Notion/etc.
+  Marketplace `keywords` arrays (SEO/discovery metadata, not narrative
+  text) are unchanged.
+- **Strengthened "prefer Arcade" to "always try Arcade first"** in both
+  hooks, `using-arcade-tools`, the Cursor rule, and the OpenCode
+  instructions — the same behavior, worded as a stronger default rather
+  than a preference.
 
 ## [0.16.0] - 2026-08-11
 

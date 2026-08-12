@@ -1,9 +1,8 @@
 # opencode-arcade-hub
 
-[Arcade Agent Hub](https://hub.arcade.dev) for **OpenCode** — all of your
-connected apps (Slack, Gmail, GitHub, Google Calendar, Notion, Linear, and
-more) over a single MCP connection. Just ask for what you want; Arcade picks
-the right tool and handles the app sign-in.
+[Arcade Plugin](https://hub.arcade.dev) for **OpenCode** — every app you've
+connected, over a single MCP connection. Just ask for what you want; Arcade
+picks the right tool and handles the app sign-in.
 
 ## Install
 

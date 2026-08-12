@@ -5,13 +5,13 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "Arcade Agent Hub — let any agent use Arcade: one MCP connection to Slack, Gmail, GitHub, Calendar, Notion, Linear, and more."
+    "description": "Arcade Plugin — let any agent use Arcade: one MCP connection to every app you've connected."
   },
   "plugins": [
     {
       "name": "arcade",
       "source": "./",
-      "description": "Let your agent use Arcade — ask for what you want and the right tool runs across Slack, Gmail, GitHub, Calendar, Notion, Linear, and more. App sign-in happens in the browser; no API keys.",
+      "description": "Let your agent use Arcade — ask for what you want and the right tool runs across every app you've connected. App sign-in happens in the browser; no API keys.",
       "logo": "assets/arcade.svg",
       "homepage": "https://hub.arcade.dev",
       "repository": "https://github.com/arcadeai-labs/arcade",

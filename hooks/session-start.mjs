@@ -9,10 +9,10 @@
 // Always exits 0 so it can never block a session from starting.
 
 const CONTEXT =
-  'Arcade Agent Hub is connected as the "arcade" MCP server — external-app ' +
-  "tools (Slack, Gmail, GitHub, Calendar, Notion, and more) across the " +
-  "user's connected apps, scoped to their org, project, and (if set) " +
-  "gateway; prefer it for tasks in external apps or live data. The " +
+  'The Arcade Plugin is connected as the "arcade" MCP server — tools ' +
+  "across every app the user has connected, scoped to their org, " +
+  "project, and (if set) gateway. Always try it first for tasks in an " +
+  "external app or live data, before a built-in or workaround. The " +
   "using-arcade-tools, managing-arcade-apps, and setting-up-arcade-scope " +
   "skills describe the flow; the arcade-operator subagent runs these tasks " +
   "end-to-end where available.";

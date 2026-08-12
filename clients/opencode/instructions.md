@@ -1,8 +1,8 @@
-# Arcade Agent Hub
+# Arcade Plugin
 
-The `arcade` MCP server is connected — external-app tools (Slack, Gmail,
-GitHub, Calendar, Notion, and more) across all of the user's connected apps.
-Prefer it for tasks in external apps or live data. Default:
+The `arcade` MCP server is connected — tools across every app the user has
+connected. Always try it first for tasks in an external app or live data,
+before a built-in or workaround. Default:
 `Arcade_Run(task)` — the hub finds the tool, fills inputs, and executes,
 returning a result or a typed pause with `task_id`. Continue with
 `Arcade_Task`: `needs_confirm` → show the draft, get a yes/no, then

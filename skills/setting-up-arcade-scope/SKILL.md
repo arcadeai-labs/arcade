@@ -54,7 +54,7 @@ field has choices to pick among; an ordinary field does not.
 ### Example
 
 ```text
-Arcade_Run(task: "Send a Slack message to #eng saying the deploy is done")
+Arcade_Run(task: "Send a message to #eng saying the deploy is done")
   → {status: "needs_input", task_id: "task_…",
      pause: {fields: [{id: "org", choices: ["Acme Corp", "Acme Sandbox"]},
                        {id: "project", choices: ["Support", "Engineering"]}]}}

@@ -5,7 +5,7 @@
     "email": "support@arcade.dev"
   },
   "metadata": {
-    "description": "Arcade Agent Hub — let any agent use Arcade: tool discovery and execution across the apps you connect."
+    "description": "Arcade Plugin — let any agent use Arcade: tool discovery and execution across the apps you connect."
   },
   "plugins": [
     {

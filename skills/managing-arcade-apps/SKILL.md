@@ -1,6 +1,6 @@
 ---
 name: managing-arcade-apps
-description: List, disconnect, reconnect, and fix the apps Arcade is connected to for the user — Google, GitHub, Slack, Notion, and more — including switching accounts, expired sign-ins, and missing permissions, plus the one-time sign-in when a task needs an app that isn't connected yet. Use when the user asks which apps are connected, wants to disconnect, reconnect, or switch the account for an app, or a tool returns a sign-in link. Not for performing tasks inside apps.
+description: List, disconnect, reconnect, and fix the apps Arcade is connected to for the user, including switching accounts, expired sign-ins, and missing permissions, plus the one-time sign-in when a task needs an app that isn't connected yet. Use when the user asks which apps are connected, wants to disconnect, reconnect, or switch the account for an app, or a tool returns a sign-in link. Not for performing tasks inside apps.
 ---
 
 # Managing connected apps
@@ -28,11 +28,11 @@ ids or raw permission strings.
 
 ```text
 Arcade_Apps(action: "list")
-  → {apps: [{app_id: "google", name: "Google", connected: true, account: "you@example.com"},
-            {app_id: "slack", name: "Slack", connected: false}, ...]}
+  → {apps: [{app_id: "app-a", name: "App A", connected: true, account: "you@example.com"},
+            {app_id: "app-b", name: "App B", connected: false}, ...]}
 Reply:
-  Connected: Google (you@example.com), GitHub (your-handle)
-  Not connected: Slack, Notion, Dropbox, …
+  Connected: App A (you@example.com)
+  Not connected: App B, App C, …
 ```
 
 ## Disconnect
