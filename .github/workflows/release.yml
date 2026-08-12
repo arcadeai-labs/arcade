@@ -56,7 +56,7 @@ jobs:
           VERSION=$(tr -d '[:space:]' < VERSION)
           REQUIRES_HUB=$(node -e 'console.log(JSON.parse(require("fs").readFileSync("release-contract.json","utf8")).requires.hub)')
           gh release create "${GITHUB_REF_NAME}" \
-            --title "Arcade Agent Hub plugins ${GITHUB_REF_NAME}" \
+            --title "Arcade Plugin ${GITHUB_REF_NAME}" \
             --notes "$(cat <<EOF
           Release-train component: **plugin** \`${VERSION}\`
 
