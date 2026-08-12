@@ -8,6 +8,33 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.16.2] - 2026-08-12
+
+Content-only; no hub dependency change: `requires hub >= 0.16.0` (floor
+unchanged).
+
+### Fixed
+
+- **README, support matrix, and install docs were stale on real numbers,
+  not just branding.** They said 9 tools / 2 skills; the current count is
+  8 tools (`Arcade_SelectGateway` isn't registered on the current
+  `all_apps_only` hub deployment) and 3 skills (`setting-up-arcade-scope`
+  added in 0.16.0 was never reflected). Fixed across `README.md`,
+  `docs/support-matrix.md`, and all 8 `docs/install/*.md` pages. The
+  Claude Desktop install guide was also missing a download link for the
+  third skill ZIP (`setting-up-arcade-scope.zip`) — it's built and
+  released, just never linked.
+- README's version badge was hardcoded to `0.15.0`; bumped to match.
+
+### Changed
+
+- Finished the brand-name cleanup from 0.16.1 in the few places it missed:
+  `plugin.json`, `.claude-plugin/plugin.json`, `clients/opencode/package.json`,
+  `clients/opencode/index.ts`, `commands/do.md`, and
+  `scripts/build-claude-skills.mjs`'s short description all still listed
+  Slack/Gmail/GitHub/etc. — now say "every app you've connected" like
+  everywhere else.
+
 ## [0.16.1] - 2026-08-12
 
 Content-only; no hub dependency change: `requires hub >= 0.16.0` (floor

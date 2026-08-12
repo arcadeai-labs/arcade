@@ -1,7 +1,7 @@
 # Install in Kiro
 
 Kiro loads this repo as an [Agent Plugins](https://agent-plugins.org) package
-— the `arcade` MCP server plus both skills.
+— the `arcade` MCP server plus all three skills.
 
 **Requires Kiro 1.0.288 or newer**, which added Agent Plugin support for
 Powers. Older builds can still add the MCP server by hand (below).
@@ -36,11 +36,11 @@ list its tools.
 
 ## Verify
 
-The 2 skills should appear in the Agent Steering & Skills panel, and the
-`arcade` server should list 9 tools.
+The 3 skills should appear in the Agent Steering & Skills panel, and the
+`arcade` server should list 8 tools.
 
 If a skill does not activate, Kiro matches your request against the skill
-`description` — try naming the app explicitly ("in Slack…", "on my
+`description` — try naming the app explicitly ("in my chat app…", "on my
 calendar…").
 
 ## Sign in

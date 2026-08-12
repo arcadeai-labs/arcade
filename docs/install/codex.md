@@ -1,7 +1,7 @@
 # Install in Codex or ChatGPT
 
 Codex and ChatGPT share one plugin directory, so a single install shows up on
-both surfaces. You get the `arcade` MCP server and both skills.
+both surfaces. You get the `arcade` MCP server and all three skills.
 
 ## Install
 
@@ -30,8 +30,8 @@ to `local`.
 
 ## Verify
 
-The 2 skills should be listed among your available skills, and the `arcade`
-MCP server should appear with its 9 tools.
+The 3 skills should be listed among your available skills, and the `arcade`
+MCP server should appear with its 8 tools.
 
 ## How Codex reads this package
 
@@ -56,4 +56,4 @@ approve it in the browser and the task continues.
 ## First steps
 
 - "What's on my calendar tomorrow?"
-- "Summarize my unread Slack mentions."
+- "Summarize my unread mentions."

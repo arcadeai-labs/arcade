@@ -4,9 +4,8 @@ import type { Plugin } from "@opencode-ai/plugin"
 //
 // Installing this plugin does two things:
 //   1. Registers the `arcade` remote MCP server (https://hub.arcade.dev/mcp)
-//      via the `config` hook, so the Arcade tools (Slack, Gmail, GitHub,
-//      Calendar, Notion, Linear, and more — across all your connected apps)
-//      are available — no keys, OAuth is auto-discovered.
+//      via the `config` hook, so the Arcade tools (across every app you've
+//      connected) are available — no keys, OAuth is auto-discovered.
 //      (You can also configure this manually in opencode.json; see
 //      clients/opencode/opencode.json.)
 //   2. Surfaces the one-time app sign-in link as a toast when an Arcade tool

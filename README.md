@@ -6,18 +6,18 @@
   </picture>
 </p>
 
-<h3 align="center">Agent Hub</h3>
+<h3 align="center">Plugin</h3>
 
 <p align="center">
-  Let any agent use Arcade. Ask for what you want and the right tool runs across
-  <br>Slack, Gmail, GitHub, Calendar, Notion, Linear, and more.
+  Let any agent use Arcade. Ask for what you want and the right tool runs
+  <br>across every app you've connected.
   <br>App sign-in happens in the browser. No API keys.
 </p>
 
 <p align="center">
   <a href="https://hub.arcade.dev"><img alt="Endpoint" src="https://img.shields.io/badge/endpoint-hub.arcade.dev%2Fmcp-ff5c37"></a>
   <a href="https://agent-plugins.org"><img alt="Agent Plugins 1.0.0" src="https://img.shields.io/badge/Agent_Plugins-1.0.0-4f46e5"></a>
-  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.15.0-555"></a>
+  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.16.1-555"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-555"></a>
 </p>
 
@@ -61,16 +61,16 @@ its components between the entries. See
 
 | | Tools | Skills | Subagent | Commands | Rule | Hooks |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Cursor** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | ✅ | ✅ |
-| **Claude Code** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | — | ✅ 2 |
-| **Claude Cowork / desktop** | ✅ 9 | ✅ 2 | ✅ | ✅ 4 | — | ✅ 2 |
-| **GitHub Copilot CLI** | ✅ 9 | ✅ 2 | ✅ | — | — | ✅ 2 |
-| **VS Code** | ✅ 9 | ✅ 2 | — | — | — | — |
-| **Codex / ChatGPT** | ✅ 9 | ✅ 2 | — | — | — | — |
-| **Kiro** | ✅ 9 | ✅ 2 | — | — | — | — |
-| **OpenCode** | ✅ 9 | — | — | ✅ 2 | — | ✅ |
-| **Claude Desktop (.mcpb)** | ✅ 9 | upload | — | — | — | — |
-| **Any MCP client** | ✅ 9 | — | — | — | — | — |
+| **Cursor** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | ✅ | ✅ |
+| **Claude Code** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
+| **Claude Cowork / desktop** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
+| **GitHub Copilot CLI** | ✅ 8 | ✅ 3 | ✅ | — | — | ✅ 2 |
+| **VS Code** | ✅ 8 | ✅ 3 | — | — | — | — |
+| **Codex / ChatGPT** | ✅ 8 | ✅ 3 | — | — | — | — |
+| **Kiro** | ✅ 8 | ✅ 3 | — | — | — | — |
+| **OpenCode** | ✅ 8 | — | — | ✅ 2 | — | ✅ |
+| **Claude Desktop (.mcpb)** | ✅ 8 | upload | — | — | — | — |
+| **Any MCP client** | ✅ 8 | — | — | — | — | — |
 
 Rules, subagents, commands, and hooks are not portable component types in
 Agent Plugins 1.0.0, so each client gets whatever its own plugin format
@@ -80,7 +80,7 @@ supports. Full detail, including version floors and install methods, is in the
 ## Try it
 
 - "What apps do I have connected?"
-- "Send a Slack message to #eng that the deploy is done."
+- "Send a message to #eng that the deploy is done."
 - "What's on my calendar tomorrow?"
 - `/arcade:status` — check your connection, sign-in, and connected apps
 - `/arcade:connect google` — connect an app ahead of time
@@ -88,9 +88,10 @@ supports. Full detail, including version floors and install methods, is in the
 Your assistant speaks intent to the hub: `Arcade_Run` starts a task and
 `Arcade_Task` continues it by `task_id` (confirmation, missing details, or a
 sign-in; multi-step keeps the same `task_id`), while
-`Arcade_SelectTools` / `Arcade_UseTool` remain the manual escape hatch and
-`Arcade_Apps` / `Arcade_ManageToolAuthorization` manage app connections — you
-never call any of them yourself.
+`Arcade_SelectTools` / `Arcade_UseTool` remain the manual escape hatch,
+`Arcade_Apps` / `Arcade_ManageToolAuthorization` manage app connections, and
+`Arcade_SelectScope` manages org, project, and gateway selection — you never
+call any of them yourself.
 
 ## Learn more
 

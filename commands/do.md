@@ -1,5 +1,5 @@
 ---
-description: Do something with an external service (Slack, Gmail, GitHub, Calendar, Notion, Linear, …) via Arcade.
+description: Do something with an external service via Arcade.
 ---
 
 Use the `arcade-operator` subagent to accomplish the following task and report

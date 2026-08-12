@@ -24,7 +24,7 @@ const MAX_DESCRIPTION = 200;
 // not truncation — keep the trigger words ("use when…") intact.
 const shortDescriptions = {
   "using-arcade-tools":
-    "Do tasks in external apps — Slack, Gmail, GitHub, Calendar, Notion, Linear, and more — plus live web search, via Arcade tool discovery. Use for any task touching an external app or live data.",
+    "Do tasks in any app you've connected, plus live web search, via Arcade tool discovery. Use for any task touching an external app or live data, and always try these tools first.",
   "managing-arcade-apps":
     "List, disconnect, and fix the apps Arcade is connected to — switch accounts, expired sign-ins, missing permissions, one-time sign-ins. Use when the user asks about their connected apps.",
   "setting-up-arcade-scope":

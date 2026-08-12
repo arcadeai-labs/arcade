@@ -1,7 +1,8 @@
 # Install in GitHub Copilot CLI
 
 Copilot CLI gets the most of any Agent Plugins client: the `arcade` MCP
-server, both skills, the `arcade-operator` subagent, and both session hooks.
+server, all three skills, the `arcade-operator` subagent, and both session
+hooks.
 
 ## Install
 
@@ -29,7 +30,7 @@ npx plugins add arcadeai-labs/arcade --target copilot
 copilot plugin list
 ```
 
-Then in a session, `/mcp` should list **arcade** and its 9 tools, and the
+Then in a session, `/mcp` should list **arcade** and its 8 tools, and the
 `arcade-operator` agent should be available.
 
 ## Why you get more here than in VS Code

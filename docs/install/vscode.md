@@ -1,7 +1,7 @@
 # Install in VS Code
 
 VS Code loads this repo as an [Agent Plugins](https://agent-plugins.org) 1.0.0
-package, which covers the `arcade` MCP server and both skills.
+package, which covers the `arcade` MCP server and all three skills.
 
 **Requires** agent plugins to be enabled: set `chat.plugins.enabled` to `true`
 (Preview feature).
@@ -24,7 +24,7 @@ npx plugins add arcadeai-labs/arcade --target vscode
 ```
 
 Verify in the Extensions view under **Agent Plugins - Installed**, and check
-that the 2 skills appear in **Chat: Configure Skills**.
+that the 3 skills appear in **Chat: Configure Skills**.
 
 ## Tools only — one click
 
@@ -59,4 +59,4 @@ continues.
 
 - "What can Arcade do?"
 - "What's on my calendar tomorrow?"
-- "Send a Slack message to #eng that the deploy is done."
+- "Send a message to #eng that the deploy is done."

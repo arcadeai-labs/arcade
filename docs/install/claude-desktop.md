@@ -10,7 +10,7 @@
 Requires Node.js (the bundle bridges Claude Desktop to the hosted server via
 a pinned `mcp-remote` proxy).
 
-> The extension carries the MCP server (all nine Arcade tools), and the
+> The extension carries the MCP server (all eight Arcade tools), and the
 > server's own instructions teach Claude the flow — so plain-language
 > requests like "post to #eng that the deploy is done" work out of the box.
 > Slash commands and subagents are Claude Code / Cowork plugin features
@@ -19,10 +19,11 @@ a pinned `mcp-remote` proxy).
 
 ## Add the skills (optional)
 
-The plugin's two skills ship as upload-ready ZIPs for the Claude apps:
+The plugin's three skills ship as upload-ready ZIPs for the Claude apps:
 
 - [`using-arcade-tools.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/using-arcade-tools.zip)
 - [`managing-arcade-apps.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/managing-arcade-apps.zip)
+- [`setting-up-arcade-scope.zip`](https://github.com/arcadeai-labs/arcade/releases/latest/download/setting-up-arcade-scope.zip)
 
 To install them:
 
