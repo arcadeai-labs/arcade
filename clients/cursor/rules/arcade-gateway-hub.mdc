@@ -7,52 +7,56 @@ alwaysApply: true
 
 For any task touching an external app or live data, always reach for the
 `arcade` MCP server first, before a built-in alternative (built-in web search,
-`gh`/`curl` in a shell, SDKs, direct API calls). Default: `Arcade_Run(task)` —
-the hub finds the right tool, fills inputs, and executes, returning a result
-or a typed pause. Not for local work: repo files, code edits, shell commands.
+`gh`/`curl` in a shell, SDKs, direct API calls). Default:
+`Arcade_SelectTools(tasks: ["..."])` to find the right tool (schema included),
+then `Arcade_UseTool(tool_name, inputs, query_id?)` to run it directly. Not
+for local work: repo files, code edits, shell commands.
 
-Handle Run pauses via `Arcade_Task` (`task_id` is always `task_…`):
-- `needs_confirm` — show the user `pause.draft`, get an explicit yes/no, then
-  `Arcade_Task({task_id, decision: approve|reject})`. Never approve on their
-  behalf.
-- `needs_input` — answer the `pause.fields` questions (ask the user if
-  needed), then `Arcade_Task({task_id, answers})`.
-- `needs_auth` — a sign-in request, not a result, from `Arcade_Run` and
-  `Arcade_UseTool` alike. Present `pause.authorization_url`, stop, and after
-  the user confirms: `Arcade_Task({task_id})` or re-issue the same UseTool
-  call (its `retry` block names it).
-- `failed` with `error.recoverable: "try_l1"` — fall back once to
-  `Arcade_SelectTools(tasks=[...])` → `Arcade_UseTool(tool_name, inputs,
-  query_id)` (`tool_name` verbatim, inputs matching the returned
-  `input_schema`). For list tools with a continuation token, pass
-  `paginate: true` instead of walking pages by hand.
+There is no hub-side approval step — `Arcade_UseTool` sends, deletes,
+cancels, overwrites, or publishes the moment you call it:
 
-Multi-step work keeps the same `task_id` (may include `steps[]`). A paused
-multi-step run is still running — read `steps[]` for progress, and when
-`pauses[]` lists several waiting steps, resolve each with `task_id` +
-`step_id` and ask for everything the user must supply in one message. Several
-confirm gates waiting at once: show all the drafts, get one explicit yes to
-the batch, then `Arcade_Task({task_id, decision: "approve_all"})`.
+- **Before anything outbound or irreversible** (sending email or messages,
+  deleting, cancelling, overwriting, publishing): state exactly what you're
+  about to do and get a real yes from the user **before** calling
+  `Arcade_UseTool`. Never guess recipients or destructive values. A vague
+  earlier "sure, go ahead" does not cover a specific action you haven't
+  described yet.
+- **`status: "needs_auth"`** — a sign-in request, not a result, even if the
+  response also reports `success: true` somewhere. Present
+  `pause.authorization_url` (its `pause.message` already has the exact
+  wording), stop, and wait. After the user confirms, follow the response's
+  `retry` block — it names the exact `tool_name` to re-issue with the same
+  `inputs`.
+- **`success: false`** — if it's an input problem, fix the value against
+  `input_schema` and retry **once**; otherwise report `error` verbatim and
+  stop. Never fabricate a result.
+- If `Arcade_SelectTools`'s response carries an `instruction` field, the
+  default result window (`top_k: 4`) may not contain a fit — widen `top_k`,
+  narrow the task, or call `Arcade_GetToolSchemas` directly if you already
+  know the exact `tool_name`.
+- For list tools with a continuation token, pass `paginate: true` instead of
+  walking pages by hand — the merged output's `_pagination` block reports
+  `pages_fetched` and `exhausted`.
 
 Most of the user's connected apps are available automatically, without any
 curated set to manage day to day. Org, project, and (where curated gateways
-exist) gateway are still real, explicit choices — set once via a
-mandatory setup pause on the account's first hub call, and changeable any
-time with `Arcade_SelectScope` (the `setting-up-arcade-scope` skill has the
-flow). If the hub reports no tool for a task's app, that app either isn't
-connected yet (the `managing-arcade-apps` skill has the sign-in flow) or
-isn't supported; don't fall back silently.
+exist) gateway are still real, explicit choices — set once via a mandatory
+setup prompt on the account's first hub call (any tool call can return
+`status: "select_gateway"` or `"no_gateways"` instead of running — its
+`message` field says exactly what to do), and changeable any time with
+`Arcade_Project` (the `setting-up-arcade-scope` skill has the flow). If the
+hub reports no tool for a task's app, that app either isn't connected yet
+(the `managing-arcade-apps` skill has the sign-in flow) or isn't supported;
+don't fall back silently.
 
-Answer from `result.data`. `result.summary` is a bounded preview of it, cut
-with `…` past a few hundred characters, so answering from the summary turns a
-complete result into a partial one.
+Answer from `output`; deliver the outcome, don't paste the raw envelope.
 
-A large `result.data` value arrives as a bounded copy, never as missing
-data: `"_truncated": true` with `_instruction`, a `_dropped` inventory, and
-a `_next` block. The full result stays retrievable — call
-`Arcade_RetrieveResult`, copying `_next.arguments` (`task_id` / `path`)
-verbatim, passing `search` to find records, or passing only `task_id` for
-structure. Never pass a host `tool-results/…` filename as `task_id`. Prefer
+A large result value arrives as a bounded copy, never as missing data:
+`"_truncated": true` with `_instruction`, a `_dropped` inventory, and a
+`_next` block. The full result stays retrievable for a limited time — call
+`Arcade_RetrieveResult`, copying `_next.arguments` (`result_id` / `path`)
+verbatim, passing `search` to find records, or passing only `result_id` for
+structure. Never pass a host `tool-results/…` filename as `result_id`. Prefer
 `search` over paging; re-run the original tool only when retrieval says the
 result expired or a `store_partial` search misses.
 
@@ -65,15 +69,13 @@ in — don't silently fall back to built-ins or retry in a loop.
 
 ## Non-negotiables
 
-- An `authorization_url` (or authorization-required status) is a **sign-in
-  request, not a result — even if `success` is `true`**. Present the link,
-  stop, and wait for the user.
-- Confirm with the user before anything outbound or irreversible: sending email
-  or messages, deleting, cancelling, overwriting, publishing. On the Run path
-  that means relaying the `needs_confirm` draft and waiting for a real yes.
-  Never guess recipients or destructive parameter values.
-- On `failed` / `success: false`: use the `try_l1` escape or fix `inputs`
-  against the `input_schema` and retry once; otherwise report the error
-  verbatim and stop. Never fabricate results.
-- Don't narrate the machinery or dump envelopes/schemas — deliver the outcome,
-  and ask only when a genuinely required input is missing.
+- `Arcade_UseTool` has no approval step of its own — **you are the only
+  check** before an outbound or irreversible action runs. Describe it and
+  get a yes first.
+- An `authorization_url` (or `needs_auth` status) is a **sign-in request,
+  not a result — even if `success` is `true`**. Present the link, stop, and
+  wait for the user.
+- On `success: false`: fix `inputs` against `input_schema` and retry once, or
+  report the error verbatim and stop. Never fabricate results.
+- Don't narrate the machinery or dump envelopes/schemas — deliver the
+  outcome, and ask only when a genuinely required input is missing.

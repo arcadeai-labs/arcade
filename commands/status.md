@@ -16,7 +16,7 @@ one-line fix:
    the Engine host from `health.engine` only if useful. If `/health` fails,
    say the hub health endpoint is unreachable and continue with sign-in
    checks. If `health.version` is missing, omit the hub side of the line.
-3. **Scope** — Call `Arcade_SelectScope(action: "list")` and report the
+3. **Scope** — Call `Arcade_Project(action: "list")` and report the
    active org and project, plus the active gateway if one is set, e.g.
    `org: Acme · project: Support · gateway: Full Suite` (omit the gateway
    segment when the deployment has none). If the tool isn't available or the

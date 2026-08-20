@@ -8,7 +8,7 @@ ChatGPT and Codex, GitHub Copilot, Kiro, and VS Code among them.
 
 The standard covers two component types, and this plugin ships both:
 
-- **The `arcade` MCP server** (`mcp.json`) — all 8 hub tools over
+- **The `arcade` MCP server** (`mcp.json`) — all 6 hub tools over
   `https://hub.arcade.dev/mcp`.
 - **Three skills** (`skills/`) — `using-arcade-tools`,
   `managing-arcade-apps`, `setting-up-arcade-scope`.

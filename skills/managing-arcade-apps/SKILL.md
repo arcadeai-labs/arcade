@@ -56,15 +56,15 @@ task.**
 ## Fixing an app connection
 
 For wrong account, expired sign-in, missing permissions, or an explicit
-"reconnect" request, use `Arcade_ManageToolAuthorization` (same `arcade` MCP
-server) with a `tool_name` from the affected app:
+"reconnect" request, use `Arcade_Apps` (same tool as list/disconnect) with a
+`tool_name` from the affected app:
 
 ```text
-Arcade_ManageToolAuthorization(action: "status", tool_name: "...")          # check the connection
-Arcade_ManageToolAuthorization(action: "switch_account", tool_name: "...",
-                               provider_id: "<from status>")                # sign in as a different account
-Arcade_ManageToolAuthorization(action: "reauthorize", tool_name: "...",
-                               provider_id: "<from status>")                # expired / missing permissions
+Arcade_Apps(action: "status", tool_name: "...")                            # check the connection
+Arcade_Apps(action: "switch_account", tool_name: "...",
+            provider_id: "<from status>")                                  # sign in as a different account
+Arcade_Apps(action: "reauthorize", tool_name: "...",
+            provider_id: "<from status>")                                  # expired / missing permissions
 ```
 
 Each returns a fresh sign-in link — present it, stop, and wait, exactly like a

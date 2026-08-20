@@ -8,12 +8,12 @@ behavior and is verified by hand before tagging a release.
 
 - [ ] **Claude Code:** `claude plugin validate .` passes, then load with
   `claude --plugin-dir .` — verify 3 skills, 1 agent (`arcade-operator`),
-  4 commands (`/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status`), the SessionStart hook context, and the `arcade` MCP
+  3 commands (`/arcade:apps`, `/arcade:connect`, `/arcade:status`), the SessionStart hook context, and the `arcade` MCP
   server connect (sign in with an Arcade staging account).
 - [ ] **Cursor:** add the marketplace `arcadeai-labs/arcade` in Cursor's
   plugins panel (or `npx plugins add arcadeai-labs/arcade --target cursor`),
   reload, and in Customize verify exactly: 1 rule, 3 skills, 1 agent,
-  6 commands, 1 hook, 1 MCP server — and nothing else, with the arcade logo.
+  3 commands, 1 hook, 1 MCP server — and nothing else, with the arcade logo.
   Confirm no duplicate "Imported" entry (would mean it's also installed in
   Claude Code). Start a new chat and confirm the sessionStart context appears
   (Hooks output channel shows no errors).
@@ -33,16 +33,18 @@ Org and project are real, explicit choices for every account; gateway is too,
 wherever a deployment has curated gateways configured (not under
 `all_apps_only`). Confirm:
 
-- The mandatory setup pause fires exactly once per account, on its very
-  first hub call, as a MENU-shaped `needs_input` (enumerated org/project/
-  gateway choices, not a single fill-in value) — and blocks every other
-  part of that first task until answered via `Arcade_Task({task_id,
-  answers})`.
-- After that pause is answered once, it never reappears unless the user
+- The mandatory setup prompt fires exactly once per account, on its very
+  first hub call: any tool call (`Arcade_SelectTools`, `Arcade_UseTool`,
+  `Arcade_Apps`, `Arcade_Project`) returns `status: "select_gateway"` (or
+  `"no_gateways"` if truly nothing resolves) instead of running — and blocks
+  every other part of that first task until answered via
+  `Arcade_Project(action: "set", target: ...)`, followed by retrying the
+  original call.
+- After that prompt is answered once, it never reappears unless the user
   explicitly asks to change org, project, or gateway.
 - An explicit "switch my org/project/gateway" request works via
-  `Arcade_SelectScope(action: "list")` → `Arcade_SelectScope(action:
-  "select", ...)`, matching by name rather than a guessed id.
+  `Arcade_Project(action: "list")` → `Arcade_Project(action: "set", ...)`,
+  matching by name rather than a guessed id.
 - A task against an app you haven't connected yet still returns a sign-in
   link rather than a scope-related message.
 
@@ -57,10 +59,12 @@ wherever a deployment has curated gateways configured (not under
   delivers the result.
 - [ ] **Pending sign-in:** asking again before signing in re-presents the link
   without spamming new authorizations.
-- [ ] **Mandatory setup pause:** a fresh account's first hub call returns a
-  MENU-shaped `needs_input` (org/project, plus gateway where curated) instead
-  of running the task; agent presents the choices, never auto-picks, and the
-  original task resumes only after `Arcade_Task({task_id, answers})`.
+- [ ] **Mandatory setup prompt:** a fresh account's first hub call returns
+  `status: "select_gateway"` (org/project, plus gateway where curated)
+  instead of running the task; agent presents the choices, never
+  auto-picks, and the original task resumes only after
+  `Arcade_Project(action: "set", target: ...)` followed by retrying the
+  call.
 - [ ] **Wrong account:** "switch the account for <app>" →
   `switch_account` flow returns a fresh link; agent reminds about browser
   session reuse.

@@ -17,7 +17,7 @@
 <p align="center">
   <a href="https://hub.arcade.dev"><img alt="Endpoint" src="https://img.shields.io/badge/endpoint-hub.arcade.dev%2Fmcp-ff5c37"></a>
   <a href="https://agent-plugins.org"><img alt="Agent Plugins 1.0.0" src="https://img.shields.io/badge/Agent_Plugins-1.0.0-4f46e5"></a>
-  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.16.1-555"></a>
+  <a href="CHANGELOG.md"><img alt="Version" src="https://img.shields.io/badge/version-0.19.0-555"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-555"></a>
 </p>
 
@@ -61,16 +61,16 @@ its components between the entries. See
 
 | | Tools | Skills | Subagent | Commands | Rule | Hooks |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Cursor** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | ✅ | ✅ |
-| **Claude Code** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
-| **Claude Cowork / desktop** | ✅ 8 | ✅ 3 | ✅ | ✅ 4 | — | ✅ 2 |
-| **GitHub Copilot CLI** | ✅ 8 | ✅ 3 | ✅ | — | — | ✅ 2 |
-| **VS Code** | ✅ 8 | ✅ 3 | — | — | — | — |
-| **Codex / ChatGPT** | ✅ 8 | ✅ 3 | — | — | — | — |
-| **Kiro** | ✅ 8 | ✅ 3 | — | — | — | — |
-| **OpenCode** | ✅ 8 | — | — | ✅ 2 | — | ✅ |
-| **Claude Desktop (.mcpb)** | ✅ 8 | upload | — | — | — | — |
-| **Any MCP client** | ✅ 8 | — | — | — | — | — |
+| **Cursor** | ✅ 6 | ✅ 3 | ✅ | ✅ 3 | ✅ | ✅ |
+| **Claude Code** | ✅ 6 | ✅ 3 | ✅ | ✅ 3 | — | ✅ 2 |
+| **Claude Cowork / desktop** | ✅ 6 | ✅ 3 | ✅ | ✅ 3 | — | ✅ 2 |
+| **GitHub Copilot CLI** | ✅ 6 | ✅ 3 | ✅ | — | — | ✅ 2 |
+| **VS Code** | ✅ 6 | ✅ 3 | — | — | — | — |
+| **Codex / ChatGPT** | ✅ 6 | ✅ 3 | — | — | — | — |
+| **Kiro** | ✅ 6 | ✅ 3 | — | — | — | — |
+| **OpenCode** | ✅ 6 | — | — | ✅ 1 | — | ✅ |
+| **Claude Desktop (.mcpb)** | ✅ 6 | upload | — | — | — | — |
+| **Any MCP client** | ✅ 6 | — | — | — | — | — |
 
 Rules, subagents, commands, and hooks are not portable component types in
 Agent Plugins 1.0.0, so each client gets whatever its own plugin format
@@ -85,13 +85,12 @@ supports. Full detail, including version floors and install methods, is in the
 - `/arcade:status` — check your connection, sign-in, and connected apps
 - `/arcade:connect google` — connect an app ahead of time
 
-Your assistant speaks intent to the hub: `Arcade_Run` starts a task and
-`Arcade_Task` continues it by `task_id` (confirmation, missing details, or a
-sign-in; multi-step keeps the same `task_id`), while
-`Arcade_SelectTools` / `Arcade_UseTool` remain the manual escape hatch,
-`Arcade_Apps` / `Arcade_ManageToolAuthorization` manage app connections, and
-`Arcade_SelectScope` manages org, project, and gateway selection — you never
-call any of them yourself.
+Your assistant speaks intent to the hub: `Arcade_SelectTools` finds the tool
+for a task (schema included) and `Arcade_UseTool` runs it directly —
+`Arcade_GetToolSchemas` and `Arcade_RetrieveResult` cover schema lookups and
+large results, `Arcade_Apps` manages app connections and sign-in repair, and
+`Arcade_Project` manages org, project, and gateway selection — you never call
+any of them yourself.
 
 ## Learn more
 

@@ -83,15 +83,10 @@ export const ArcadePlugin: Plugin = async ({ client }) => {
       // Slash commands mirroring the Cursor/Claude plugin commands.
       cfg.command = cfg.command ?? {}
       const commands: Record<string, { description: string; template: string }> = {
-        "arcade-do": {
-          description: "Do something with an external service via Arcade",
-          template:
-            "Use the Arcade tools to accomplish this task and report only the result, a sign-in link, or one clarifying question: $ARGUMENTS",
-        },
         "arcade-apps": {
           description: "See, disconnect, or fix your connected Arcade apps",
           template:
-            "Use Arcade_Apps (list/disconnect, confirm before disconnecting) and Arcade_ManageToolAuthorization (status/switch_account/reauthorize for connection fixes) to help with this request, using apps language and presenting sign-in links once: $ARGUMENTS",
+            "Use Arcade_Apps (list/disconnect, confirm before disconnecting; status/switch_account/reauthorize for connection fixes) to help with this request, using apps language and presenting sign-in links once: $ARGUMENTS",
         },
       }
       for (const [name, command] of Object.entries(commands)) {

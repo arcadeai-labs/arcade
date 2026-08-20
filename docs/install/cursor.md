@@ -15,11 +15,11 @@ npx plugins add arcadeai-labs/arcade --target cursor
 ```
 
 Either way installs the plugin natively in Cursor — the logo, the MCP server,
-all three skills, the `arcade-operator` subagent, all 4 commands, the
+all three skills, the `arcade-operator` subagent, all 3 commands, the
 always-on rule, and the session-start hook — and enables auto-updates. After
 reload, open **Settings → MCP**, find **arcade**, and sign in with Arcade.
 
-Verify under **Settings → Customize**: 1 rule, 3 skills, 1 agent, 4 commands,
+Verify under **Settings → Customize**: 1 rule, 3 skills, 1 agent, 3 commands,
 1 hook, 1 MCP server.
 
 ## Tools only (one click)

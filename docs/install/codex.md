@@ -31,7 +31,7 @@ to `local`.
 ## Verify
 
 The 3 skills should be listed among your available skills, and the `arcade`
-MCP server should appear with its 8 tools.
+MCP server should appear with its 6 tools.
 
 ## How Codex reads this package
 

@@ -40,9 +40,10 @@ assert(
   "config hook must register the session instructions file",
 )
 
-// config: registers the slash commands. 0.7.0 retired arcade-gateway —
-// all connected apps are available without a command to pick from them.
-for (const name of ["arcade-do", "arcade-apps"]) {
+// config: registers the slash commands. 0.7.0 retired arcade-gateway, and
+// the hub's Run/Task removal retired arcade-do — all connected apps are
+// available without a command to pick from them or start a task through.
+for (const name of ["arcade-apps"]) {
   assert(
     typeof emptyConfig.command?.[name]?.template === "string" &&
       typeof emptyConfig.command?.[name]?.description === "string",
@@ -53,7 +54,7 @@ for (const name of ["arcade-do", "arcade-apps"]) {
 // config: never overwrites existing user entries (server, commands)
 const userConfig = {
   mcp: { arcade: { url: "https://example.com/custom" } },
-  command: { "arcade-do": { description: "mine", template: "custom" } },
+  command: { "arcade-apps": { description: "mine", template: "custom" } },
 }
 await hooks.config!(userConfig as never)
 assert(
@@ -61,7 +62,7 @@ assert(
   "config hook must not overwrite an existing arcade entry",
 )
 assert(
-  userConfig.command["arcade-do"].template === "custom",
+  userConfig.command["arcade-apps"].template === "custom",
   "config hook must not overwrite an existing user command",
 )
 
