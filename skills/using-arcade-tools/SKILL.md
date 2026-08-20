@@ -58,11 +58,15 @@ call.
    `Arcade_GetToolSchemas` if you already know the exact `tool_name`).
 2. Pick the best match from `tools[]` — each entry already carries
    `input_schema`, so there's no extra lookup for the common case.
-3. `Arcade_UseTool(tool_name, inputs, query_id?)` — `tool_name` exactly as
+3. **If the call sends, deletes, overwrites, cancels, or publishes anything,
+   stop here first** — see "Outbound and irreversible actions" below. Get a
+   real yes from the user before continuing to the next step. Skip this for
+   read-only calls (fetch, list, search, summarize).
+4. `Arcade_UseTool(tool_name, inputs, query_id?)` — `tool_name` exactly as
    returned (no `@version`, no dot-form). `inputs` must match the returned
    `input_schema`. Pass `query_id` from the SelectTools call when you have
    one, so usage signals correlate.
-4. Read the result:
+5. Read the result:
    - **`success: true`** — answer from `output`. Deliver the outcome; don't
      paste the raw envelope.
    - **`status: "needs_auth"`** — a sign-in request, never a result, even if
@@ -74,7 +78,7 @@ call.
    - **`success: false`** — read `error`. If it's an input problem, fix the
      value against `input_schema` and retry **once**. Otherwise report
      `error` verbatim and stop; never fabricate a result.
-5. For list tools that return a continuation token, pass `paginate: true`
+6. For list tools that return a continuation token, pass `paginate: true`
    instead of hand-walking `next_page_token` / `next_cursor` — the merged
    output's `_pagination` block reports `pages_fetched`, whether the listing
    was `exhausted`, and the live token when pages remain (`max_pages`
@@ -108,6 +112,9 @@ search missed.
 User: "Tell #eng the deploy is done"
 Arcade_SelectTools(tasks: ["Send a message to #eng saying the deploy is done"])
   → {query_id: "q_…", tools: [{tool_name: "Slack_SendMessage", input_schema: {...}}]}
+This sends a message — confirm first:
+  "I'll post '#eng: Deploy is done.' to the #eng channel — send it?"
+User: "yes"
 Arcade_UseTool(tool_name: "Slack_SendMessage",
                inputs: {channel: "#eng", text: "Deploy is done."}, query_id: "q_…")
   → {success: true, output: {ts: "..."}, execution_id: "exec_…"}
