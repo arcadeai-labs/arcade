@@ -6,8 +6,10 @@
 // Skills spec allows 1024, which the in-repo skills use), so each skill gets
 // an explicit short description here. Everything else ships verbatim.
 //
-// Output: clients/claude-desktop/skills/<name>.zip (committed, so README
-// download links always work). Run after editing any SKILL.md:
+// Output: clients/claude-desktop/skills/<name>.zip (gitignored — the release
+// workflow builds these fresh and attaches them to the GitHub Release, so
+// README download links resolve without committing archives). Run locally
+// after editing any SKILL.md to sanity-check the build:
 //   node scripts/build-claude-skills.mjs
 
 import { execFileSync } from "node:child_process";
@@ -28,7 +30,7 @@ const shortDescriptions = {
   "managing-arcade-apps":
     "List, disconnect, and fix the apps Arcade is connected to — switch accounts, expired sign-ins, missing permissions, one-time sign-ins. Use when the user asks about their connected apps.",
   "setting-up-arcade-scope":
-    "Handle Arcade's one-time org/project/gateway setup pause and Arcade_SelectScope changes. Use on the mandatory first-call menu pause or when the user asks to change org, project, or gateway.",
+    "Handle Arcade's one-time org/project/gateway setup prompt and Arcade_Project changes. Use on the mandatory first-call setup prompt or when the user asks to change org, project, or gateway.",
 };
 
 mkdirSync(OUT_DIR, { recursive: true });

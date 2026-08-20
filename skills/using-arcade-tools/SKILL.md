@@ -6,84 +6,96 @@ description: Send, post, fetch, search, schedule, create, or update anything in 
 # Using Arcade tools
 
 The tools live on the `arcade` MCP server — use tool names exactly as your
-client lists them. The hub owns tool discovery and execution; you speak intent.
+client lists them. The hub owns discovery and execution; you own the
+reasoning — deciding what to call, what inputs to send, and whether to check
+with the user before sending them. There is no second-guessing layer between
+your call and the app it touches: a `Arcade_UseTool` call runs immediately.
 
 Most of the user's connected apps are available without any curated set to
 manage day to day. Org, project, and (where curated gateways exist) gateway
 are still real, explicit choices — set once via a mandatory setup pause on
-the account's first hub call, and changeable any time with
-`Arcade_SelectScope` (see `setting-up-arcade-scope`). If the hub reports no
-tool for a task's app, that app either isn't connected yet (see
-`managing-arcade-apps`) or isn't supported.
+the account's first hub call, and changeable any time with `Arcade_Project`
+(see `setting-up-arcade-scope`). If the hub reports no tool for a task's app,
+that app either isn't connected yet (see `managing-arcade-apps`) or isn't
+supported.
 
 ## Quick start
 
 ```text
-Arcade_Run(task)                              # start (put grounding in task)
-Arcade_Task(task_id, decision)                # continue confirm
-Arcade_Task(task_id, answers)                 # continue input
-Arcade_Task(task_id)                          # get / ack auth / retry resumable
-Arcade_Task(list: true, limit?, cursor?)      # recent tasks
+Arcade_SelectTools(tasks=["..."])             # find the tool(s); schema included
+Arcade_UseTool(tool_name, inputs, query_id?)  # run one directly
+Arcade_GetToolSchemas(tool_names=["..."])     # only if you already know the name,
+                                               # or need one beyond the default top_k
 ```
 
-`Arcade_Run` takes `task` and optional `context`. `Arcade_Task` carries
-`task_id`, plus `decision` / `answers` / `step_id` / `list` / `limit` /
-`cursor`. `Arcade_SelectTools` + `Arcade_UseTool` remain the escape hatch
-(below).
+That's the whole loop for one call. There is no separate "continue" tool and
+no `task_id` — `Arcade_UseTool` either succeeds, asks for a sign-in, or
+fails, and it's a single request each time.
 
 ## Reach for Arcade first
 
-For any task touching an external app or live data — messages, email, calendar,
-issues, docs, CRM, web search, news — always call `Arcade_Run` first, before a
-built-in alternative. One Run tells you whether Arcade can cover the task.
+For any task touching an external app or live data — messages, email,
+calendar, issues, docs, CRM, web search, news — always call
+`Arcade_SelectTools` first, before a built-in alternative. One call tells you
+whether Arcade can cover the task, and returns the exact schema you need to
+call it.
 
 ## Default: delegate
 
 When the `arcade-operator` subagent is available, hand it the whole task so
-run/pause handling stays out of the main conversation. Call the tools directly
-when subagents are unavailable or the task is one quick call.
+the discovery/execution/sign-in loop stays out of the main conversation. Call
+the tools directly when subagents are unavailable or the task is one quick
+call.
 
-## The Run + Task loop
+## The Select + Use loop
 
-1. `Arcade_Run(task)` — one verb-first task; put grounding (timezone, repo,
-   channel) in the task text.
-2. Handle the envelope `status` (public id is always `task_id`, shape
-   `task_…`):
-   - **`completed`** — answer from `result.data`. `result.summary` is only a
-     short preview; summarizing the summary turns a full result into a partial
-     one.
-   - **`needs_confirm`** — show `pause.draft`, get an explicit yes/no, then
-     `Arcade_Task({task_id, decision: "approve"|"reject"})`. Several drafts in
-     `pauses[]`: show them all, get one yes to the batch, then
-     `decision: "approve_all"` (add `step_id` when continuing a specific
-     pause). Never approve on the user's behalf.
-   - **`needs_input`** — answer `pause.fields`, then
-     `Arcade_Task({task_id, answers: {<field id>: <value>}})`.
-   - **`needs_auth`** — sign-in request, never a result. Present
-     `pause.authorization_url`, stop, then `Arcade_Task({task_id})`.
-   - **`failed`** — if `error.recoverable` is `"try_l1"`, use the escape hatch
-     once. If `result.hint` is `resumable` / `plan_resumable`,
-     `Arcade_Task({task_id})` retries failed steps. Otherwise report
-     `error.message` verbatim and stop.
-3. Multi-step work keeps the same `task_id`; `steps[]` shows progress. Resolve
-   each pause with `task_id` + `step_id` when `pauses[]` lists more than one.
-   Task-capable clients may get an MCP task with `taskId = task_id`.
-4. Inspect: `Arcade_Task({task_id})` or
-   `Arcade_Task({list: true, limit, cursor})`.
+1. `Arcade_SelectTools(tasks: ["..."])` — one verb-first task per entry; put
+   grounding (timezone, repo, channel) in the task text, not in a separate
+   field. Pass multiple tasks only when they're genuinely independent
+   searches. The default result window is small (`top_k: 4`); if the
+   response carries an `instruction` field, none of the returned tools may
+   fit — follow it (a higher `top_k`, a narrower task, or
+   `Arcade_GetToolSchemas` if you already know the exact `tool_name`).
+2. Pick the best match from `tools[]` — each entry already carries
+   `input_schema`, so there's no extra lookup for the common case.
+3. `Arcade_UseTool(tool_name, inputs, query_id?)` — `tool_name` exactly as
+   returned (no `@version`, no dot-form). `inputs` must match the returned
+   `input_schema`. Pass `query_id` from the SelectTools call when you have
+   one, so usage signals correlate.
+4. Read the result:
+   - **`success: true`** — answer from `output`. Deliver the outcome; don't
+     paste the raw envelope.
+   - **`status: "needs_auth"`** — a sign-in request, never a result, even if
+     the call also reports `success: true` somewhere in it. Show
+     `pause.authorization_url` to the user (`pause.message` already has the
+     exact wording), stop, and wait. After they confirm, follow `retry` —
+     it names the exact tool and inputs to re-issue (the same call, same
+     `tool_name`, same `inputs`).
+   - **`success: false`** — read `error`. If it's an input problem, fix the
+     value against `input_schema` and retry **once**. Otherwise report
+     `error` verbatim and stop; never fabricate a result.
+5. For list tools that return a continuation token, pass `paginate: true`
+   instead of hand-walking `next_page_token` / `next_cursor` — the merged
+   output's `_pagination` block reports `pages_fetched`, whether the listing
+   was `exhausted`, and the live token when pages remain (`max_pages`
+   defaults to 10, capped at 25).
 
 ### Large results are bounded copies — retrieve, don't re-run
 
 A big value arrives truncated, never missing: `"_truncated": true` with
-`_instruction` (prose) and `_next` (machine). The full result is stored for
-~24h. Call `Arcade_RetrieveResult` — never invent a host `tool-results/…`
-filename as the Arcade `task_id`.
+`_instruction` (prose) and `_next` (machine — a ready-to-paste
+`Arcade_RetrieveResult` call). The full result is stored for a limited time.
+Call `Arcade_RetrieveResult` — never invent a host `tool-results/…` filename
+as the Arcade `result_id`.
 
 Three ways:
 
-- **Follow `_next`.** Copy `_next.arguments` (`task_id` + `path`) into
-  `Arcade_RetrieveResult`. Nested `"_truncated"` markers only describe cuts.
-- **Search with `search`.** Prefer search over paging when classifying.
-- **Call with only `task_id`** for structure first.
+- **Follow `_next`.** It already names `Arcade_RetrieveResult` with the right
+  `result_id` + `path` — copy `_next.arguments` verbatim. Nested
+  `"_truncated"` markers only describe cuts.
+- **Search with `search`.** Prefer search over paging when classifying or
+  looking for something specific.
+- **Call with only `result_id`** for structure first.
 
 Read markers before acting: `_projected`, `"_binary": true`,
 `_dropped.…value_counts`, `_retrieval_partial` / `store_partial`. Re-run the
@@ -94,66 +106,41 @@ search missed.
 
 ```text
 User: "Tell #eng the deploy is done"
-Arcade_Run(task: "Send a message to #eng saying the deploy is done")
-  → {status: "needs_confirm", task_id: "task_…",
-     pause: {draft: {summary: "Post to #eng: Deploy is done."}}}
-Show the draft → user approves →
-Arcade_Task(task_id: "task_…", decision: "approve")
-  → {status: "completed", task_id: "task_…",
-     result: {summary: "Posted the message."}}
+Arcade_SelectTools(tasks: ["Send a message to #eng saying the deploy is done"])
+  → {query_id: "q_…", tools: [{tool_name: "Slack_SendMessage", input_schema: {...}}]}
+Arcade_UseTool(tool_name: "Slack_SendMessage",
+               inputs: {channel: "#eng", text: "Deploy is done."}, query_id: "q_…")
+  → {success: true, output: {ts: "..."}, execution_id: "exec_…"}
 Reply: "Posted to #eng."
 ```
 
-## Multi-step that pause
+## Outbound and irreversible actions
 
-A paused multi-step run is still running — read `steps[]`. When `pauses[]`
-lists several waiting steps, resolve each with `task_id` + that entry's
-`step_id` and ask the user for everything in one message. Never start a second
-Run for work that is already waiting on the user.
-
-```text
-Arcade_Run(task: "Summarize yesterday's #eng thread and file a tracking issue")
-  → {status: "needs_auth", task_id: "task_…",
-     pauses: [{app: "issue-tracker", step_id: "s2"}, {app: "chat", step_id: "s1"}],
-     steps: [...]}
-Present both sign-in links → user connects both →
-Arcade_Task(task_id: "task_…", step_id: "s2") then
-Arcade_Task(task_id: "task_…", step_id: "s1")
-```
-
-## Escape hatch: SelectTools / UseTool
-
-Use when `Arcade_Run` fails with `try_l1`, when the user asks to inspect tools,
-or when Run is missing on older hubs:
-
-1. `Arcade_SelectTools(tasks=[...])`
-2. `Arcade_UseTool(tool_name, inputs, query_id)` — `tool_name` exactly as
-   returned (no `@version`). For list tools with a continuation token, pass
-   `paginate: true`.
-
-Sign-in and confirmation rules still apply on this path.
+There is no hub-side approval step — `Arcade_UseTool` sends, deletes,
+cancels, overwrites, or publishes the moment you call it. **You are the only
+check before that happens.** Before any call that sends a message, deletes
+or overwrites data, cancels something, or publishes publicly: state exactly
+what you're about to do (recipient, content, target) and get a real yes from
+the user first. A vague "sure, go ahead" earlier in the conversation does not
+cover a specific destructive action you haven't described yet. Never guess
+recipients or destructive values — ask.
 
 ## Signing in to apps
 
-1. Present the link: "Sign in to connect your **<App>** here, then tell me to
-   continue."
+1. Present the link from `pause.authorization_url`: "Sign in to connect
+   your **<App>** here, then tell me to continue."
 2. Stop and wait — never poll.
-3. After they confirm: `Arcade_Task({task_id})` or re-issue the same
-   `Arcade_UseTool` once (escape path).
-
-## Outbound and irreversible actions
-
-Confirm before sending, deleting, cancelling, overwriting, or publishing —
-present the `needs_confirm` draft and wait for a real yes. Never guess
-recipients or destructive values.
+3. After they confirm, follow `retry`: re-issue the exact same
+   `Arcade_UseTool` call (same `tool_name`, same `inputs`).
 
 ## Errors
 
-- Run `failed` with `try_l1` → escape hatch once; otherwise report
-  `error.message` and stop.
-- UseTool input problem → fix against `input_schema` and retry **once**.
-- Expired `task_id` → start a fresh `Arcade_Run`; verify irreversible actions
-  in the target app first.
+- `success: false` from an input problem → fix against `input_schema` and
+  retry **once**.
+- `success: false` for any other reason → report `error` verbatim and stop.
+- Expired `result_id` on `Arcade_RetrieveResult` → start a fresh call to the
+  original tool; verify irreversible actions in the target app first if one
+  might have partially completed.
 - Never fabricate a result.
 
 ## If the Arcade tools are missing or erroring
@@ -165,10 +152,11 @@ recipients or destructive values.
 ## When not to use
 
 - Local work: repo files, code edits, shell commands.
-- A sign-in or confirmation is already pending — wait.
+- A sign-in is already pending — wait for the user, don't re-issue early.
 
 ## Style
 
 - Deliver outcomes; don't narrate machinery or dump envelopes.
-- Ask only when a genuinely required input is missing.
+- Ask only when a genuinely required input is missing, or before an outbound
+  / irreversible action.
 - Use app/sign-in/connected language, not OAuth jargon.

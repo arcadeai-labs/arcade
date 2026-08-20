@@ -12,9 +12,9 @@ declared explicitly, so no client picks it up by folder convention.
 |------|------------|---------|
 | `plugin.json` | Agent Plugins 1.0.0 manifest (portable core) | Codex, Copilot, Kiro, VS Code, any conformant client |
 | `mcp.json` | Portable MCP config (`streamable-http` → the hub) | Same |
-| `skills/` | `using-arcade-tools`, `managing-arcade-apps` skills | Every client with a skill system |
+| `skills/` | `using-arcade-tools`, `managing-arcade-apps`, `setting-up-arcade-scope` skills | Every client with a skill system |
 | `agents/arcade-operator.agent.md` | The operator subagent | Claude Code / Cowork, Cursor, Copilot CLI |
-| `commands/` | `/arcade:do`, `/arcade:apps`, `/arcade:connect`, `/arcade:status` | Cursor + Claude Code / Cowork |
+| `commands/` | `/arcade:apps`, `/arcade:connect`, `/arcade:status` | Cursor + Claude Code / Cowork |
 | `hooks/` | Claude-format `hooks.json` + the two shared hook scripts | Claude Code / Cowork, Copilot CLI |
 | `clients/cursor/` | Rule, Cursor-native session hook, MCP config | Cursor |
 | `clients/claude/` | MCP config | Claude Code / Cowork |

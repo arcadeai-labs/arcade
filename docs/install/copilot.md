@@ -30,7 +30,7 @@ npx plugins add arcadeai-labs/arcade --target copilot
 copilot plugin list
 ```
 
-Then in a session, `/mcp` should list **arcade** and its 8 tools, and the
+Then in a session, `/mcp` should list **arcade** and its 6 tools, and the
 `arcade-operator` agent should be available.
 
 ## Why you get more here than in VS Code

@@ -41,11 +41,13 @@ Prefer configuring the MCP server yourself instead of using the plugin? Add:
 
 Meta-tools that resolve to your connected apps' tools on demand:
 
-- `Arcade_SelectTools` — find the right tool for a task
+- `Arcade_SelectTools` — find the right tool for a task, schema included
 - `Arcade_UseTool` — run it
-- `Arcade_Apps` — see or disconnect your connected apps
-- `Arcade_ManageToolAuthorization` — fix an app connection (switch account,
-  expired sign-in, missing permissions)
+- `Arcade_GetToolSchemas` — look up a tool's schema by name
+- `Arcade_RetrieveResult` — read more of a truncated result
+- `Arcade_Apps` — see, disconnect, or fix the connection for your connected
+  apps (switch account, expired sign-in, missing permissions)
+- `Arcade_Project` — view or change your org, project, and gateway
 
 ## Links
 

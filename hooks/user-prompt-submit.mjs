@@ -28,9 +28,9 @@
 const REMINDER =
   'The Arcade Plugin ("arcade" MCP server) is connected. It runs tasks ' +
   "across every app the user has connected and returns live web data — " +
-  "always try it first, before a built-in or workaround. Arcade_Run " +
-  "takes a task in plain language; Arcade_Task continues it (confirm, " +
-  "input, sign-in) and carries multi-step work by task_id.";
+  "always try it first, before a built-in or workaround. Arcade_SelectTools " +
+  "finds the right tool for a task in plain language, schema included; " +
+  "Arcade_UseTool calls it directly.";
 
 // A prompt that carries no task cannot be redirected by a reminder: the model
 // is mid-flight on the previous turn and already holds its context. Skipping

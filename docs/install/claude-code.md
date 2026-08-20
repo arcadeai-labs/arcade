@@ -15,7 +15,6 @@ stating at session start that Arcade is connected, one restating it alongside
 any prompt that looks like external-app or live-data work, since session-start
 context stops carrying by the thirtieth turn — and the commands:
 
-- `/arcade:do <task>` — do something in an app you've connected
 - `/arcade:apps` — see, disconnect, or fix your connected apps
 - `/arcade:connect <app>` — connect an app with a one-time sign-in
 - `/arcade:status` — check connection, sign-in, and apps

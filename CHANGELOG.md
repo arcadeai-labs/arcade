@@ -8,6 +8,61 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.19.0] - 2026-08-20
+
+Breaking: `requires hub ≥ 0.19.0`. The hub removed `Arcade_Run`/`Arcade_Task`
+and the server-side Judge/Plan orchestration behind them entirely — this
+release rewrites every plugin surface that spoke that protocol. Old plugin
+installs will not work against a 0.19.0+ hub.
+
+### Removed
+
+- **The `/do` command is gone** (`commands/do.md`, and its OpenCode
+  equivalent `arcade-do` in `clients/opencode/index.ts`). It was a thin
+  passthrough to the `arcade-operator` subagent; with `Arcade_Run` gone
+  there is no run/pause handle to keep out of the main conversation, so the
+  indirection no longer earns its place — call the tools (or the subagent)
+  directly.
+
+### Changed
+
+- **Every skill, the operator subagent, both hooks, the Cursor always-on
+  rule, and the OpenCode instructions rewritten for the hub's new surface**
+  (`Arcade_SelectTools` → `Arcade_UseTool` directly, no `Arcade_Task`
+  continuation loop, no `task_id`, no server-side `needs_confirm`/pause
+  contract):
+  - `skills/using-arcade-tools/SKILL.md`, `agents/arcade-operator.agent.md`,
+    `clients/cursor/rules/arcade-gateway-hub.mdc`,
+    `clients/opencode/instructions.md`: the Run + Task loop is replaced by
+    a plain Select → Use call. Since `Arcade_UseTool` now has **no
+    hub-side approval step of its own**, outbound/irreversible actions get
+    a new, more prominent rule: describe the action and get a real yes from
+    the user *before* calling `Arcade_UseTool`, not after — there is no
+    draft/confirm pause to fall back on if you don't.
+  - `skills/setting-up-arcade-scope/SKILL.md`: rewritten for
+    `Arcade_Project` (renamed from `Arcade_SelectScope`, absorbing
+    `Arcade_SelectGateway`). The mandatory-once setup gate is now any tool
+    call returning `status: "select_gateway"` / `"no_gateways"` — a normal
+    result, not a `needs_input` pause answered through `Arcade_Task`.
+  - `skills/managing-arcade-apps/SKILL.md`, `commands/connect.md`,
+    `commands/apps.md`: `Arcade_ManageToolAuthorization` calls now go
+    through `Arcade_Apps`, which absorbed its full action set (`status`,
+    `authorize`, `reauthorize`, `switch_account`, `poll`).
+  - `commands/status.md`: `Arcade_SelectScope` → `Arcade_Project`.
+  - `hooks/user-prompt-submit.mjs`: the per-turn reminder now points at
+    `Arcade_SelectTools` / `Arcade_UseTool` instead of `Arcade_Run` /
+    `Arcade_Task`.
+- **`Arcade_RetrieveResult`'s identifier is `result_id`, not `task_id`**
+  everywhere it's mentioned (skills, rule, instructions).
+- Tool/skill/command counts corrected across `README.md`,
+  `docs/support-matrix.md`, `docs/development.md`, `QA.md`, and all
+  affected `docs/install/*.md` pages: 6 tools (was 8), 3 commands on
+  Cursor/Claude (was 4), 1 command on OpenCode (was 2). Skills stay at 3.
+- `clients/claude-desktop/mcpb/manifest.json`'s declared `tools` list
+  updated to the 6-tool roster.
+- `scripts/opencode-smoke.ts` and `scripts/check.mjs` updated for the
+  removed `/do` command and the new tool names.
+
 ## [0.16.2] - 2026-08-12
 
 Content-only; no hub dependency change: `requires hub >= 0.16.0` (floor

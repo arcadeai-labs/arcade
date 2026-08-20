@@ -491,7 +491,6 @@ for (const source of ["README.md", "docs/support-matrix.md"]) {
 
 // --- Language consistency -------------------------------------------------------
 const userFacing = [
-  "commands/do.md",
   "commands/apps.md",
   "commands/status.md",
   "commands/connect.md",

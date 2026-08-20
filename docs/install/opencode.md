@@ -24,10 +24,10 @@ To develop against a checkout instead, point at it from `opencode.json`
 ```
 
 The plugin registers the `arcade` MCP server (OAuth is auto-discovered — no
-keys), injects a session orientation for the agent, adds the `/arcade-do`
-and `/arcade-apps` commands (your own definitions with the same names win),
-and shows app sign-in links as toasts. Run `opencode mcp auth arcade` if it
-doesn't prompt automatically.
+keys), injects a session orientation for the agent, adds the `/arcade-apps`
+command (your own definition with the same name wins), and shows app sign-in
+links as toasts. Run `opencode mcp auth arcade` if it doesn't prompt
+automatically.
 
 To update a `file://` install, `git pull` the checkout and restart OpenCode.
 
