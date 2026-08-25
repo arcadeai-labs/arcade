@@ -24,8 +24,6 @@ supported.
 ```text
 Arcade_SelectTools(tasks=["..."])             # find the tool(s); schema included
 Arcade_UseTool(tool_name, inputs, query_id?)  # run one directly
-Arcade_GetToolSchemas(tool_names=["..."])     # only if you already know the name,
-                                               # or need one beyond the default top_k
 ```
 
 That's the whole loop for one call. There is no separate "continue" tool and
@@ -54,8 +52,8 @@ call.
    field. Pass multiple tasks only when they're genuinely independent
    searches. The default result window is small (`top_k: 4`); if the
    response carries an `instruction` field, none of the returned tools may
-   fit — follow it (a higher `top_k`, a narrower task, or
-   `Arcade_GetToolSchemas` if you already know the exact `tool_name`).
+   fit — follow it (retry with a higher `top_k`, or a narrower, more
+   specific task description).
 2. Pick the best match from `tools[]` — each entry already carries
    `input_schema`, so there's no extra lookup for the common case.
 3. **If the call sends, deletes, overwrites, cancels, or publishes anything,

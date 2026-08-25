@@ -52,10 +52,6 @@
       "description": "Run a tool found by Arcade_SelectTools"
     },
     {
-      "name": "Arcade_GetToolSchemas",
-      "description": "Look up the schema for a tool you already know by name"
-    },
-    {
       "name": "Arcade_RetrieveResult",
       "description": "Read more of a truncated Arcade result by result_id (path or search)"
     },

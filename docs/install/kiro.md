@@ -37,7 +37,7 @@ list its tools.
 ## Verify
 
 The 3 skills should appear in the Agent Steering & Skills panel, and the
-`arcade` server should list 6 tools.
+`arcade` server should list 5 tools.
 
 If a skill does not activate, Kiro matches your request against the skill
 `description` — try naming the app explicitly ("in my chat app…", "on my
