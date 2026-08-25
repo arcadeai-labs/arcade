@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "arcade-gateway-hub",
   "display_name": "Arcade Plugin",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "Let Claude use Arcade \u2014 one connection to every app you've connected.",
   "long_description": "Connects Claude Desktop to the Arcade Plugin (https://hub.arcade.dev/mcp). Ask for what you want; Arcade finds and runs the right tool, with one-time app sign-ins handled in the browser \u2014 no API keys. Requires Node.js (uses the pinned mcp-remote proxy to bridge Claude Desktop's stdio transport to the hosted server).",
   "author": {

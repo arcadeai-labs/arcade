@@ -8,6 +8,32 @@ Derived from Arcade's earlier plugin packaging at v0.6.0 (see the git
 history); this repo targets the gateway hub deployment
 (`hub.arcade.dev`).
 
+## [0.19.1] - 2026-08-25
+
+Content-only; no hub dependency change: `requires hub ≥ 0.19.0` (floor
+unchanged).
+
+### Fixed
+
+- **Guidance pointed agents at a tool the hub does not register.** 0.19.0
+  told agents, in nine places, to "call `Arcade_GetToolSchemas` directly if
+  you already know the exact `tool_name`". That tool is not registered on
+  `hub.arcade.dev`: `tools.get_tool_schemas.enabled` is false and
+  registration also requires Condex, which the deployment does not run. A
+  `tools/list` against the live endpoint returns five tools, not six, so any
+  agent that followed the advice hit a tool-not-found error. The
+  discover-more guidance is now "widen `top_k` or narrow the task" — what
+  the hub itself emits when the tool is unregistered — across
+  `skills/using-arcade-tools`, `agents/arcade-operator.agent.md`, the Cursor
+  rule, `clients/opencode/instructions.md`, and both READMEs. (Same defect
+  Cursor Bugbot caught in the hub's own instruction string before 0.19.0
+  merged; it was missed in the plugin content.)
+- The `.mcpb` manifest no longer declares `Arcade_GetToolSchemas`, so Claude
+  Desktop's pre-install dialog matches what the server actually exposes.
+- Client-facing tool counts corrected 6 → 5 in `README.md`,
+  `docs/support-matrix.md`, and the codex / kiro / copilot / agent-plugins /
+  claude-desktop install guides.
+
 ## [0.19.0] - 2026-08-20
 
 Breaking: `requires hub ≥ 0.19.0`. The hub removed `Arcade_Run`/`Arcade_Task`
