@@ -10,17 +10,17 @@ plugin the client can load.
 
 | Client | Tools | Skills | Subagent | Commands | Rule | Hooks | Install |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|---|
-| **Cursor** | 6 | 3 | ✅ | 3 | ✅ | ✅ | [guide](install/cursor.md) |
-| **Claude Code (CLI)** | 6 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
-| **Claude Cowork / Code desktop** | 6 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
-| **GitHub Copilot CLI** | 6 | 3 | ✅ | — | — | 2 | [guide](install/copilot.md) |
-| **VS Code** | 6 | 3 | — | — | — | — | [guide](install/vscode.md) |
-| **Codex / ChatGPT** | 6 | 3 | — | — | — | — | [guide](install/codex.md) |
-| **Kiro** | 6 | 3 | — | — | — | — | [guide](install/kiro.md) |
-| **OpenCode** | 6 | — | — | 1 | — | ✅ | [guide](install/opencode.md) |
-| **Claude Desktop (.mcpb)** | 6 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
-| **claude.ai web / mobile** | 6 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
-| **Any MCP client** | 6 | — | — | — | — | — | endpoint |
+| **Cursor** | 5 | 3 | ✅ | 3 | ✅ | ✅ | [guide](install/cursor.md) |
+| **Claude Code (CLI)** | 5 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
+| **Claude Cowork / Code desktop** | 5 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
+| **GitHub Copilot CLI** | 5 | 3 | ✅ | — | — | 2 | [guide](install/copilot.md) |
+| **VS Code** | 5 | 3 | — | — | — | — | [guide](install/vscode.md) |
+| **Codex / ChatGPT** | 5 | 3 | — | — | — | — | [guide](install/codex.md) |
+| **Kiro** | 5 | 3 | — | — | — | — | [guide](install/kiro.md) |
+| **OpenCode** | 5 | — | — | 1 | — | ✅ | [guide](install/opencode.md) |
+| **Claude Desktop (.mcpb)** | 5 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
+| **claude.ai web / mobile** | 5 | upload | — | — | — | — | [guide](install/claude-desktop.md) |
+| **Any MCP client** | 5 | — | — | — | — | — | endpoint |
 
 Only skills and MCP servers are portable component types in
 [Agent Plugins](https://agent-plugins.org) 1.0.0. Rules, subagents, commands,
@@ -53,7 +53,7 @@ any `.md`, so one file satisfies all three.
 |---|---|---|---|---|
 | **Install** | add marketplace `arcadeai-labs/arcade` in Cursor's plugins panel (native: logo + all components + auto-update) | `claude plugin marketplace add arcadeai-labs/arcade` + `claude plugin install arcade@arcade` | Plugins → Add marketplace → `arcadeai-labs/arcade` | `opencode plugin opencode-arcade-hub` (npm) |
 | **One-command alternative** | `npx plugins add arcadeai-labs/arcade --target cursor` | `npx plugins add arcadeai-labs/arcade --target claude-code` | — | — |
-| **MCP tools (all 6)** | ✅ | ✅ | ✅ | ✅ |
+| **MCP tools (all 5)** | ✅ | ✅ | ✅ | ✅ |
 | **Skills (3)** | ✅ | ✅ | ✅ | — (no skill system; session instructions cover it) |
 | **Always-on rule** | ✅ `arcade-gateway-hub` | — (hook context instead) | — (hook context instead) | — (injected instructions instead) |
 | **Operator subagent** | ✅ `arcade-operator` | ✅ | ✅ | — |
@@ -70,7 +70,7 @@ These read the root `plugin.json` and load the portable component types.
 |---|---|---|---|---|
 | **Install** | `copilot plugin install arcadeai-labs/arcade` | **Chat: Install Plugin From Source** with the repo URL | `npx plugins add … --target codex` | Agent Steering & Skills → import from GitHub URL or folder |
 | **Requires** | Copilot CLI with Open Plugin Spec support | `chat.plugins.enabled` (Preview) | Codex with Agent Plugins manifest support | Kiro ≥ 1.0.288 |
-| **MCP tools (all 6)** | ✅ | ✅ | ✅ | ✅ |
+| **MCP tools (all 5)** | ✅ | ✅ | ✅ | ✅ |
 | **Skills (3)** | ✅ | ✅ | ✅ | ✅ |
 | **Operator subagent** | ✅ (`agents/*.agent.md`) | — | — | — |
 | **Hooks** | ✅ 2 (`hooks/hooks.json`) | — | — | — |
@@ -109,7 +109,7 @@ Notes:
 | | Cursor (button) | VS Code (button) | Claude Desktop Chat (`.mcpb`) | Claude Desktop Chat (connector) | claude.ai web / mobile | Any MCP client |
 |---|---|---|---|---|---|---|
 | **Install** | one-click deeplink from the README | one-click deeplink from the README | download `.mcpb` from the release, double-click, Install | Settings → Connectors → add `https://hub.arcade.dev/mcp` (paid plans) | via account connector (paid plans) | add `https://hub.arcade.dev/mcp` |
-| **MCP tools (all 6)** | ✅ | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
+| **MCP tools (all 5)** | ✅ | ✅ | ✅ (declared in the install dialog) | ✅ | ✅ | ✅ |
 | **Skills** | — (install full plugin) | — (install full plugin) | ✅ optional: upload the 3 skill ZIPs (Customize → Skills) | ✅ same ZIP uploads | ✅ uploads follow the account | — |
 | **Commands / subagent / hooks** | — | — | — (not supported by extensions) | — | — | — |
 | **Requires** | — | — | Node.js (`mcp-remote` bridge) | paid Claude plan | paid plan + code execution for skills | MCP + OAuth support |

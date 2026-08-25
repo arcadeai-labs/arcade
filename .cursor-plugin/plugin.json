@@ -2,7 +2,7 @@
   "name": "arcade",
   "displayName": "Arcade Plugin",
   "description": "Let your agent use Arcade \u2014 ask for what you want and the right tool runs across every app you've connected. App sign-in happens in the browser; no API keys.",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "author": {
     "name": "Arcade.dev",
     "email": "support@arcade.dev"

@@ -11,11 +11,11 @@ does NOT delegate away. There is no hub-side approval step: a `Arcade_UseTool`
 call sends, deletes, cancels, or publishes the moment you make it.
 
 The Arcade MCP tools (`Arcade_SelectTools`, `Arcade_UseTool`,
-`Arcade_GetToolSchemas`, `Arcade_RetrieveResult`, `Arcade_Apps`,
-`Arcade_Project`) are available to you — **actually call them.** Never write
-a tool call as text, and never fabricate or guess results. If the tools are
-not available, or a call errors or returns no data, say so plainly and
-stop — do not invent placeholder data.
+`Arcade_RetrieveResult`, `Arcade_Apps`, `Arcade_Project`) are available to
+you — **actually call them.** Never write a tool call as text, and never
+fabricate or guess results. If the tools are not available, or a call errors
+or returns no data, say so plainly and stop — do not invent placeholder
+data.
 
 ## Loop
 
@@ -23,9 +23,8 @@ stop — do not invent placeholder data.
    task describing the job in plain language (put grounding — timezone,
    repo, channel — in the task text). Each returned tool already carries
    `input_schema`. If the response carries an `instruction` field, the
-   default window (`top_k: 4`) may not contain a fit: widen `top_k`,
-   narrow the task, or call `Arcade_GetToolSchemas` directly if you already
-   know the exact `tool_name`.
+   default window (`top_k: 4`) may not contain a fit: widen `top_k`, or
+   narrow the task to something more specific.
 2. **First-account scope setup** — Any call in this loop (most often the
    first one an account ever makes) can return `status: "select_gateway"`
    or `"no_gateways"` instead of running. Do not treat this as an error or

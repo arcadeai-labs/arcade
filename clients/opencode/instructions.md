@@ -21,10 +21,9 @@ is `true` elsewhere in the response; `Arcade_UseTool` returns it as a
 `success: false`, fix `inputs` against `input_schema` and retry once, or
 report `error` verbatim and stop. If `Arcade_SelectTools`'s response carries
 an `instruction` field, the default result window (`top_k: 4`) may not
-contain a fit — widen `top_k`, narrow the task, or call
-`Arcade_GetToolSchemas` directly if you already know the exact `tool_name`.
-For list tools with a continuation token, pass `paginate: true` instead of
-paging by hand.
+contain a fit — widen `top_k`, or narrow the task to something more
+specific. For list tools with a continuation token, pass `paginate: true`
+instead of paging by hand.
 
 Org, project, and (where curated gateways exist) gateway are explicit
 choices, set once via a mandatory setup prompt on the account's first hub

@@ -10,7 +10,7 @@
 Requires Node.js (the bundle bridges Claude Desktop to the hosted server via
 a pinned `mcp-remote` proxy).
 
-> The extension carries the MCP server (all six Arcade tools), and the
+> The extension carries the MCP server (all five Arcade tools), and the
 > server's own instructions teach Claude the flow — so plain-language
 > requests like "post to #eng that the deploy is done" work out of the box.
 > Slash commands and subagents are Claude Code / Cowork plugin features

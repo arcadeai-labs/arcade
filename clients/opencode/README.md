@@ -43,7 +43,6 @@ Meta-tools that resolve to your connected apps' tools on demand:
 
 - `Arcade_SelectTools` — find the right tool for a task, schema included
 - `Arcade_UseTool` — run it
-- `Arcade_GetToolSchemas` — look up a tool's schema by name
 - `Arcade_RetrieveResult` — read more of a truncated result
 - `Arcade_Apps` — see, disconnect, or fix the connection for your connected
   apps (switch account, expired sign-in, missing permissions)

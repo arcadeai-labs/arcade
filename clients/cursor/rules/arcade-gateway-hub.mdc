@@ -32,8 +32,7 @@ cancels, overwrites, or publishes the moment you call it:
   stop. Never fabricate a result.
 - If `Arcade_SelectTools`'s response carries an `instruction` field, the
   default result window (`top_k: 4`) may not contain a fit — widen `top_k`,
-  narrow the task, or call `Arcade_GetToolSchemas` directly if you already
-  know the exact `tool_name`.
+  or narrow the task to something more specific.
 - For list tools with a continuation token, pass `paginate: true` instead of
   walking pages by hand — the merged output's `_pagination` block reports
   `pages_fetched` and `exhausted`.
