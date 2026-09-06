@@ -43,14 +43,55 @@ for (const file of jsonFiles) {
 // client picks it up by folder convention in a bundle that never intended it.
 // skills/ and mcp.json are the portable component types, fixed at the root by
 // the standard. agents/, commands/, and hooks/ are *not* portable, but the
-// root is where Claude Code, Cursor, and Copilot CLI look for them by default,
-// so keeping one copy there is what gets the same components loaded in every
-// client that supports them.
+// root is where Claude Code and Cursor look for them, so keeping one copy
+// there is what gets the same components loaded in those clients.
+//
+// Copilot CLI used to read the root too. As of 1.0.80 (2026-08-14) it reads
+// commands/, agents/, rules/, hooks/hooks.json, lsp.json and extensions/ ONLY
+// under com.github.copilot/ — a plugin that keeps them at the root loads its
+// portable core and silently drops the rest. The mirrored copies below are the
+// fix, so the failure mode to guard is no longer absence but drift.
 for (const required of ["plugin.json", "mcp.json", "skills", "agents", "commands", "hooks/hooks.json"]) {
   if (!existsSync(join(ROOT, required))) {
     fail(`root ${required} is missing — clients discover components there by default`);
   }
 }
+// Copilot CLI's own component root. Each entry is a byte-identical copy of the
+// root file, kept in sync here rather than by symlink: `copilot plugin install`
+// clones the repo, and Git for Windows defaults core.symlinks=false, which
+// would materialize a link as a text file and restore the silent breakage.
+const COPILOT_ROOT = "com.github.copilot";
+const MIRRORED = [
+  "commands/apps.md",
+  "commands/connect.md",
+  "commands/status.md",
+  "hooks/hooks.json",
+];
+for (const rel of MIRRORED) {
+  const mirror = join(COPILOT_ROOT, rel);
+  if (!existsSync(join(ROOT, mirror))) {
+    fail(`${mirror} is missing — Copilot CLI >= 1.0.80 reads components only under ${COPILOT_ROOT}/`);
+    continue;
+  }
+  if (read(rel) !== read(mirror)) {
+    fail(`${mirror} has drifted from ${rel} — the two copies must stay byte-identical`);
+  }
+}
+
+// The operator subagent is deliberately not mirrored: Copilot CLI namespaces
+// agents and we ship it to Claude Code and Cursor only. An agents/ directory
+// appearing here would change the support matrix without anyone deciding to.
+if (existsSync(join(ROOT, COPILOT_ROOT, "agents"))) {
+  fail(`${COPILOT_ROOT}/agents exists — the subagent is intentionally Claude Code + Cursor only; update docs/support-matrix.md before adding it`);
+}
+
+// The hook scripts are referenced by both hooks.json copies through
+// ${CLAUDE_PLUGIN_ROOT} (Copilot substitutes that variable as well as its own),
+// so they live at the root exactly once and must not be duplicated.
+if (existsSync(join(ROOT, COPILOT_ROOT, "hooks", "session-start.mjs"))) {
+  fail(`${COPILOT_ROOT}/hooks/session-start.mjs exists — hook scripts stay at the root and resolve via \${CLAUDE_PLUGIN_ROOT}`);
+}
+
 // rules/ is Cursor-only, and .mcp.json is the legacy MCP location that would
 // register the server a second time alongside the portable mcp.json.
 for (const forbidden of ["rules", ".mcp.json"]) {
