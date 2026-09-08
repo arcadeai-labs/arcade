@@ -13,7 +13,7 @@ plugin the client can load.
 | **Cursor** | 5 | 3 | ✅ | 3 | ✅ | ✅ | [guide](install/cursor.md) |
 | **Claude Code (CLI)** | 5 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
 | **Claude Cowork / Code desktop** | 5 | 3 | ✅ | 3 | — | 2 | [guide](install/claude-code.md) |
-| **GitHub Copilot CLI** | 5 | 3 | ✅ | — | — | 2 | [guide](install/copilot.md) |
+| **GitHub Copilot CLI** | 5 | 3 | — | 3 | — | 2 | [guide](install/copilot.md) |
 | **VS Code** | 5 | 3 | — | — | — | — | [guide](install/vscode.md) |
 | **Codex / ChatGPT** | 5 | 3 | — | — | — | — | [guide](install/codex.md) |
 | **Kiro** | 5 | 3 | — | — | — | — | [guide](install/kiro.md) |
@@ -29,23 +29,31 @@ format supports — which is why the right-hand columns thin out.
 
 ## How the same components reach so many clients
 
-There is exactly one copy of each component in this repo, at the location the
-most clients discover by default:
+Almost every component exists exactly once, at the location the most clients
+discover by default. The exception is Copilot CLI: since 1.0.80 it reads
+non-portable components **only** under `com.github.copilot/`, so the commands
+and the Claude-format hooks file are mirrored there as byte-identical copies
+(`scripts/check.mjs` fails the build if the pairs drift).
 
 | Component | Location | Read by |
 |---|---|---|
 | Skills | `skills/` | Every client with a skill system, portable or not |
 | MCP server | `mcp.json` (portable) | Agent Plugins clients |
 | MCP server | `clients/{cursor,claude}/mcp.json` | Cursor, Claude Code |
-| Subagent | `agents/arcade-operator.agent.md` | Claude Code, Cursor, Copilot CLI |
+| Subagent | `agents/arcade-operator.agent.md` | Claude Code, Cursor |
 | Commands | `commands/*.md` | Claude Code, Cursor |
-| Hooks | `hooks/hooks.json` (Claude format) | Claude Code, Copilot CLI |
+| Commands | `com.github.copilot/commands/*.md` (mirror) | Copilot CLI |
+| Hooks | `hooks/hooks.json` (Claude format) | Claude Code |
+| Hooks | `com.github.copilot/hooks/hooks.json` (mirror) | Copilot CLI |
+| Hook scripts | `hooks/*.mjs` | Both hooks files, via `${CLAUDE_PLUGIN_ROOT}` |
 | Hooks | `clients/cursor/hooks/hooks.json` | Cursor |
 | Rule | `clients/cursor/rules/*.mdc` | Cursor |
 
-The subagent filename ends in `.agent.md` on purpose: Copilot CLI only
-discovers agents matching `*.agent.md`, while Claude Code and Cursor accept
-any `.md`, so one file satisfies all three.
+The subagent filename ends in `.agent.md` because Copilot CLI only discovers
+agents matching that pattern, and Claude Code and Cursor accept any `.md`. The
+subagent is no longer shipped to Copilot — it is not mirrored under
+`com.github.copilot/` — so the suffix is now only about keeping that option
+open.
 
 ## Full plugins
 
@@ -72,19 +80,23 @@ These read the root `plugin.json` and load the portable component types.
 | **Requires** | Copilot CLI with Open Plugin Spec support | `chat.plugins.enabled` (Preview) | Codex with Agent Plugins manifest support | Kiro ≥ 1.0.288 |
 | **MCP tools (all 5)** | ✅ | ✅ | ✅ | ✅ |
 | **Skills (3)** | ✅ | ✅ | ✅ | ✅ |
-| **Operator subagent** | ✅ (`agents/*.agent.md`) | — | — | — |
-| **Hooks** | ✅ 2 (`hooks/hooks.json`) | — | — | — |
-| **Slash commands** | — (no default discovery path) | — | — | — |
+| **Operator subagent** | — (not mirrored; Claude Code + Cursor only) | — | — | — |
+| **Hooks** | ✅ 2 (`com.github.copilot/hooks/hooks.json`) | — | — | — |
+| **Slash commands** | ✅ 3 (`com.github.copilot/commands/`) | — | — | — |
 | **Always-on rule** | — | — | — | — |
 
 Notes:
 
-- **Copilot CLI gets the most** of any Agent Plugins client because it applies
-  spec semantics *additively on top of* its standard plugin loading — the
-  portable core comes from the standard, and `agents/` and `hooks/hooks.json`
-  still come from Copilot's own defaults. Commands are the one gap: Copilot
-  has no default discovery location for them, and the Agent Plugins manifest
-  is a closed schema that cannot declare component paths.
+- **Copilot CLI applies spec semantics additively on top of its standard
+  plugin loading:** the portable core (`skills/`, `mcp.json`) comes from the
+  standard, and the non-portable kinds come from Copilot's own locations. Those
+  locations moved in **1.0.80** (2026-08-14) — `commands/`, `agents/`,
+  `rules/`, `hooks/hooks.json`, `lsp.json` and `extensions/` are read only
+  under `com.github.copilot/`, no longer from the plugin root. A plugin that
+  keeps them at the root loads its tools and skills and silently drops
+  everything else; verified with `copilot --agent`, `copilot plugins list`, and
+  the client's own `Plugin activation` log lines. The mirror directory is why
+  slash commands now work here at all.
 - **Copilot CLI resolves `.plugin/plugin.json` before the root manifest.** That
   legacy manifest was removed in 0.11.0 so Copilot falls through to the Agent
   Plugins manifest; see
@@ -95,7 +107,8 @@ Notes:
   semantics; it also ignores client extension namespaces. To get the subagent
   and hooks in a Copilot context, install via the
   [Copilot CLI](install/copilot.md) — VS Code auto-discovers plugins from
-  `~/.copilot/installed-plugins/`.
+  `~/.copilot/installed-plugins/`. Note that path carries the Copilot mirror,
+  which has hooks and commands but no subagent.
 - **Codex** additionally supports a `com.openai` extension namespace and a
   `.codex-plugin/plugin.json` overlay for apps, lifecycle hooks, and directory
   presentation. Neither ships yet: those field shapes are not published, and
